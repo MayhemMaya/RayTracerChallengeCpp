@@ -5,7 +5,7 @@
 
 # Assets and learning material
 *.pdf
-*.docx
+#*.docx
 /Useful assets and images/*
 
 # Visual Studio files and folders
