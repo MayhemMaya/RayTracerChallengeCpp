@@ -1,15 +1,16 @@
-
+﻿
 **/logs
 *.log*
 *.suo
 *.pdf
 
 # Visual Studio files and folders
-**/.vs/
-**/bin/
-**/intermediates/
-**/testing/
-**/packages/
+**/.vs
+# Build directories
+**/intermediates
+**/testing
+# GoogleTest NuGet package
+**/packages
 
-# compilation files
+# Compilation files
 *.o
