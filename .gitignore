@@ -1,19 +1,16 @@
 
-
+**/logs
 *.log*
 *.suo
+*.pdf
 
 # Assets and learning material
-*.pdf
-#*.docx
-~$*
-/Useful assets and images/*
+**/Useful assets and images/
 
 # Visual Studio files and folders
-RayTracerChallenge/.vs
-RayTracerChallenge/*.sln
-RayTracerChallenge/ConRayTracer/*.vcxproj*
-/RayTracerChallenge/Build/*
+**/.vs/
+**/build/
+**/RayTracerChallenge/packages/
 
 # compilation files
 *.o
