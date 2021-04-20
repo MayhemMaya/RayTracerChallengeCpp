@@ -10,7 +10,7 @@
 # Visual Studio files and folders
 **/.vs/
 **/build/
-**/RayTracerChallenge/packages/
+**/packages/
 
 # compilation files
 *.o
