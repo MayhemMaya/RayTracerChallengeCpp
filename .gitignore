@@ -4,15 +4,12 @@
 *.suo
 *.pdf
 
-# Assets and learning material
-**/Useful assets and images/
-
 # Visual Studio files and folders
 **/.vs/
-**/build/bin/
+**/bin/
+**/intermediates/
 **/build/intermediates/
-**/build/intermediates/
-**/build/testing/
+**/testing/
 **/packages/
 
 # compilation files
