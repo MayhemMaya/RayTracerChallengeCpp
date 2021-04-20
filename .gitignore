@@ -9,7 +9,10 @@
 
 # Visual Studio files and folders
 **/.vs/
-**/build/
+**/build/bin/
+**/build/intermediates/
+**/build/intermediates/
+**/build/testing/
 **/packages/
 
 # compilation files
