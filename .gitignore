@@ -8,7 +8,6 @@
 **/.vs/
 **/bin/
 **/intermediates/
-**/build/intermediates/
 **/testing/
 **/packages/
 
