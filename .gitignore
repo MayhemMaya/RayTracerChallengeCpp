@@ -8,8 +8,6 @@
 **/.vs
 # Build directories
 **/intermediates
-**/testing
-# GoogleTest NuGet package
 **/packages
 
 # Compilation files

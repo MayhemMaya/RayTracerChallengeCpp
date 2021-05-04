@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GtaTestDurations xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Executable>C:\Users\zachc\source\repos\RayTracerChallengeCpp\RayTracerChallenge\build\bin\x64\Debug\RayTracerTesting.exe</Executable>
+  <TestDurations>
+    <TestDuration Test="TupleTest.TupleIsPoint" Duration="1" />
+    <TestDuration Test="TupleTest.TupleIsVector" Duration="1" />
+    <TestDuration Test="TupleTest.AddTwoTuples" Duration="1" />
+    <TestDuration Test="TupleTest.SubtractTwoTuples" Duration="1" />
+    <TestDuration Test="TupleTest.NegateTuple" Duration="1" />
+    <TestDuration Test="TupleTest.MultiplyTupleByScalar" Duration="1" />
+    <TestDuration Test="TupleTest.MultiplyTupleByFraction" Duration="1" />
+    <TestDuration Test="TupleTest.DivideTupleByScalar" Duration="1" />
+    <TestDuration Test="PointTest.CreatePoint" Duration="1" />
+    <TestDuration Test="PointTest.AddVectorToPoint" Duration="1" />
+    <TestDuration Test="PointTest.SubtractTwoPoints" Duration="1" />
+    <TestDuration Test="PointTest.SubtractVectorFromPoint" Duration="1" />
+    <TestDuration Test="PointTest.NegatePoint" Duration="1" />
+    <TestDuration Test="VectorTest.CreateVector" Duration="1" />
+    <TestDuration Test="VectorTest.SubtractTwoVectors" Duration="1" />
+    <TestDuration Test="VectorTest.SubtractVectorFromZeroVector" Duration="1" />
+    <TestDuration Test="VectorTest.NegateVector" Duration="1" />
+    <TestDuration Test="VectorTest.MultiplyVectorByScalar" Duration="1" />
+    <TestDuration Test="VectorTest.MultiplyVectorByFraction" Duration="1" />
+    <TestDuration Test="VectorTest.DivideVectorByScalar" Duration="1" />
+    <TestDuration Test="VectorTest.ComputeMagnitudeOfVector1" Duration="1" />
+    <TestDuration Test="VectorTest.ComputeMagnitudeOfVector2" Duration="1" />
+    <TestDuration Test="VectorTest.ComputeMagnitudeOfVector3" Duration="1" />
+    <TestDuration Test="VectorTest.ComputeMagnitudeOfVector4" Duration="1" />
+    <TestDuration Test="VectorTest.ComputeMagnitudeOfVector5" Duration="1" />
+    <TestDuration Test="VectorTest.NormalizeVector1" Duration="1" />
+    <TestDuration Test="VectorTest.NormalizeVector2" Duration="1" />
+    <TestDuration Test="VectorTest.NormalizeVector3" Duration="1" />
+    <TestDuration Test="VectorTest.DotProductOfTwoVectors" Duration="1" />
+    <TestDuration Test="VectorTest.CrossProductOfTwoVectors" Duration="1" />
+  </TestDurations>
+</GtaTestDurations>

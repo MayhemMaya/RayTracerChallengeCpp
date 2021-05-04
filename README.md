@@ -1,8 +1,6 @@
 # RayTracerChallengeCpp
 Building a Ray Tracer from scratch in C++ by following the book 'The Ray Tracer Challenge – A Test-Driven Guide to Your First 3D Renderer' by Jamis Buck.
 
-Developed by Zach Coley amd Finn Evans.
-
 Link to the book: https://pragprog.com/titles/jbtracer/the-ray-tracer-challenge/.
 
 ## Introduction
