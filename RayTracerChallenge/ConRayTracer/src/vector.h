@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include "tuple.h"
-//#include "point.h"
 
 class Vector : public Tuple {
  public:

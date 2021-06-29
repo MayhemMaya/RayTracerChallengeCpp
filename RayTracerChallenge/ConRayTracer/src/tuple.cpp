@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tuple.h"
 
+Tuple::Tuple() : x_(0), y_(0), z_(0), w_(0) {}
 Tuple::Tuple(float x, float y, float z, float w)
     : x_(x), y_(y), z_(z), w_(w) {}
 
@@ -20,6 +21,23 @@ float Tuple::operator[] (unsigned int index) const {
   }
 }
 
+void Tuple::operator()(unsigned int index, float value) {
+  switch (index) {
+  case 0:
+    x_ = value;
+    break;
+  case 1:
+    y_ = value;
+    break;
+  case 2:
+    z_ = value;
+    break;
+  case 3:
+    w_ = value;
+    break;
+  }
+}
+
 bool Tuple::operator==(const Tuple& other) const {
   return(x_ == other[0] && y_ == other[1] &&
          z_ == other[2] && w_ == other[3]);
@@ -35,12 +53,13 @@ Tuple Tuple::operator+(const Tuple& other) const {
   }
   else {
     std::cout << "Cannot add two Points!" << std::endl;
+    exit(0);
   }
 }
 
 Tuple Tuple::operator-(const Tuple& other) const {
-  return Tuple((float)x_ - (float)other[0], (float)y_ - (float)other[1],
-               (float)z_ - (float)other[2], (float)w_ - (float)other[3]);
+  return Tuple(x_ - other[0], y_ - other[1],
+               z_ - other[2], w_ - other[3]);
 }
 
 Tuple Tuple::operator-() const {
@@ -48,11 +67,11 @@ Tuple Tuple::operator-() const {
 }
 
 Tuple Tuple::operator*(const float& scalar) const {
-  return Tuple((float)x_ * (float)scalar, (float)y_ * (float)scalar,
-               (float)z_ * (float)scalar, (float)w_ * (float)scalar);
+  return Tuple(x_ * scalar, y_ * scalar,
+               z_ * scalar, w_ * scalar);
 }
 
 Tuple Tuple::operator/(const float& scalar) const {
-  return Tuple((float)x_ / (float)scalar, (float)y_ / (float)scalar,
-               (float)z_ / (float)scalar, (float)w_ / (float)scalar);
+  return Tuple(x_ / scalar, y_ / scalar,
+               z_ / scalar, w_ / scalar);
 }

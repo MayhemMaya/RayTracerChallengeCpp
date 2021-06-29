@@ -177,8 +177,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\canvas.cpp" />
+    <ClCompile Include="src\color.cpp" />
     <ClCompile Include="src\environment.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\matrix2.cpp" />
+    <ClCompile Include="src\matrix3.cpp" />
+    <ClCompile Include="src\matrix4.cpp" />
     <ClCompile Include="src\point.cpp" />
     <ClCompile Include="src\projectile.cpp" />
     <ClCompile Include="src\tuple.cpp" />
@@ -186,10 +194,12 @@
     <ClCompile Include="src\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="src\canvas.h" />
+    <ClInclude Include="src\color.h" />
     <ClInclude Include="src\environment.h" />
+    <ClInclude Include="src\matrix2.h" />
+    <ClInclude Include="src\matrix3.h" />
+    <ClInclude Include="src\matrix4.h" />
     <ClInclude Include="src\point.h" />
     <ClInclude Include="src\projectile.h" />
     <ClInclude Include="src\tuple.h" />

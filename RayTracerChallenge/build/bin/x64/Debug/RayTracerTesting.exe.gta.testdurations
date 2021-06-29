@@ -32,5 +32,49 @@
     <TestDuration Test="VectorTest.NormalizeVector3" Duration="1" />
     <TestDuration Test="VectorTest.DotProductOfTwoVectors" Duration="1" />
     <TestDuration Test="VectorTest.CrossProductOfTwoVectors" Duration="1" />
+    <TestDuration Test="ColorTest.CreateColor" Duration="1" />
+    <TestDuration Test="ColorTest.AddTwoColors" Duration="1" />
+    <TestDuration Test="ColorTest.SubtractTwoColors" Duration="1" />
+    <TestDuration Test="ColorTest.MultiplyColorByScalar" Duration="1" />
+    <TestDuration Test="ColorTest.MultiplyTwoColors" Duration="1" />
+    <TestDuration Test="CanvasTest.CreateCanvas" Duration="1" />
+    <TestDuration Test="CanvasTest.WritePixelToCanvas" Duration="1" />
+    <TestDuration Test="CanvasTest.ConstructPPMHeader" Duration="1" />
+    <TestDuration Test="UtilsTests.ClampToZero" Duration="1" />
+    <TestDuration Test="UtilsTests.ClampToOne" Duration="1" />
+    <TestDuration Test="CanvasTest.ConstructPPMPixelData" Duration="1" />
+    <TestDuration Test="CanvasTest.SplitLongLinesInPPMFiles" Duration="1" />
+    <TestDuration Test="CanvasTest.PPMFileTerminatedByNewlineCharacter" Duration="1" />
+    <TestDuration Test="UtilsTests.SwapFloatValues" Duration="1" />
+    <TestDuration Test="UtilsTests.SwapIntegerValues" Duration="1" />
+    <TestDuration Test="UtilsTests.SwapDoubleValues" Duration="1" />
+    <TestDuration Test="MatrixTest.Create2x2Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.Create3x3Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.Create4x4Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest._2x2MatrixEqualityWithIdentical2x2Matrices" Duration="1" />
+    <TestDuration Test="MatrixTest._2x2MatrixEqualityWithDifferent2x2Matrices" Duration="1" />
+    <TestDuration Test="MatrixTest._3x3MatrixEqualityWithIdentical3x3Matrices" Duration="1" />
+    <TestDuration Test="MatrixTest._3x3MatrixEqualityWithDifferent3x3Matrices" Duration="1" />
+    <TestDuration Test="MatrixTest._4x4MatrixEqualityWithIdentical4x4Matrices" Duration="1" />
+    <TestDuration Test="MatrixTest._4x4MatrixEqualityWithDifferent4x4Matrices" Duration="1" />
+    <TestDuration Test="MatrixTest.MultiplyTwoMatrices" Duration="1" />
+    <TestDuration Test="MatrixTest.MultiplyMatrixByTuple" Duration="1" />
+    <TestDuration Test="MatrixTest.MultiplyMatrixByIdentityMatrix" Duration="1" />
+    <TestDuration Test="MatrixTest.MultiplyIdentityMatrixByTuple" Duration="1" />
+    <TestDuration Test="MatrixTest.TransposeMatrix" Duration="1" />
+    <TestDuration Test="MatrixTest.TransposeIdentityMatrix" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateDeterminantOf2x2Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.SubmatrixOf3x3MatrixIs2x2Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.SubmatrixOf4x4MatrixIs3x3Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateMinorOf3x3Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateCofactorOf3x3Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateDeterminantOf3x3Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateDeterminantOf4x4Matrix" Duration="1" />
+    <TestDuration Test="MatrixTest.MatrixIsInvertible" Duration="1" />
+    <TestDuration Test="MatrixTest.MatrixIsNotInvertible" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix1" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix2" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix3" Duration="1" />
+    <TestDuration Test="MatrixTest.MultiplyMatrixByItsInverse" Duration="1" />
   </TestDurations>
 </GtaTestDurations>
