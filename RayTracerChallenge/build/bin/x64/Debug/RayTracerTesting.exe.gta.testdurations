@@ -76,5 +76,28 @@
     <TestDuration Test="MatrixTest.CalculateInverseOfMatrix2" Duration="1" />
     <TestDuration Test="MatrixTest.CalculateInverseOfMatrix3" Duration="1" />
     <TestDuration Test="MatrixTest.MultiplyMatrixByItsInverse" Duration="1" />
+    <TestDuration Test="TranslationMatrixTest.MultiplyByTranslationMatrix" Duration="1" />
+    <TestDuration Test="TranslationMatrixTest.MultiplyByInverseOfTranslationMatrix" Duration="1" />
+    <TestDuration Test="TranslationMatrixTest.TranslationMatrixDoesNotAffectVectors" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.ScalingMatrixAppliedToPoint" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.ScalingMatrixAppliedToVector" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.MultiplyByInverseOfScalingMatrix" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.Reflection_is_scaling_by_a_negative_value" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.Rotating_a_point_around_the_x_axis" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.The_inverse_of_an_x_rotation_rotates_in_the_opposite_direction" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.Rotating_a_point_around_the_y_axis" Duration="1" />
+    <TestDuration Test="ScalingMatrixTest.Rotating_a_point_around_the_z_axis" Duration="1" />
+    <TestDuration Test="ShearingMatrixTest.Shearing_transformation_moves_x_in_proportion_to_y" Duration="1" />
+    <TestDuration Test="ShearingMatrixTest.Shearing_transformation_moves_x_in_proportion_to_z" Duration="1" />
+    <TestDuration Test="ShearingMatrixTest.Shearing_transformation_moves_y_in_proportion_to_x" Duration="1" />
+    <TestDuration Test="ShearingMatrixTest.Shearing_transformation_moves_y_in_proportion_to_z" Duration="1" />
+    <TestDuration Test="ShearingMatrixTest.Shearing_transformation_moves_z_in_proportion_to_x" Duration="1" />
+    <TestDuration Test="ShearingMatrixTest.Shearing_transformation_moves_z_in_proportion_to_y" Duration="1" />
+    <TestDuration Test="RotationMatrixTest.Rotating_a_point_around_the_x_axis" Duration="1" />
+    <TestDuration Test="RotationMatrixTest.The_inverse_of_an_x_rotation_rotates_in_the_opposite_direction" Duration="1" />
+    <TestDuration Test="RotationMatrixTest.Rotating_a_point_around_the_y_axis" Duration="1" />
+    <TestDuration Test="RotationMatrixTest.Rotating_a_point_around_the_z_axis" Duration="1" />
+    <TestDuration Test="TransformationTest.Individual_transformations_are_applied_in_sequence" Duration="1" />
+    <TestDuration Test="TransformationTest.Chained_transformations_must_be_applied_in_reverse_order" Duration="1" />
   </TestDurations>
 </GtaTestDurations>

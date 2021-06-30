@@ -79,4 +79,8 @@ void swap(double& a, double& b) {
   b = temp;
 }
 
+float radians(float degrees) {
+  return(degrees * kPI / 180);
+}
+
 } // namespace utils

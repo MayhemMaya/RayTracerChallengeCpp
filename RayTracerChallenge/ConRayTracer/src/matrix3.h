@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Matrix2.h"
+#include "matrix2.h"
 #include "utils.h"
 
 class Matrix3 {

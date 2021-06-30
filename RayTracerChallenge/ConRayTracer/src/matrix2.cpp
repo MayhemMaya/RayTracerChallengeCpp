@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Matrix2.h"
+#include "matrix2.h"
 #include "utils.h"
 
 Matrix2::Matrix2() {}

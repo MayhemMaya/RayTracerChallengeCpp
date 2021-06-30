@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "Matrix3.h"
-#include "Matrix2.h"
+#include "matrix3.h"
+#include "matrix2.h"
 #include "utils.h"
 
 Matrix3::Matrix3() {}

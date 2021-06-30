@@ -6,9 +6,13 @@
 #include "vector.cpp"
 #include "color.cpp"
 #include "canvas.cpp"
-#include "Matrix2.cpp"
-#include "Matrix3.cpp"
-#include "Matrix4.cpp"
+#include "matrix2.cpp"
+#include "matrix3.cpp"
+#include "matrix4.cpp"
+#include "translation-matrix.cpp"
+#include "scaling-matrix.cpp"
+#include "rotation-matrix.cpp"
+#include "shearing-matrix.cpp"
 
 /*
 #pragma region BankAccountTest
@@ -628,5 +632,153 @@ TEST(MatrixTest, MultiplyMatrixByItsInverse) {
 
 	Matrix4 C = A * B;
 	EXPECT_TRUE(C * B.inverse() == A);
+}
+#pragma endregion
+
+#pragma region TranslationMatrixTests
+TEST(TranslationMatrixTest, MultiplyByTranslationMatrix) {
+	TranslationMatrix transform(5, -3, 2);
+	Point p(-3, 4, 5);
+	EXPECT_TRUE(transform * p == Point(2, 1, 7));
+}
+
+TEST(TranslationMatrixTest, MultiplyByInverseOfTranslationMatrix) {
+	TranslationMatrix transform(5, -3, 2);
+	Matrix4 ivn = transform.inverse();
+	Point p(-3, 4, 5);
+	EXPECT_TRUE(ivn * p == Point(-8, 7, 3));
+}
+
+TEST(TranslationMatrixTest, TranslationMatrixDoesNotAffectVectors) {
+	TranslationMatrix transform(5, -3, 2);
+	Vector v(-3, 4, 5);
+	EXPECT_TRUE(transform * v == v);
+}
+#pragma endregion
+
+#pragma region ScalingMatrixTests
+TEST(ScalingMatrixTest, ScalingMatrixAppliedToPoint) {
+	ScalingMatrix transform(2, 3, 4);
+	Point p(-4, 6, 8);
+	EXPECT_TRUE(transform * p == Point(-8, 18, 32));
+}
+
+TEST(ScalingMatrixTest, ScalingMatrixAppliedToVector) {
+	ScalingMatrix transform(2, 3, 4);
+	Vector v(-4, 6, 8);
+	EXPECT_TRUE(transform * v == Vector(-8, 18, 32));
+}
+
+TEST(ScalingMatrixTest, MultiplyByInverseOfScalingMatrix) {
+	ScalingMatrix transform(2, 3, 4);
+	Matrix4 inv = transform.inverse();
+	Vector v(-4, 6, 8);
+	EXPECT_TRUE(inv * v == Vector(-2, 2, 2));
+}
+
+TEST(ScalingMatrixTest, Reflection_is_scaling_by_a_negative_value) {
+	ScalingMatrix transform(-1, 1, 1);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(-2, 3, 4));
+}
+#pragma endregion
+
+#pragma region RotationMatrixTests
+TEST(RotationMatrixTest, Rotating_a_point_around_the_x_axis) {
+	Point p(0, 1, 0);
+	RotationMatrix half_quarter(utils::kPI / 4, 0, 0);
+	RotationMatrix full_quarter(utils::kPI / 2, 0, 0);
+	EXPECT_TRUE(half_quarter * p == Point(0, sqrt(2) / 2, sqrt(2) / 2));
+	EXPECT_TRUE(full_quarter * p == Point(0, 0, 1));
+}
+
+TEST(RotationMatrixTest, The_inverse_of_an_x_rotation_rotates_in_the_opposite_direction) {
+	Point p(0, 1, 0);
+	RotationMatrix half_quarter(utils::kPI / 4, 0, 0);
+	Matrix4 inv = half_quarter.inverse();
+	EXPECT_TRUE(inv * p == Point(0, sqrt(2) / 2, -sqrt(2) / 2));
+}
+
+TEST(RotationMatrixTest, Rotating_a_point_around_the_y_axis) {
+	Point p(0, 0, 1);
+	RotationMatrix half_quarter(0, utils::kPI / 4, 0);
+	RotationMatrix full_quarter(0, utils::kPI / 2, 0);
+	EXPECT_TRUE(half_quarter * p == Point(sqrt(2) / 2, 0, sqrt(2) / 2));
+	EXPECT_TRUE(full_quarter * p == Point(1, 0, 0));
+}
+
+TEST(RotationMatrixTest, Rotating_a_point_around_the_z_axis) {
+	Point p(0, 1, 0);
+	RotationMatrix half_quarter(0, 0, utils::kPI / 4);
+	RotationMatrix full_quarter(0, 0, utils::kPI / 2);
+	EXPECT_TRUE(half_quarter * p == Point(-sqrt(2) / 2, sqrt(2) / 2, 0));
+	EXPECT_TRUE(full_quarter * p == Point(-1, 0, 0));
+}
+#pragma endregion
+
+#pragma region ShearingMatrixTests
+TEST(ShearingMatrixTest, Shearing_transformation_moves_x_in_proportion_to_y) {
+	ShearingMatrix transform(1, 0, 0, 0, 0, 0);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(5, 3, 4));
+}
+
+TEST(ShearingMatrixTest, Shearing_transformation_moves_x_in_proportion_to_z) {
+	ShearingMatrix transform(0, 1, 0, 0, 0, 0);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(6, 3, 4));
+}
+
+TEST(ShearingMatrixTest, Shearing_transformation_moves_y_in_proportion_to_x) {
+	ShearingMatrix transform(0, 0, 1, 0, 0, 0);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(2, 5, 4));
+}
+
+TEST(ShearingMatrixTest, Shearing_transformation_moves_y_in_proportion_to_z) {
+	ShearingMatrix transform(0, 0, 0, 1, 0, 0);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(2, 7, 4));
+}
+
+TEST(ShearingMatrixTest, Shearing_transformation_moves_z_in_proportion_to_x) {
+	ShearingMatrix transform(0, 0, 0, 0, 1, 0);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(2, 3, 6));
+}
+
+TEST(ShearingMatrixTest, Shearing_transformation_moves_z_in_proportion_to_y) {
+	ShearingMatrix transform(0, 0, 0, 0, 0, 1);
+	Point p(2, 3, 4);
+	EXPECT_TRUE(transform * p == Point(2, 3, 7));
+}
+#pragma endregion
+
+#pragma region TransformationTests
+TEST(TransformationTest, Individual_transformations_are_applied_in_sequence) {
+	Point p(1, 0, 1);
+	RotationMatrix A(utils::kPI / 2, 0, 0);
+	ScalingMatrix B(5, 5, 5);
+	TranslationMatrix C(10, 5, 7);
+
+	// Apply rotation first
+	Point p2 = A * p;
+	EXPECT_TRUE(p2 == Point(1, -1, 0));
+	// then apply scaling
+	Point p3 = B * p2;
+	EXPECT_TRUE(p3 == Point(5, -5, 0));
+	// then apply translation
+	Point p4 = C * p3;
+	EXPECT_TRUE(p4 == Point(15, 0, 7));
+}
+
+TEST(TransformationTest, Chained_transformations_must_be_applied_in_reverse_order) {
+	Point p(1, 0, 1);
+	RotationMatrix A(utils::kPI / 2, 0, 0);
+	ScalingMatrix B(5, 5, 5);
+	TranslationMatrix C(10, 5, 7);
+
+	Matrix4 T = C * B * A;
+	EXPECT_TRUE(T * p == Point(15, 0, 7));
 }
 #pragma endregion

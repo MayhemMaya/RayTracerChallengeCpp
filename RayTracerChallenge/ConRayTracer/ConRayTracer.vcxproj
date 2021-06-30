@@ -189,6 +189,10 @@
     <ClCompile Include="src\matrix4.cpp" />
     <ClCompile Include="src\point.cpp" />
     <ClCompile Include="src\projectile.cpp" />
+    <ClCompile Include="src\rotation-matrix.cpp" />
+    <ClCompile Include="src\scaling-matrix.cpp" />
+    <ClCompile Include="src\shearing-matrix.cpp" />
+    <ClCompile Include="src\translation-matrix.cpp" />
     <ClCompile Include="src\tuple.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\vector.cpp" />
@@ -202,6 +206,10 @@
     <ClInclude Include="src\matrix4.h" />
     <ClInclude Include="src\point.h" />
     <ClInclude Include="src\projectile.h" />
+    <ClInclude Include="src\rotation-matrix.h" />
+    <ClInclude Include="src\scaling-matrix.h" />
+    <ClInclude Include="src\shearing-matrix.h" />
+    <ClInclude Include="src\translation-matrix.h" />
     <ClInclude Include="src\tuple.h" />
     <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\vector.h" />

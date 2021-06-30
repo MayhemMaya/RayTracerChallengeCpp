@@ -2,8 +2,9 @@
 #define MATRIX_4_H
 
 #include <iostream>
-#include "Matrix3.h"
+#include "matrix3.h"
 #include "tuple.h"
+#include "point.h"
 #include "utils.h"
 
 class Matrix4 {
@@ -14,13 +15,14 @@ class Matrix4 {
           float a21, float a22, float a23, float a24,
           float a31, float a32, float a33, float a34,
           float a41, float a42, float a43, float a44);
-  float operator()(unsigned int y, unsigned int x) const;
+  virtual float operator()(unsigned int y, unsigned int x) const;
   void operator()(unsigned int y, unsigned int x, float value);
   friend std::ostream& operator<<(std::ostream& os, const Matrix4& obj);
   bool operator==(const Matrix4& other) const;
   bool operator!=(const Matrix4& other) const;
   Matrix4 operator*(const Matrix4& other) const;
   Tuple operator*(const Tuple& other) const;
+  virtual Point operator*(const Point& other) const;
   Matrix4 transpose() const;
   Matrix3 submatrix(int row, int col) const;
   float minor(int row, int col) const;
