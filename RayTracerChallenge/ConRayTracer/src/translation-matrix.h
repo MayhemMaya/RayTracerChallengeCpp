@@ -1,5 +1,4 @@
-#ifndef TRANSLATION_MATRIX_H
-#define TRANSLATION_MATRIX_H
+#pragma once
 
 #include "matrix4.h"
 #include "point.h"
@@ -11,5 +10,3 @@ class TranslationMatrix : public Matrix4 {
   //Point operator*(const Point& other) const override;
   //Vector operator*(const Vector& other) const;
 };
-
-#endif // TRANSLATION_MATRIX_H

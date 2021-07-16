@@ -1,5 +1,4 @@
-#ifndef TUPLE_H
-#define TUPLE_H
+#pragma once
 
 #include <iostream>
 
@@ -22,5 +21,3 @@ class Tuple {
  protected:
   float x_, y_, z_, w_;
 };
-
-#endif // TUPLE_H

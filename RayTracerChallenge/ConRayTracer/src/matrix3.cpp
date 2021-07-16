@@ -2,7 +2,6 @@
 #include <vector>
 #include "matrix3.h"
 #include "matrix2.h"
-#include "utils.h"
 
 Matrix3::Matrix3() {}
 

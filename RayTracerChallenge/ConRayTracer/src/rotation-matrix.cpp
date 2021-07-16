@@ -18,8 +18,26 @@ RotationMatrix::RotationMatrix(float x, float y, float z)
                   0, 0, 0, 1),
       result_(rotation_x_* rotation_y_* rotation_z_) {}
 
-float RotationMatrix::operator()(unsigned int y, unsigned int x) const {
-  return result_(y, x);
+float RotationMatrix::operator()(unsigned int row, unsigned int col) const {
+  return result_(row, col);
+}
+
+void RotationMatrix::operator()(unsigned int row, unsigned int col, float value) {
+  result_(row, col, value);
+}
+
+RotationMatrix RotationMatrix::operator*(const Matrix4& other) const {
+  RotationMatrix R(0, 0, 0);
+  for (int r = 0; r < 4; r++) {
+    for (int c = 0; c < 4; c++) {
+      float temp = result_(r, 0) * other(0, c) +
+                   result_(r, 1) * other(1, c) +
+                   result_(r, 2) * other(2, c) +
+                   result_(r, 3) * other(3, c);
+      R(r, c, temp);
+    }
+  }
+  return R;
 }
 
 Point RotationMatrix::operator*(const Point& other) const {

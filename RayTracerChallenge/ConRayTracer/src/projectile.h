@@ -1,5 +1,4 @@
-#ifndef PROJECTILE_H
-#define PROJECTILE_H
+#pragma once
 
 #include <iostream>
 #include "point.h"
@@ -15,5 +14,3 @@ class Projectile {
   Point position_;
   Vector velocity_;
 };
-
-#endif // PROJECTILE_H

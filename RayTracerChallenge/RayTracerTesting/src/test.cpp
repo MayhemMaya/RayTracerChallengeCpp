@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <cmath>
+#include <vector>
 #include "utils.cpp"
 #include "tuple.cpp"
 #include "point.cpp"
@@ -13,25 +14,11 @@
 #include "scaling-matrix.cpp"
 #include "rotation-matrix.cpp"
 #include "shearing-matrix.cpp"
-
-/*
-#pragma region BankAccountTest
-class BankAccountTest : public testing::Test {
- protected:
-	BankAccount* account;
-	BankAccountTest() {
-		account = new BankAccount;
-	}
-	~BankAccountTest() {
-		delete account;
-	}
-};
-
-TEST_F(BankAccountTest, BankAccountStartsEmpty) {
-	EXPECT_EQ(0, account->GetBalance());
-}
-#pragm a endregion
-*/
+#include "ray.cpp"
+#include "Object.cpp"
+#include "sphere.cpp"
+#include "intersection.cpp"
+#include "hit.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -780,5 +767,181 @@ TEST(TransformationTest, Chained_transformations_must_be_applied_in_reverse_orde
 
 	Matrix4 T = C * B * A;
 	EXPECT_TRUE(T * p == Point(15, 0, 7));
+}
+#pragma endregion
+
+#pragma region RayTests
+TEST(RayTest, Creating_and_querying_a_ray) {
+	Point origin(1, 2, 3);
+	Vector direction(4, 5, 6);
+	Ray r(origin, direction);
+	EXPECT_TRUE(r.GetOrigin() == origin);
+	EXPECT_TRUE(r.GetDirection() == direction);
+}
+
+TEST(RayTest, Computing_a_point_from_a_distance) {
+	Ray r(Point(2, 3, 4), Vector(1, 0, 0));
+	EXPECT_TRUE(r.position(0) == Point(2, 3, 4));
+	EXPECT_TRUE(r.position(1) == Point(3, 3, 4));
+	EXPECT_TRUE(r.position(-1) == Point(1, 3, 4));
+	EXPECT_TRUE(r.position(2.5) == Point(4.5, 3, 4));
+}
+
+TEST(RayTest, A_ray_intersects_a_sphere_at_two_points) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere s;
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), 4.0);
+	EXPECT_EQ(xs[1].GetTime(), 6.0);
+}
+
+TEST(RayTest, A_ray_intersects_a_sphere_at_a_tangent) {
+	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
+	Sphere s;
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), 5.0);
+	EXPECT_EQ(xs[1].GetTime(), 5.0);
+}
+
+TEST(RayTest, A_ray_misses_a_sphere) {
+	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
+	Sphere s;
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(RayTest, A_ray_originates_inside_a_sphere) {
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+	Sphere s;
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), -1.0);
+	EXPECT_EQ(xs[1].GetTime(), 1.0);
+}
+
+TEST(RayTest, A_sphere_is_behind_a_ray) {
+	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+	Sphere s;
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), -6.0);
+	EXPECT_EQ(xs[1].GetTime(), -4.0);
+}
+
+TEST(RayTest, Translating_a_ray) {
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+	TranslationMatrix m(3, 4, 5);
+	Ray r2 = r.transform(m);
+	EXPECT_TRUE(r2.GetOrigin() == Point(4, 6, 8));
+	EXPECT_TRUE(r2.GetDirection() == Vector(0, 1, 0));
+}
+
+TEST(RayTest, Scaling_a_ray) {
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+	ScalingMatrix m(2, 3, 4);
+	Ray r2 = r.transform(m);
+	EXPECT_TRUE(r2.GetOrigin() == Point(2, 6, 12));
+	EXPECT_TRUE(r2.GetDirection() == Vector(0, 3, 0));
+}
+#pragma endregion
+
+#pragma region IntersectionTests
+TEST(IntersectionTest, An_intersection_encapsulates_time_and_object) {
+	Sphere s;
+	Intersection i(3.5, s);
+	EXPECT_EQ(i.GetTime(), 3.5);
+	EXPECT_TRUE(i.GetObject() == s);
+}
+
+TEST(IntersectionTest, Aggregating_intersections) {
+	Sphere s;
+	Intersection i1(1, s);
+	Intersection i2(2, s);
+	std::vector<Intersection> xs = Intersection::intersections({ i1, i2 });
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), 1);
+	EXPECT_EQ(xs[1].GetTime(), 2);
+}
+
+TEST(IntersectionTest, Intersect_sets_the_object_on_the_intersection) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere s;
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_TRUE(xs[0].GetObject() == s);
+	EXPECT_TRUE(xs[1].GetObject() == s);
+}
+
+TEST(IntersectionTest, The_hit_when_all_intersections_have_positive_time) {
+	Sphere s;
+	Intersection i1(1, s);
+	Intersection i2(2, s);
+	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
+	Hit h = Hit::hit(xs);
+	EXPECT_TRUE(h.i == i1);
+}
+
+TEST(IntersectionTest, The_hit_when_some_intersections_have_negative_time) {
+	Sphere s;
+	Intersection i1(-1, s);
+	Intersection i2(1, s);
+	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
+	Hit h = Hit::hit(xs);
+	EXPECT_TRUE(h.i == i2);
+}
+
+TEST(IntersectionTest, The_hit_when_all_intersections_have_negative_time) {
+	Sphere s;
+	Intersection i1(-2, s);
+	Intersection i2(-1, s);
+	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
+	Hit h = Hit::hit(xs);
+	EXPECT_TRUE(h.result == HitResult::NO_HIT);
+}
+
+TEST(IntersectionTest, The_hit_is_always_the_lowest_nonnegative_intersection) {
+	Sphere s;
+	Intersection i1(5, s);
+	Intersection i2(7, s);
+	Intersection i3(-3, s);
+	Intersection i4(2, s);
+	std::vector<Intersection> xs = Intersection::intersections({ i1, i2, i3, i4 });
+	Hit h = Hit::hit(xs);
+	EXPECT_TRUE(h.i == i4);
+}
+#pragma endregion
+
+#pragma region SphereTests
+TEST(SphereTest, A_spheres_default_transformation) {
+	Sphere s;
+	Matrix4 identity_matrix;
+	EXPECT_TRUE(s.GetTransform() == identity_matrix);
+}
+
+TEST(SphereTest, Changing_a_spheres_transformation) {
+	Sphere s;
+	TranslationMatrix t(2, 3, 4);
+	s.SetTransform(t);
+	EXPECT_TRUE(s.GetTransform() == t);
+}
+
+TEST(SphereTest, Intersecting_a_scaled_sphere_with_a_ray) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere s;
+	s.SetTransform(ScalingMatrix(2, 2, 2));
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), 3);
+	EXPECT_EQ(xs[1].GetTime(), 7);
+}
+
+TEST(SphereTest, Intersecting_a_translated_sphere_with_a_ray) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere s;
+	s.SetTransform(TranslationMatrix(5, 0, 0));
+	std::vector<Intersection> xs = r.intersect(s);
+	EXPECT_EQ(xs.size(), 0);
 }
 #pragma endregion

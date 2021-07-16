@@ -1,10 +1,8 @@
-#ifndef MATRIX_3_H
-#define MATRIX_3_H
+#pragma once
 
 #include <iostream>
 #include <vector>
 #include "matrix2.h"
-#include "utils.h"
 
 class Matrix3 {
  public:
@@ -28,5 +26,3 @@ class Matrix3 {
     {0, 0, 1}
   };
 };
-
-#endif // MATRIX_3_H

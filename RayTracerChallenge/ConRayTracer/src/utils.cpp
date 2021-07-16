@@ -1,9 +1,11 @@
 
 #include <cstdlib>
-#include <sstream>
 #include <vector>
+#include <sstream>
 #include <fstream>
 #include "utils.h"
+#include "vector.h"
+#include "color.h"
 
 namespace utils {
   

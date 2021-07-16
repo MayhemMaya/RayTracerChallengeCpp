@@ -1,9 +1,6 @@
-#ifndef SCALING_MATRIX_H
-#define SCALING_MATRIX_H
+#pragma once
 
 #include "matrix4.h"
-#include "point.h"
-#include "vector.h"
 
 class ScalingMatrix : public Matrix4 {
  public:
@@ -11,5 +8,3 @@ class ScalingMatrix : public Matrix4 {
   //Point operator*(const Point& other) const override;
   //Vector operator*(const Vector& other) const;
 };
-
-#endif // SCALING_MATRIX_H

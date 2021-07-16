@@ -2,7 +2,7 @@
 #include "matrix4.h"
 #include "matrix3.h"
 #include "tuple.h"
-#include "utils.h"
+#include "point.h"
 
 Matrix4::Matrix4() {}
 
@@ -36,12 +36,12 @@ Matrix4::Matrix4(float a11, float a12, float a13, float a14,
   data_[3][3] = a44;
 }
 
-float Matrix4::operator()(unsigned int y, unsigned int x) const {
-  return data_[y][x];
+float Matrix4::operator()(unsigned int row, unsigned int col) const {
+  return data_[row][col];
 }
 
-void Matrix4::operator()(unsigned int y, unsigned int x, float value) {
-  data_[y][x] = value;
+void Matrix4::operator()(unsigned int row, unsigned int col, float value) {
+  data_[row][col] = value;
 }
 
 std::ostream& operator<<(std::ostream& os, const Matrix4& obj) {
@@ -138,6 +138,17 @@ Point Matrix4::operator*(const Point& other) const {
     }
   }
   return p;
+}
+
+Matrix4& Matrix4::operator=(const Matrix4& other) {
+  if (this != &other) {
+    for (int r = 0; r < 4; r++) {
+      for (int c = 0; c < 4; c++) {
+        this->data_[r][c] = other(r, c);
+      }
+    }
+  }
+  return *this;
 }
 
 Matrix4 Matrix4::transpose() const {

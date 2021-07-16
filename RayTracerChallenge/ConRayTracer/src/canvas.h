@@ -1,5 +1,4 @@
-#ifndef CANVAS_H
-#define CANVAS_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -22,5 +21,3 @@ class Canvas {
   int width_, height_;
   std::vector<Color*> pixels_;
 };
-
-#endif // CANVAS_H

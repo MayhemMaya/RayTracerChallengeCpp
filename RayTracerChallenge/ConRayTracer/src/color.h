@@ -1,5 +1,4 @@
-#ifndef COLOR_H
-#define COLOR_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -21,7 +20,3 @@ class Color {
  private:
   float r_, g_, b_;
 };
-
- 
-
-#endif // COLOR_H

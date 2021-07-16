@@ -1,5 +1,4 @@
-#ifndef ENVIRONMENT_H
-#define ENVIRONMENT_H
+#pragma once
 
 
 #include "vector.h"
@@ -13,5 +12,3 @@ class Environment {
    Vector gravity_;
    Vector wind_;
 };
-
-#endif // ENVIRONMENT_H

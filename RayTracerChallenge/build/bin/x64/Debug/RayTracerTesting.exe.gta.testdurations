@@ -73,11 +73,11 @@
     <TestDuration Test="MatrixTest.MatrixIsInvertible" Duration="1" />
     <TestDuration Test="MatrixTest.MatrixIsNotInvertible" Duration="1" />
     <TestDuration Test="MatrixTest.CalculateInverseOfMatrix1" Duration="1" />
-    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix2" Duration="1" />
+    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix2" Duration="3" />
     <TestDuration Test="MatrixTest.CalculateInverseOfMatrix3" Duration="1" />
     <TestDuration Test="MatrixTest.MultiplyMatrixByItsInverse" Duration="1" />
     <TestDuration Test="TranslationMatrixTest.MultiplyByTranslationMatrix" Duration="1" />
-    <TestDuration Test="TranslationMatrixTest.MultiplyByInverseOfTranslationMatrix" Duration="1" />
+    <TestDuration Test="TranslationMatrixTest.MultiplyByInverseOfTranslationMatrix" Duration="2" />
     <TestDuration Test="TranslationMatrixTest.TranslationMatrixDoesNotAffectVectors" Duration="1" />
     <TestDuration Test="ScalingMatrixTest.ScalingMatrixAppliedToPoint" Duration="1" />
     <TestDuration Test="ScalingMatrixTest.ScalingMatrixAppliedToVector" Duration="1" />
@@ -99,5 +99,25 @@
     <TestDuration Test="RotationMatrixTest.Rotating_a_point_around_the_z_axis" Duration="1" />
     <TestDuration Test="TransformationTest.Individual_transformations_are_applied_in_sequence" Duration="1" />
     <TestDuration Test="TransformationTest.Chained_transformations_must_be_applied_in_reverse_order" Duration="1" />
+    <TestDuration Test="RayTest.Creating_and_querying_a_ray" Duration="1" />
+    <TestDuration Test="RayTest.Computing_a_point_from_a_distance" Duration="1" />
+    <TestDuration Test="RayTest.A_ray_intersects_a_sphere_at_two_points" Duration="2" />
+    <TestDuration Test="RayTest.A_ray_intersects_a_sphere_at_a_tangent" Duration="2" />
+    <TestDuration Test="RayTest.A_ray_misses_a_sphere" Duration="1" />
+    <TestDuration Test="RayTest.A_ray_originates_inside_a_sphere" Duration="1" />
+    <TestDuration Test="RayTest.A_sphere_is_behind_a_ray" Duration="2" />
+    <TestDuration Test="IntersectionTest.An_intersection_encapsulates_time_and_object" Duration="1" />
+    <TestDuration Test="IntersectionTest.Aggregating_intersections" Duration="1" />
+    <TestDuration Test="IntersectionTest.Intersect_sets_the_object_on_the_intersection" Duration="1" />
+    <TestDuration Test="IntersectionTest.The_hit_when_all_intersections_have_positive_time" Duration="1" />
+    <TestDuration Test="IntersectionTest.The_hit_when_some_intersections_have_negative_time" Duration="1" />
+    <TestDuration Test="IntersectionTest.The_hit_when_all_intersections_have_negative_time" Duration="1" />
+    <TestDuration Test="IntersectionTest.The_hit_is_always_the_lowest_nonnegative_intersection" Duration="1" />
+    <TestDuration Test="RayTest.Translating_a_ray" Duration="1" />
+    <TestDuration Test="RayTest.Scaling_a_ray" Duration="1" />
+    <TestDuration Test="SphereTest.A_spheres_default_transformation" Duration="1" />
+    <TestDuration Test="SphereTest.Changing_a_spheres_transformation" Duration="1" />
+    <TestDuration Test="SphereTest.Intersecting_a_scaled_sphere_with_a_ray" Duration="2" />
+    <TestDuration Test="SphereTest.Intersecting_a_translated_sphere_with_a_ray" Duration="1" />
   </TestDurations>
 </GtaTestDurations>

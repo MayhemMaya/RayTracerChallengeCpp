@@ -5,7 +5,9 @@
 #include "utils.h"
 
 Vector::Vector(float x, float y, float z) : Tuple(x, y, z, 0) {}
-Vector::Vector(const Tuple& t) : Tuple(t[0], t[1], t[2], t[3]) {}
+Vector::Vector(const Tuple& tuple)
+    : Tuple(tuple[0], tuple[1],
+            tuple[2], tuple[3]) {}
 
 std::ostream& operator<<(std::ostream& os, const Vector& obj) {
   os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")";

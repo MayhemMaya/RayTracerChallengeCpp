@@ -1,5 +1,4 @@
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #include <iostream>
 #include "tuple.h"
@@ -15,5 +14,3 @@ class Point : public Tuple {
   Point operator - (const Vector&) const;
   Point operator - () const;
 };
-
-#endif // POINT_H

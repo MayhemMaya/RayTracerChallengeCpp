@@ -1,5 +1,4 @@
-#ifndef MATRIX_2_H
-#define MATRIX_2_H
+#pragma once
 
 #include <iostream>
 #include "utils.h"
@@ -21,5 +20,3 @@ class Matrix2 {
     {0, 1} 
   };
 };
-
-#endif // MATRIX_2_H

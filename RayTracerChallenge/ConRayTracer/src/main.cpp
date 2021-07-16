@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <vector>
+#include <array>
 #include "utils.h"
 #include "tuple.h"
 #include "point.h"
@@ -16,38 +18,45 @@
 #include "scaling-matrix.h"
 #include "rotation-matrix.h"
 #include "shearing-matrix.h"
+#include "ray.h"
+#include "sphere.h"
+#include "intersection.h"
+#include "hit.h"
+#include "object.h"
 
 int main() {
-	int size = 200;
-	Canvas c(size, size);
-	Color white(1, 1, 1);
-	Point p(0, 0, 0);
+	Point ray_origin(0, 0, -5);
 
-	float dist = 20;
-	int degrees = 15;
-	int t = 24;
+	float wall_z = 10;
+	float wall_size = 7.0;
+	int canvas_pixels = 100;
 
-	for (int i = 0; i < 16; i++)
-	{
-		TranslationMatrix T(0, dist, 0);
-		RotationMatrix R(0, 0, utils::radians(degrees));
+	float pixel_size = wall_size / canvas_pixels;
+	float half = wall_size / 2;
 
-		p = T * p;
+	Canvas c(canvas_pixels, canvas_pixels);
+	Color red(1, 0, 0);
+	Sphere sphere;
+	//sphere.SetTransform(RotationMatrix(0, 0, utils::kPI / 4) * ScalingMatrix(0.5, 1, 1));
+	sphere.SetTransform(ShearingMatrix(1, 0, 0, 0, 0, 0) * ScalingMatrix(0.5, 1, 1));
+	//sphere.SetTransform(TranslationMatrix(0.5, 0, 0) * RotationMatrix(0, 0, utils::kPI / 4) * ScalingMatrix(0.5, 1, 1));
+	std::cout << sphere.GetTransform() << std::endl;
 
-		for (int j = 0; j < t; j++)
-		{
-			int x = round(p[0] + size / 2);
-			int y = round(p[1]);
-			c.WritePixel(x, c.GetHeight() - (y + (size / 2)), white);
-			std::cout << p << std::endl;
-			p = R * p;
+	for (int y = 0; y < canvas_pixels; y++) {
+		float world_y = half - pixel_size * y;
+		for (int x = 0; x < canvas_pixels; x++) {
+			float world_x = -half + pixel_size * x;
+
+			Point position(world_x, world_y, wall_z);
+			Ray r(ray_origin, (position - ray_origin).normalize());
+			std::vector<Intersection> xs = r.intersect(sphere);
+			if (Hit::hit(xs).result == HitResult::HIT) {
+				c.WritePixel(x, y, red);
+			}
 		}
-		dist += 20;
-		//degrees /= 4;
-		//t *= 2;
 	}
 
-	utils::ExportFile("clock.ppm", c.ToPPM());
+	utils::ExportFile("sphere.ppm", c.ToPPM());
 
 	std::cin.get();
 	return 0;

@@ -1,6 +1,4 @@
 #include "scaling-matrix.h"
-#include "point.h"
-#include "vector.h"
 
 ScalingMatrix::ScalingMatrix(float x, float y, float z)
     : Matrix4(x, 0, 0, 0,
