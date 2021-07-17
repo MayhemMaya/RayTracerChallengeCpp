@@ -15,7 +15,7 @@
 #include "rotation-matrix.cpp"
 #include "shearing-matrix.cpp"
 #include "ray.cpp"
-#include "Object.cpp"
+#include "object.cpp"
 #include "sphere.cpp"
 #include "intersection.cpp"
 #include "hit.cpp"

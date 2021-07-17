@@ -19,10 +19,10 @@
 #include "rotation-matrix.h"
 #include "shearing-matrix.h"
 #include "ray.h"
-#include "sphere.h"
 #include "intersection.h"
 #include "hit.h"
 #include "object.h"
+#include "sphere.h"
 
 int main() {
 	Point ray_origin(0, 0, -5);
@@ -55,7 +55,6 @@ int main() {
 			}
 		}
 	}
-
 	utils::ExportFile("sphere.ppm", c.ToPPM());
 
 	std::cin.get();

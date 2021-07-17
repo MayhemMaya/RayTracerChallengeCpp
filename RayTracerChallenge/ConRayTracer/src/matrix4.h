@@ -29,6 +29,7 @@ class Matrix4 {
   float minor(int row, int col) const;
   float cofactor(int row, int col) const;
   float determinant() const;
+  bool invertible() const;
   Matrix4 inverse() const;
  private:
   float data_[4][4] = {
@@ -37,5 +38,4 @@ class Matrix4 {
     {0, 0, 1, 0},
     {0, 0, 0, 1}
   };
-  bool invertible() const;
 };
