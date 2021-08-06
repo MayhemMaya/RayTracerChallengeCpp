@@ -1,22 +1,22 @@
 #include <vector>
 #include "intersection.h"
-#include "object.h"
+#include "mesh.h"
 
 Intersection::Intersection()
-    : time_(0.0), object_() {}
+    : time_(0.0), mesh_object_("") {}
 
-Intersection::Intersection(float time, const Object& object)
-    : time_(time), object_(object) {}
+Intersection::Intersection(float time, const Mesh& object)
+    : time_(time), mesh_object_(object) {}
 
 float Intersection::GetTime() const {
   return time_;
 }
-Object Intersection::GetObject() const {
-  return object_;
+Mesh Intersection::GetObject() const {
+  return mesh_object_;
 }
 
 bool Intersection::operator==(const Intersection& other) const {
-  return(time_ == other.GetTime() && object_ == other.GetObject());
+  return(time_ == other.GetTime() && mesh_object_ == other.GetObject());
 }
 
 void swap(Intersection& a, Intersection& b) {

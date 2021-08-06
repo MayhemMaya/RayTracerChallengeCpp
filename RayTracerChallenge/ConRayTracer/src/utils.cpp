@@ -85,4 +85,9 @@ float radians(float degrees) {
   return(degrees * kPI / 180);
 }
 
+float roundoff(float value, int precision) {
+  float pow_10 = pow(10.0f, precision);
+  return round(value * pow_10) / pow_10;
+}
+
 } // namespace utils

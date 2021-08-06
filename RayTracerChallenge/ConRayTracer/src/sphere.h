@@ -1,8 +1,8 @@
 #pragma once
 
-#include "object.h"
+#include "mesh.h"
 
-class Sphere : public Object {
+class Sphere : public Mesh {
  public:
    Sphere();
    Sphere(std::string name);

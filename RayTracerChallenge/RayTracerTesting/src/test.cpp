@@ -16,9 +16,13 @@
 #include "shearing-matrix.cpp"
 #include "ray.cpp"
 #include "object.cpp"
+#include "mesh.cpp"
 #include "sphere.cpp"
 #include "intersection.cpp"
 #include "hit.cpp"
+#include "material.cpp"
+#include "light-source.cpp"
+#include "point-light.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -943,5 +947,155 @@ TEST(SphereTest, Intersecting_a_translated_sphere_with_a_ray) {
 	s.SetTransform(TranslationMatrix(5, 0, 0));
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(SphereTest, A_sphere_has_a_default_material) {
+	Sphere s;
+	Material m = s.GetMaterial();
+	EXPECT_TRUE(m == Material());
+}
+
+TEST(SphereTest, A_sphere_may_be_assigned_a_material) {
+	Sphere s;
+	Material m;
+	m.SetAmbient(1);
+	s.SetMaterial(m);
+	EXPECT_TRUE(s.GetMaterial() == m);
+}
+#pragma endregion
+
+#pragma region NormalTests
+TEST(NormalTest, The_normal_on_a_sphere_at_a_point_on_the_x_axis) {
+	Sphere s;
+	Vector n = s.normal_at(Point(1, 0, 0));
+	EXPECT_TRUE(n == Vector(1, 0, 0));
+}
+
+TEST(NormalTest, The_normal_on_a_sphere_at_a_point_on_the_y_axis) {
+	Sphere s;
+	Vector n = s.normal_at(Point(0, 1, 0));
+	EXPECT_TRUE(n == Vector(0, 1, 0));
+}
+
+TEST(NormalTest, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
+	Sphere s;
+	Vector n = s.normal_at(Point(0, 0, 1));
+	EXPECT_TRUE(n == Vector(0, 0, 1));
+}
+
+TEST(NormalTest, The_normal_on_a_sphere_at_a_nonaxial_point) {
+	Sphere s;
+	Vector n = s.normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	EXPECT_TRUE(n == Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+}
+
+TEST(NormalTest, The_normal_is_a_normalized_vector) {
+	Sphere s;
+	Vector n = s.normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	EXPECT_TRUE(n == n.normalize());
+}
+
+TEST(NormalTest, Computing_the_normal_on_a_translated_sphere) {
+	Sphere s;
+	s.SetTransform(TranslationMatrix(0, 1, 0));
+	Vector n = s.normal_at(Point(0, 1.70711, -0.70711));
+	EXPECT_TRUE(n == Vector(0, 0.70711, -0.70711));
+}
+
+TEST(NormalTest, Computing_the_normal_on_a_transformed_sphere) {
+	Sphere s;
+	Matrix4 m = ScalingMatrix(1, 0.5, 1) * RotationMatrix(0, 0, utils::kPI / 5);
+	s.SetTransform(m);
+	Vector n = s.normal_at(Point(0, sqrt(2) / 2, -sqrt(2) / 2));
+	EXPECT_TRUE(n == Vector(0, 0.97014, -0.24254));
+}
+#pragma endregion
+
+#pragma region ReflectionTests
+TEST(ReflectionTest, Reflecting_a_vector_approaching_at_45_degrees) {
+	Vector v(1, -1, 0);
+	Vector n(0, 1, 0);
+	Vector r = v.reflect(n);
+	EXPECT_TRUE(r == Vector(1, 1, 0));
+}
+
+TEST(ReflectionTest, Reflecting_a_vector_off_a_slanted_surface) {
+	Vector v(0, -1, 0);
+	Vector n(sqrt(2) /2, sqrt(2) / 2, 0);
+	Vector r = v.reflect(n);
+	EXPECT_TRUE(r == Vector(1, 0, 0));
+}
+#pragma endregion
+
+#pragma region PointLightTests
+TEST(PointLightTest, A_point_light_has_a_position_and_intensity) {
+	Color intensity(1, 1, 1);
+	Point position(0, 0, 0);
+	PointLight light(position, intensity);
+	EXPECT_TRUE(light.GetPosition() == position);
+	EXPECT_TRUE(light.GetIntensity() == intensity);
+}
+#pragma endregion
+
+#pragma region MaterialTests
+TEST(MaterialTest, The_default_material) {
+	Material m;
+	EXPECT_TRUE(m.GetColor() == Color(1, 1, 1));
+	EXPECT_EQ(m.GetAmbient(), 0.1f);
+	EXPECT_EQ(m.GetDiffuse(), 0.9f);
+	EXPECT_EQ(m.GetSpecular(), 0.9f);
+	EXPECT_EQ(m.GetShininess(), 200.0f);
+}
+#pragma endregion
+
+#pragma region LightingTests
+TEST(LightingTest, Lighting_with_the_eye_between_the_light_and_the_surface) {
+	Material m;
+	Point position(0, 0, 0);
+	Vector evev(0, 0, -1);
+	Vector normalv(0, 0, -1);
+	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
+	Color result = LightSource::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(1.9, 1.9, 1.9));
+}
+
+TEST(LightingTest, Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees) {
+	Material m;
+	Point position(0, 0, 0);
+	Vector evev(0, sqrt(2) / 2, -sqrt(2) / 2);
+	Vector normalv(0, 0, -1);
+	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
+	Color result = LightSource::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(1.0, 1.0, 1.0));
+}
+
+TEST(LightingTest, Lighting_with_eye_opposite_surface_light_offset_45_degrees) {
+	Material m;
+	Point position(0, 0, 0);
+	Vector evev(0, 0, -1);
+	Vector normalv(0, 0, -1);
+	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
+	Color result = LightSource::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(0.7364, 0.7364, 0.7364));
+}
+
+TEST(LightingTest, Lighting_with_eye_in_the_path_of_the_reflection_vector) {
+	Material m;
+	Point position(0, 0, 0);
+	Vector evev(0, -sqrt(2) / 2, -sqrt(2) / 2);
+	Vector normalv(0, 0, -1);
+	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
+	Color result = LightSource::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(1.6364, 1.6364, 1.6364));
+}
+
+TEST(LightingTest, Lighting_with_the_light_behind_the_surface) {
+	Material m;
+	Point position(0, 0, 0);
+	Vector evev(0, 0, -1);
+	Vector normalv(0, 0, -1);
+	PointLight light(Point(0, 0, 10), Color(1, 1, 1));
+	Color result = LightSource::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(0.1, 0.1, 0.1));
 }
 #pragma endregion

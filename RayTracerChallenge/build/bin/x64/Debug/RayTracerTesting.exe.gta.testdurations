@@ -73,11 +73,11 @@
     <TestDuration Test="MatrixTest.MatrixIsInvertible" Duration="1" />
     <TestDuration Test="MatrixTest.MatrixIsNotInvertible" Duration="1" />
     <TestDuration Test="MatrixTest.CalculateInverseOfMatrix1" Duration="1" />
-    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix2" Duration="3" />
+    <TestDuration Test="MatrixTest.CalculateInverseOfMatrix2" Duration="1" />
     <TestDuration Test="MatrixTest.CalculateInverseOfMatrix3" Duration="1" />
     <TestDuration Test="MatrixTest.MultiplyMatrixByItsInverse" Duration="1" />
     <TestDuration Test="TranslationMatrixTest.MultiplyByTranslationMatrix" Duration="1" />
-    <TestDuration Test="TranslationMatrixTest.MultiplyByInverseOfTranslationMatrix" Duration="2" />
+    <TestDuration Test="TranslationMatrixTest.MultiplyByInverseOfTranslationMatrix" Duration="1" />
     <TestDuration Test="TranslationMatrixTest.TranslationMatrixDoesNotAffectVectors" Duration="1" />
     <TestDuration Test="ScalingMatrixTest.ScalingMatrixAppliedToPoint" Duration="1" />
     <TestDuration Test="ScalingMatrixTest.ScalingMatrixAppliedToVector" Duration="1" />
@@ -101,11 +101,11 @@
     <TestDuration Test="TransformationTest.Chained_transformations_must_be_applied_in_reverse_order" Duration="1" />
     <TestDuration Test="RayTest.Creating_and_querying_a_ray" Duration="1" />
     <TestDuration Test="RayTest.Computing_a_point_from_a_distance" Duration="1" />
-    <TestDuration Test="RayTest.A_ray_intersects_a_sphere_at_two_points" Duration="2" />
-    <TestDuration Test="RayTest.A_ray_intersects_a_sphere_at_a_tangent" Duration="2" />
+    <TestDuration Test="RayTest.A_ray_intersects_a_sphere_at_two_points" Duration="1" />
+    <TestDuration Test="RayTest.A_ray_intersects_a_sphere_at_a_tangent" Duration="1" />
     <TestDuration Test="RayTest.A_ray_misses_a_sphere" Duration="1" />
     <TestDuration Test="RayTest.A_ray_originates_inside_a_sphere" Duration="1" />
-    <TestDuration Test="RayTest.A_sphere_is_behind_a_ray" Duration="2" />
+    <TestDuration Test="RayTest.A_sphere_is_behind_a_ray" Duration="1" />
     <TestDuration Test="IntersectionTest.An_intersection_encapsulates_time_and_object" Duration="1" />
     <TestDuration Test="IntersectionTest.Aggregating_intersections" Duration="1" />
     <TestDuration Test="IntersectionTest.Intersect_sets_the_object_on_the_intersection" Duration="1" />
@@ -117,7 +117,25 @@
     <TestDuration Test="RayTest.Scaling_a_ray" Duration="1" />
     <TestDuration Test="SphereTest.A_spheres_default_transformation" Duration="1" />
     <TestDuration Test="SphereTest.Changing_a_spheres_transformation" Duration="1" />
-    <TestDuration Test="SphereTest.Intersecting_a_scaled_sphere_with_a_ray" Duration="2" />
-    <TestDuration Test="SphereTest.Intersecting_a_translated_sphere_with_a_ray" Duration="1" />
+    <TestDuration Test="SphereTest.Intersecting_a_scaled_sphere_with_a_ray" Duration="1" />
+    <TestDuration Test="SphereTest.Intersecting_a_translated_sphere_with_a_ray" Duration="2" />
+    <TestDuration Test="NormalTest.The_normal_on_a_sphere_at_a_point_on_the_x_axis" Duration="3" />
+    <TestDuration Test="NormalTest.The_normal_on_a_sphere_at_a_point_on_the_y_axis" Duration="2" />
+    <TestDuration Test="NormalTest.The_normal_on_a_sphere_at_a_point_on_the_z_axis" Duration="2" />
+    <TestDuration Test="NormalTest.The_normal_on_a_sphere_at_a_nonaxial_point" Duration="2" />
+    <TestDuration Test="NormalTest.The_normal_is_a_normalized_vector" Duration="2" />
+    <TestDuration Test="NormalTest.Computing_the_normal_on_a_translated_sphere" Duration="2" />
+    <TestDuration Test="NormalTest.Computing_the_normal_on_a_transformed_sphere" Duration="2" />
+    <TestDuration Test="ReflectionTest.Reflecting_a_vector_approaching_at_45_degrees" Duration="1" />
+    <TestDuration Test="ReflectionTest.Reflecting_a_vector_off_a_slanted_surface" Duration="1" />
+    <TestDuration Test="SphereTest.A_sphere_has_a_default_material" Duration="1" />
+    <TestDuration Test="SphereTest.A_sphere_may_be_assigned_a_material" Duration="1" />
+    <TestDuration Test="PointLightTest.A_point_light_has_a_position_and_intensity" Duration="1" />
+    <TestDuration Test="MaterialTest.The_default_material" Duration="1" />
+    <TestDuration Test="LightingTest.Lighting_with_the_eye_between_the_light_and_the_surface" Duration="1" />
+    <TestDuration Test="LightingTest.Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees" Duration="1" />
+    <TestDuration Test="LightingTest.Lighting_with_eye_opposite_surface_light_offset_45_degrees" Duration="1" />
+    <TestDuration Test="LightingTest.Lighting_with_eye_in_the_path_of_the_reflection_vector" Duration="1" />
+    <TestDuration Test="LightingTest.Lighting_with_the_light_behind_the_surface" Duration="1" />
   </TestDurations>
 </GtaTestDurations>

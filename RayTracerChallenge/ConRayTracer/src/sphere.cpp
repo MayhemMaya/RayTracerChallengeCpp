@@ -1,6 +1,7 @@
 #include "sphere.h"
+#include "vector.h"
+#include "point.h"
 
-Sphere::Sphere() : Object("sphere") {}
+Sphere::Sphere() : Mesh("sphere") {}
 
-Sphere::Sphere(std::string name)
-    : Object(name) {}
+Sphere::Sphere(std::string name) : Mesh(name) {}

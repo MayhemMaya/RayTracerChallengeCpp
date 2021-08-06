@@ -17,9 +17,9 @@ std::ostream& operator<<(std::ostream& os, const Color& obj) {
 
 std::string Color::ToPPMString() const {
   std::stringstream ss;
-  ss << utils::clamp(round(r_ * 255), 0, 255) << " "
-     << utils::clamp(round(g_ * 255), 0, 255) << " "
-     << utils::clamp(round(b_ * 255), 0, 255);
+  ss << utils::clamp(std::round(r_ * 255), 0, 255) << " "
+     << utils::clamp(std::round(g_ * 255), 0, 255) << " "
+     << utils::clamp(std::round(b_ * 255), 0, 255);
   return ss.str();
 }
 
@@ -55,4 +55,10 @@ Color Color::operator*(const Color& other) const {
 Color Color::clamp() const {
   return Color(utils::clamp(r_, 0.0, 1.0), utils::clamp(g_, 0.0, 1.0),
                                            utils::clamp(b_, 0.0, 1.0));
+}
+
+Color Color::round(int roundoff_amount) const {
+  return Color(utils::roundoff(r_, roundoff_amount),
+               utils::roundoff(g_, roundoff_amount),
+               utils::roundoff(b_, roundoff_amount));
 }

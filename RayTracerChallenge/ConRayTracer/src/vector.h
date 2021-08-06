@@ -16,4 +16,5 @@ class Vector : public Tuple {
   Vector operator / (const float& other) const;
   double magnitude() const;
   Vector normalize() const;
+  Vector reflect(const Vector& normal) const;
 };

@@ -1,34 +1,28 @@
-#include <sstream>
 #include "object.h"
+#include "translation-matrix.h"
 
 int Object::object_count_ = 0;
-
-Object::Object()
-    : transform_(Matrix4()), name_("object") {
-  object_count_++;
-  std::stringstream ss;
-  ss << object_count_;
-  name_ += ss.str();
-}
-
 
 Object::Object(std::string name)
     : transform_(Matrix4()), name_(name) {
   object_count_++;
-  if (name == "sphere") {
-    std::stringstream ss;
-    ss << object_count_;
-    name_ += ss.str();
-  }
 }
 
-std::ostream& operator<<(std::ostream& os, const Object& obj) {
-  os << "Name: " << obj.name_ << " Transform: "; // << obj.transform_;
-  return os;
+Object::Object(std::string name, const Point& position)
+    : transform_(TranslationMatrix(position[0], position[1], position[2])), name_(name) {
+  object_count_++;
+}
+
+Object::~Object() {
+  object_count_--;
 }
 
 std::string Object::GetName() const {
   return name_;
+}
+
+void Object::SetName(const std::string& name) {
+  name_ = name;
 }
 
 Matrix4 Object::GetTransform() const {
@@ -46,5 +40,7 @@ Point Object::GetPosition() const {
   return Point(x, y, z);
 }
 bool Object::operator==(const Object& other) const {
-  return(name_ == other.GetName()); //&& transform_ == other.GetTransform());
+  return(name_ == other.GetName() && transform_ == other.GetTransform());
 }
+
+int Object::GetCount() { return object_count_; }

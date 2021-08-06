@@ -23,24 +23,33 @@
 #include "hit.h"
 #include "object.h"
 #include "sphere.h"
+#include "point-light.h"
 
 int main() {
+
 	Point ray_origin(0, 0, -5);
 
 	float wall_z = 10;
 	float wall_size = 7.0;
-	int canvas_pixels = 100;
+	int canvas_pixels = 1024;
 
 	float pixel_size = wall_size / canvas_pixels;
 	float half = wall_size / 2;
 
 	Canvas c(canvas_pixels, canvas_pixels);
-	Color red(1, 0, 0);
 	Sphere sphere;
+	Material m;
+	m.SetColor(Color(1, 0.2, 1));
+	sphere.SetMaterial(m);
+
 	//sphere.SetTransform(RotationMatrix(0, 0, utils::kPI / 4) * ScalingMatrix(0.5, 1, 1));
-	sphere.SetTransform(ShearingMatrix(1, 0, 0, 0, 0, 0) * ScalingMatrix(0.5, 1, 1));
+	//sphere.SetTransform(ScalingMatrix(1, 0.5, 1));
+	//sphere.SetTransform(ShearingMatrix(1, 0, 0, 0, 0, 0) * ScalingMatrix(0.5, 1, 1));
 	//sphere.SetTransform(TranslationMatrix(0.5, 0, 0) * RotationMatrix(0, 0, utils::kPI / 4) * ScalingMatrix(0.5, 1, 1));
-	std::cout << sphere.GetTransform() << std::endl;
+
+	Point light_position(-10, 10, -10);
+	Color light_color(1, 1, 1);
+	PointLight light(light_position, light_color);
 
 	for (int y = 0; y < canvas_pixels; y++) {
 		float world_y = half - pixel_size * y;
@@ -51,7 +60,13 @@ int main() {
 			Ray r(ray_origin, (position - ray_origin).normalize());
 			std::vector<Intersection> xs = r.intersect(sphere);
 			if (Hit::hit(xs).result == HitResult::HIT) {
-				c.WritePixel(x, y, red);
+				Intersection hit = Hit::hit(xs).i;
+				Point point = r.position(hit.GetTime());
+				Vector normal = hit.GetObject().normal_at(point);
+				Vector eye = -r.GetDirection();
+				Color color = LightSource::lighting(hit.GetObject().GetMaterial(),
+																						light, point, eye, normal);
+				c.WritePixel(x, y, color);
 			}
 		}
 	}

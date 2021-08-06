@@ -53,3 +53,7 @@ Vector Vector::normalize() const {
                       z_ / this->magnitude(),
                       w_ / this->magnitude()));
 }
+
+Vector Vector::reflect(const Vector& normal) const {
+  return (*this - normal * 2 * utils::dot(*this, normal));
+}

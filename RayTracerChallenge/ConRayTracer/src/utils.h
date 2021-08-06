@@ -24,5 +24,6 @@ void swap(float& a, float& b);
 void swap(int& a, int& b);
 void swap(double& a, double& b);
 float radians(float degrees);
+float roundoff(float value, int precision);
 
 } // namespace utils
