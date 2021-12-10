@@ -15,6 +15,7 @@ class Color {
    Color operator-(const Color& other) const;
    Color operator*(const float& scalar) const;
    Color operator*(const Color& other) const;
+   Color& operator+=(const Color& other);
    Color clamp() const;
    Color round(int roundoff_amount) const;
 

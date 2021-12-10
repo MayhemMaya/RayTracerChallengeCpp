@@ -43,8 +43,8 @@ Vector Vector::operator/(const float& scalar) const {
                              z_ / scalar);
 }
 
-double Vector::magnitude() const {
-  return sqrt(pow(x_, 2) + pow(y_, 2) + pow(z_, 2));
+float Vector::magnitude() const {
+  return (float)sqrt(pow(x_, 2.0f) + pow(y_, 2.0f) + pow(z_, 2.0f));
 }
 
 Vector Vector::normalize() const {

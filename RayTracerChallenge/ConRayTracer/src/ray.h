@@ -6,6 +6,7 @@
 #include "vector.h"
 #include "intersection.h"
 #include "matrix4.h"
+#include "world.h"
 
 class Ray {
  public:
@@ -13,7 +14,8 @@ class Ray {
   Point GetOrigin() const;
   Vector GetDirection() const;
   Point position(float time) const;
-  std::vector<Intersection> intersect(const Sphere& obj) const;
+  std::vector<Intersection> intersect(const Sphere& sphere) const;
+  std::vector<Intersection> intersect(const World& world) const;
   Ray transform(const Matrix4& matrix) const;
  private:
   Point origin_;

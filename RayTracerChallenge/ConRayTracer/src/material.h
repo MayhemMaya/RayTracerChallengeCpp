@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "color.h"
 #include "utils.h"
 
@@ -8,6 +9,7 @@ class Material {
    Material();
    Material(const Color& color, float ambient, float diffuse,
             float specular, float shininess);
+   friend std::ostream& operator<<(std::ostream& os, const Material& obj);
    Color GetColor() const;
    float GetAmbient() const;
    float GetDiffuse() const;
@@ -20,6 +22,8 @@ class Material {
    void SetSpecular(float specular);
    void SetShininess(float shininess);
    bool operator==(const Material& other) const;
+   Material& operator=(const Material& other);
+   std::string format() const;
  private:
   Color color_;
   float ambient_;

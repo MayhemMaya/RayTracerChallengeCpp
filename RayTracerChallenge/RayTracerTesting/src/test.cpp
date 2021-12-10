@@ -10,10 +10,6 @@
 #include "matrix2.cpp"
 #include "matrix3.cpp"
 #include "matrix4.cpp"
-#include "translation-matrix.cpp"
-#include "scaling-matrix.cpp"
-#include "rotation-matrix.cpp"
-#include "shearing-matrix.cpp"
 #include "ray.cpp"
 #include "object.cpp"
 #include "mesh.cpp"
@@ -23,14 +19,17 @@
 #include "material.cpp"
 #include "light-source.cpp"
 #include "point-light.cpp"
+#include "world.cpp"
+#include "engine.cpp"
+#include "camera.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
-	EXPECT_EQ(utils::clamp(-1.5, 0.0, 1.0), 0.0);
+	EXPECT_EQ(utils::clamp(-1.5f, 0.0f, 1.0f), 0.0f);
 }
 
 TEST(UtilsTests, ClampToOne) {
-	EXPECT_EQ(utils::clamp(1.5, 0.0, 1.0), 1.0);
+	EXPECT_EQ(utils::clamp(1.5f, 0.0f, 1.0f), 1.0f);
 }
 
 TEST(UtilsTests, SwapFloatValues) {
@@ -56,10 +55,22 @@ TEST(UtilsTests, SwapDoubleValues) {
 	EXPECT_EQ(a, 8.6);
 	EXPECT_EQ(b, 7.4);
 }
+
+TEST(UtilsTests, SwapIntersectionValues) {
+	Mesh m1("mesh1", ObjectType::kMesh);
+	Mesh m2("mesh2", ObjectType::kMesh);
+	Intersection i1(1.0f, m1);
+	Intersection i2(2.0f, m2);
+	Intersection::swap(i1, i2);
+	EXPECT_EQ(i1.GetTime(), 2.0f);
+	EXPECT_TRUE(i1.GetObject() == m2);
+	EXPECT_EQ(i2.GetTime(), 1.0f);
+	EXPECT_TRUE(i2.GetObject() == m1);
+}
 #pragma endregion
 
-#pragma region TupleTests
-TEST(TupleTest, TupleIsPoint) {
+#pragma region Chapter1Tests
+TEST(Chapter1_tests, A_tuple_with_w_as_1_is_a_point) {
 	Tuple a(4.3f, -4.2f, 3.1f, 1.0f);
 	EXPECT_EQ(a[0], 4.3f);
 	EXPECT_EQ(a[1], -4.2f);
@@ -69,7 +80,7 @@ TEST(TupleTest, TupleIsPoint) {
 	EXPECT_FALSE(a.IsVector());
 }
 
-TEST(TupleTest, TupleIsVector) {
+TEST(Chapter1_tests, A_tuple_with_w_as_0_is_a_vector) {
 	Tuple a(4.3f, -4.2f, 3.1f, 0.0f);
 	EXPECT_EQ(a[0], 4.3f);
 	EXPECT_EQ(a[1], -4.2f);
@@ -79,155 +90,114 @@ TEST(TupleTest, TupleIsVector) {
 	EXPECT_TRUE(a.IsVector());
 }
 
-TEST(TupleTest, AddTwoTuples) {
+TEST(Chapter1_tests, Create_a_point) {
+	Point p(4, -4, 3);
+	EXPECT_TRUE(p == Tuple(4, -4, 3, 1));
+}
+
+TEST(Chapter1_tests, Create_a_vector) {
+	Vector v(4, -4, 3);
+	EXPECT_TRUE(v == Tuple(4, -4, 3, 0));
+}
+
+TEST(Chapter1_tests, Adding_two_tuples) {
 	Tuple a1(3, -2, 5, 1);
 	Tuple a2(-2, 3, 1, 0);
 	EXPECT_TRUE(a1 + a2 == Tuple(1, 1, 6, 1));
 }
 
-TEST(TupleTest, SubtractTwoTuples) {
-	Tuple a1(3, 2, 1, 1);
-	Tuple a2(5, 6, 7, 0);
-	EXPECT_TRUE(a1 - a2 == Tuple(-2, -4, -6, 1));
-}
-
-TEST(TupleTest, NegateTuple) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(-a == Tuple(-1, 2, -3, 4));
-}
-
-TEST(TupleTest, MultiplyTupleByScalar) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(a * 3.5 == Tuple(3.5, -7, 10.5, -14));
-}
-
-TEST(TupleTest, MultiplyTupleByFraction) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(a * 0.5 == Tuple(0.5, -1, 1.5, -2));
-}
-
-TEST(TupleTest, DivideTupleByScalar) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(a / 2 == Tuple(0.5, -1, 1.5, -2));
-}
-#pragma endregion
-
-#pragma region PointTests
-TEST(PointTest, CreatePoint) {
-	Point p(4, -4, 3);
-	EXPECT_TRUE(p == Tuple(4, -4, 3, 1));
-}
-
-TEST(PointTest, AddVectorToPoint) {
-	Point p(5, 6, 7);
-	Vector v(3, 2, 1);
-	EXPECT_TRUE(p + v == Point(8, 8, 8));
-}
-
-TEST(PointTest, SubtractTwoPoints) {
+TEST(Chapter1_tests, Subtracting_two_points) {
 	Point p1(3, 2, 1);
 	Point p2(5, 6, 7);
 	EXPECT_TRUE(p1 - p2 == Vector(-2, -4, -6));
 }
 
-TEST(PointTest, SubtractVectorFromPoint) {
+TEST(Chapter1_tests, Subtracting_a_vector_from_a_point) {
 	Point p(3, 2, 1);
 	Vector v(5, 6, 7);
 	EXPECT_TRUE(p - v == Point(-2, -4, -6));
 }
 
-TEST(PointTest, NegatePoint) {
-	Point p(1, -2, 3);
-	EXPECT_TRUE(-p == Point(-1, 2, -3));
-}
-#pragma endregion
-
-#pragma region VectorTests
-TEST(VectorTest, CreateVector) {
-	Vector v(4, -4, 3);
-	EXPECT_TRUE(v == Tuple(4, -4, 3, 0));
-}
-
-TEST(VectorTest, SubtractTwoVectors) {
+TEST(Chapter1_tests, Subtracting_two_vectors) {
 	Vector v1(3, 2, 1);
 	Vector v2(5, 6, 7);
 	EXPECT_TRUE(v1 - v2 == Vector(-2, -4, -6));
 }
 
-TEST(VectorTest, SubtractVectorFromZeroVector) {
+TEST(Chapter1_tests, Subtracting_a_vector_from_the_zero_vector) {
 	Vector zero(0, 0, 0);
 	Vector v(1, -2, 3);
 	EXPECT_TRUE(zero - v == Vector(-1, 2, -3));
 }
 
-TEST(VectorTest, NegateVector) {
-	Vector v(1, -2, 3);
-	EXPECT_TRUE(-v == Vector(-1, 2, -3));
+TEST(Chapter1_tests, Negating_a_Tuple) {
+	Tuple a(1, -2, 3, -4);
+	EXPECT_TRUE(-a == Tuple(-1, 2, -3, 4));
 }
 
-TEST(VectorTest, MultiplyVectorByScalar) {
-	Vector v(1, -2, 3);
-	EXPECT_TRUE(v * 3.5 == Vector(3.5, -7, 10.5));
+TEST(Chapter1_tests, Multiplying_a_tuple_by_a_scalar) {
+	Tuple a(1, -2, 3, -4);
+	EXPECT_TRUE(a * 3.5f == Tuple(3.5f, -7, 10.5f, -14));
 }
 
-TEST(VectorTest, MultiplyVectorByFraction) {
-	Vector v(1, -2, 3);
-	EXPECT_TRUE(v * 0.5 == Vector(0.5, -1, 1.5));
+TEST(Chapter1_tests, Multiplying_a_tuple_by_a_fraction) {
+	Tuple a(1, -2, 3, -4);
+	EXPECT_TRUE(a * 0.5f == Tuple(0.5f, -1, 1.5f, -2));
 }
 
-TEST(VectorTest, DivideVectorByScalar) {
-	Vector v(1, -2, 3);
-	EXPECT_TRUE(v / 2 == Vector(0.5, -1, 1.5));
+TEST(Chapter1_tests, Dividing_a_tuple_by_a_scalar) {
+	Tuple a(1, -2, 3, -4);
+	EXPECT_TRUE(a / 2 == Tuple(0.5f, -1, 1.5f, -2));
 }
 
-TEST(VectorTest, ComputeMagnitudeOfVector1) {
+TEST(Chapter1_tests, Computing_the_magnitude_of_vector_1_0_0) {
 	Vector v(1, 0, 0);
 	EXPECT_EQ(v.magnitude(), 1);
 }
 
-TEST(VectorTest, ComputeMagnitudeOfVector2) {
+TEST(Chapter1_tests, Computing_the_magnitude_of_vector_0_1_0) {
 	Vector v(0, 1, 0);
 	EXPECT_EQ(v.magnitude(), 1);
 }
 
-TEST(VectorTest, ComputeMagnitudeOfVector3) {
+TEST(Chapter1_tests, Computing_the_magnitude_of_vector_0_0_1) {
 	Vector v(0, 0, 1);
 	EXPECT_EQ(v.magnitude(), 1);
 }
 
-TEST(VectorTest, ComputeMagnitudeOfVector4) {
+TEST(Chapter1_tests, Computing_the_magnitude_of_vector_1_2_3) {
 	Vector v(1, 2, 3);
-	EXPECT_EQ(v.magnitude(), sqrt(14));
+	EXPECT_EQ(v.magnitude(), (float)sqrt(14));
 }
 
-TEST(VectorTest, ComputeMagnitudeOfVector5) {
+TEST(Chapter1_tests, Computing_the_magnitude_of_negated_vector_1_2_3) {
 	Vector v(-1, -2, -3);
-	EXPECT_EQ(v.magnitude(), sqrt(14));
+	EXPECT_EQ(v.magnitude(), (float)sqrt(14));
 }
 
-TEST(VectorTest, NormalizeVector1) {
+TEST(Chapter1_tests, Normalizing_vector_4_0_0_gives_1_0_0) {
 	Vector v(4, 0, 0);
 	EXPECT_TRUE(v.normalize() == Vector(1, 0, 0));
 }
 
-TEST(VectorTest, NormalizeVector2) {
+TEST(Chapter1_tests, Normalizing_vector_1_2_3) {
 	Vector v(1, 2, 3);
-	EXPECT_TRUE(v.normalize() == Vector(0.26726, 0.53452, 0.80178));
+	EXPECT_TRUE(v.normalize() == Vector(0.26726f, 0.53452f, 0.80178f));
 }
 
-TEST(VectorTest, NormalizeVector3) {
+TEST(Chapter1_tests, The_magnitude_of_a_normalized_vector) {
 	Vector v(1, 2, 3);
 	Vector norm = v.normalize();
-	EXPECT_TRUE(utils::equal(norm.magnitude(), 1));
+	EXPECT_TRUE(utils::equal(norm.magnitude(), 1.0f));
 }
 
-TEST(VectorTest, DotProductOfTwoVectors) {
+TEST(Chapter1_tests, The_dot_product_of_two_vectors) {
 	Vector a(1, 2, 3);
 	Vector b(2, 3, 4);
 	EXPECT_EQ(utils::dot(a, b), 20);
 }
 
-TEST(VectorTest, CrossProductOfTwoVectors) {
+TEST(Chapter1_tests, The_cross_product_of_two_vectors) {
 	Vector a(1, 2, 3);
 	Vector b(2, 3, 4);
 	EXPECT_TRUE(utils::cross(a, b) == Vector(-1, 2, -1));
@@ -235,40 +205,38 @@ TEST(VectorTest, CrossProductOfTwoVectors) {
 }
 #pragma endregion
 
-#pragma region ColorTests
-TEST(ColorTest, CreateColor) {
+#pragma region Chapter2Tests
+TEST(Chapter2_tests, Colors_are_red_green_tuples) {
 	Color c(-0.5f, 0.4f, 1.7f);
 	EXPECT_EQ(c[0], -0.5f);
 	EXPECT_EQ(c[1], 0.4f);
 	EXPECT_EQ(c[2], 1.7f);
 }
 
-TEST(ColorTest, AddTwoColors) {
-	Color c1(0.9, 0.6, 0.75);
-	Color c2(0.7, 0.1, 0.25);
-	EXPECT_TRUE(c1 + c2 == Color(1.6, 0.7, 1.0));
+TEST(Chapter2_tests, Adding_colors) {
+	Color c1(0.9f, 0.6f, 0.75f);
+	Color c2(0.7f, 0.1f, 0.25f);
+	EXPECT_TRUE(c1 + c2 == Color(1.6f, 0.7f, 1.0f));
 }
 
-TEST(ColorTest, SubtractTwoColors) {
-	Color c1(0.9, 0.6, 0.75);
-	Color c2(0.7, 0.1, 0.25);
+TEST(Chapter2_tests, Subtracting_colors) {
+	Color c1(0.9f, 0.6f, 0.75f);
+	Color c2(0.7f, 0.1f, 0.25f);
 	EXPECT_TRUE(c1 - c2 == Color(0.2, 0.5, 0.5));
 }
 
-TEST(ColorTest, MultiplyColorByScalar) {
-	Color c1(0.2, 0.3, 0.4);
-	EXPECT_TRUE(c1 * 2 == Color(0.4, 0.6, 0.8));
+TEST(Chapter2_tests, Multiplying_a_color_by_a_scalar) {
+	Color c1(0.2f, 0.3f, 0.4f);
+	EXPECT_TRUE(c1 * 2.0f == Color(0.4f, 0.6f, 0.8f));
 }
 
-TEST(ColorTest, MultiplyTwoColors) {
-	Color c1(1, 0.2, 0.4);
-	Color c2(0.9, 1, 0.1);
-	EXPECT_TRUE(c1 * c2 == Color(0.9, 0.2, 0.04));
+TEST(Chapter2_tests, Multiplying_colors) {
+	Color c1(1.0f, 0.2f, 0.4f);
+	Color c2(0.9f, 1.0f, 0.1f);
+	EXPECT_TRUE(c1 * c2 == Color(0.9f, 0.2f, 0.04f));
 }
-#pragma endregion
 
-#pragma region CanvasTests
-TEST(CanvasTest, CreateCanvas) {
+TEST(Chapter2_tests, Creating_a_canvas) {
 	Canvas c(10, 20);
 	for (int y = 0; y < c.GetHeight(); y++) {
 		for (int x = 0; x < c.GetWidth(); x++) {
@@ -277,14 +245,14 @@ TEST(CanvasTest, CreateCanvas) {
 	}
 }
 
-TEST(CanvasTest, WritePixelToCanvas) {
+TEST(Chapter2_tests, Writing_pixels_to_a_canvas) {
 	Canvas c(10, 20);
 	Color red(1, 0, 0);
 	c.WritePixel(2, 3, red);
 	EXPECT_TRUE(c.PixelAt(2, 3) == red);
 }
 
-TEST(CanvasTest, ConstructPPMHeader) {
+TEST(Chapter2_tests, Constructing_the_PPM_header) {
 	Canvas c(5, 3);
 	std::string ppm = c.ToPPM();
 	std::vector<std::string> ppm_lines = utils::split_lines(ppm);
@@ -293,11 +261,11 @@ TEST(CanvasTest, ConstructPPMHeader) {
 	EXPECT_EQ(ppm_lines[2], "255");
 }
 
-TEST(CanvasTest, ConstructPPMPixelData) {
+TEST(Chapter2_tests, Constructing_the_PPM_pixel_data) {
 	Canvas c(5, 3);
-	Color c1(1.5, 0, 0);
-	Color c2(0, 0.5, 0);
-	Color c3(-0.5, 0, 1);
+	Color c1(1.5f, 0, 0);
+	Color c2(0, 0.5f, 0);
+	Color c3(-0.5f, 0, 1);
 	c.WritePixel(0, 0, c1);
 	c.WritePixel(2, 1, c2);
 	c.WritePixel(4, 2, c3);
@@ -308,11 +276,11 @@ TEST(CanvasTest, ConstructPPMPixelData) {
 	EXPECT_EQ(ppm_lines[5], "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
 }
 
-TEST(CanvasTest, SplitLongLinesInPPMFiles) {
+TEST(Chapter2_tests, Splitting_long_lines_in_PPM_files) {
 	Canvas c(10, 2);
 	for (int y = 0; y < c.GetHeight(); y++) {
 		for (int x = 0; x < c.GetWidth(); x++) {
-			c.WritePixel(x, y, Color(1, 0.8, 0.6));
+			c.WritePixel(x, y, Color(1, 0.8f, 0.6f));
 		}
 	}
 	std::string ppm = c.ToPPM();
@@ -323,15 +291,29 @@ TEST(CanvasTest, SplitLongLinesInPPMFiles) {
 	EXPECT_EQ(ppm_lines[6], "153 255 204 153 255 204 153 255 204 153 255 204 153");
 }
 
-TEST(CanvasTest, PPMFileTerminatedByNewlineCharacter) {
+TEST(Chapter2_tests, PPM_files_are_terminated_by_a_newline_character) {
 	Canvas c(5, 3);
 	std::string ppm = c.ToPPM();
-	EXPECT_EQ(ppm[ppm.size()-1], '\n');
+	EXPECT_EQ(ppm[ppm.size() - 1], '\n');
 }
 #pragma endregion
 
-#pragma region MatrixTests
-TEST(MatrixTest, Create2x2Matrix) {
+#pragma region Chapter3Tests
+TEST(Chapter3_tests, Constructing_and_inspecting_a_4x4_matrix) {
+	Matrix4 M(1, 2, 3, 4,
+		5.5f, 6.5f, 7.5f, 8.5f,
+		9, 10, 11, 12,
+		13.5f, 14.5f, 15.5f, 16.5f);
+	EXPECT_EQ(M(0, 0), 1);
+	EXPECT_EQ(M(0, 3), 4);
+	EXPECT_EQ(M(1, 0), 5.5f);
+	EXPECT_EQ(M(1, 2), 7.5f);
+	EXPECT_EQ(M(2, 2), 11);
+	EXPECT_EQ(M(3, 0), 13.5f);
+	EXPECT_EQ(M(3, 2), 15.5f);
+}
+
+TEST(Chapter3_tests, A_2x2_matrix_ought_to_be_representable) {
 	Matrix2 M(-3, 5,
 						1, -2);
 	EXPECT_EQ(M(0, 0), -3);
@@ -340,7 +322,7 @@ TEST(MatrixTest, Create2x2Matrix) {
 	EXPECT_EQ(M(1, 1), -2);
 }
 
-TEST(MatrixTest, Create3x3Matrix) {
+TEST(Chapter3_tests, A_3x3_matrix_ought_to_be_representable) {
 	Matrix3 M(-3, 5, 0,
 						1, -2, -7,
 						0, 1, 1);
@@ -349,61 +331,7 @@ TEST(MatrixTest, Create3x3Matrix) {
 	EXPECT_EQ(M(2, 2), 1);
 }
 
-TEST(MatrixTest, Create4x4Matrix) {
-	Matrix4 M(1, 2, 3, 4,
-						5.5, 6.5, 7.5, 8.5,
-						9, 10, 11, 12,
-						13.5, 14.5, 15.5, 16.5);
-	EXPECT_EQ(M(0, 0), 1);
-	EXPECT_EQ(M(0, 3), 4);
-	EXPECT_EQ(M(1, 0), 5.5);
-	EXPECT_EQ(M(1, 2), 7.5);
-	EXPECT_EQ(M(2, 2), 11);
-	EXPECT_EQ(M(3, 0), 13.5);
-	EXPECT_EQ(M(3, 2), 15.5);
-}
-
-TEST(MatrixTest, _2x2MatrixEqualityWithIdentical2x2Matrices) {
-	Matrix2 A(1, 2,
-						3, 4);
-
-	Matrix2 B(1, 2,
-						3, 4);
-	EXPECT_TRUE(A == B);
-}
-
-TEST(MatrixTest, _2x2MatrixEqualityWithDifferent2x2Matrices) {
-	Matrix2 A(1, 2,
-						3, 4);
-
-	Matrix2 B(4, 3,
-						2, 1);
-	EXPECT_TRUE(A != B);
-}
-
-TEST(MatrixTest, _3x3MatrixEqualityWithIdentical3x3Matrices) {
-	Matrix3 A(1, 2, 3, 
-						4, 5, 6,
-						7, 8, 9);
-
-	Matrix3 B(1, 2, 3,
-						4, 5, 6,
-						7, 8, 9);
-	EXPECT_TRUE(A == B);
-}
-
-TEST(MatrixTest, _3x3MatrixEqualityWithDifferent3x3Matrices) {
-	Matrix3 A(1, 2, 3,
-						4, 5, 6,
-						7, 8, 9);
-
-	Matrix3 B(9, 8, 7,
-						6, 0, 1,
-						2, 3, 4);
-	EXPECT_TRUE(A != B);
-}
-
-TEST(MatrixTest, _4x4MatrixEqualityWithIdentical4x4Matrices) {
+TEST(Chapter3_tests, Matrix_equality_with_identical_matrices) {
 	Matrix4 A(1, 2, 3, 4,
 						5, 6, 7, 8,
 						9, 8, 7, 6,
@@ -416,7 +344,7 @@ TEST(MatrixTest, _4x4MatrixEqualityWithIdentical4x4Matrices) {
 	EXPECT_TRUE(A == B);
 }
 
-TEST(MatrixTest, _4x4MatrixEqualityWithDifferent4x4Matrices) {
+TEST(Chapter3_tests, Matrix_equality_with_different_matrices) {
 	Matrix4 A(1, 2, 3, 4,
 						5, 6, 7, 8,
 						9, 8, 7, 6,
@@ -429,7 +357,7 @@ TEST(MatrixTest, _4x4MatrixEqualityWithDifferent4x4Matrices) {
 	EXPECT_TRUE(A != B);
 }
 
-TEST(MatrixTest, MultiplyTwoMatrices) {
+TEST(Chapter3_tests, Multiplying_two_matrices) {
 	Matrix4 A(1, 2, 3, 4,
 						5, 6, 7, 8,
 						9, 8, 7, 6,
@@ -446,7 +374,7 @@ TEST(MatrixTest, MultiplyTwoMatrices) {
 													 16, 26, 46, 42));
 }
 
-TEST(MatrixTest, MultiplyMatrixByTuple) {
+TEST(Chapter3_tests, A_matrix_multiplied_by_a_tuple) {
 	Matrix4 A(1, 2, 3, 4,
 						2, 4, 4, 2,
 						8, 6, 4, 1,
@@ -456,62 +384,62 @@ TEST(MatrixTest, MultiplyMatrixByTuple) {
 	EXPECT_TRUE(c == Tuple(18, 24, 33, 1));
 }
 
-TEST(MatrixTest, MultiplyMatrixByIdentityMatrix) {
+TEST(Chapter3_tests, Multiplying_a_matrix_by_the_identity_matrix) {
 	Matrix4 A(0, 1, 2, 4,
 						1, 2, 4, 8,
 						2, 4, 8, 16,
 						4, 8, 16, 32);
-	Matrix4 identity_matrix;
+	Matrix4 identity_matrix = Matrix4().identity();
 	EXPECT_TRUE(A * identity_matrix == A);
 }
 
-TEST(MatrixTest, MultiplyIdentityMatrixByTuple) {
+TEST(Chapter3_tests, Multiplying_the_identity_matrix_by_a_tuple) {
 	Tuple a(1, 2, 3, 4);
-	Matrix4 identity_matrix;
+	Matrix4 identity_matrix = Matrix4().identity();
 	EXPECT_TRUE(identity_matrix * a == a);
 }
 
-TEST(MatrixTest, TransposeMatrix) {
+TEST(Chapter3_tests, Transposing_a_matrix) {
 	Matrix4 A(0, 9, 3, 0,
-						9, 8, 0, 8,
-						1, 8, 5, 3,
-						0, 0, 5, 8);
+		9, 8, 0, 8,
+		1, 8, 5, 3,
+		0, 0, 5, 8);
 	EXPECT_TRUE(A.transpose() == Matrix4(0, 9, 1, 0,
 																			 9, 8, 8, 0,
 																			 3, 0, 5, 5,
 																			 0, 8, 3, 8));
 }
 
-TEST(MatrixTest, TransposeIdentityMatrix) {
-	Matrix4 identity_matrix;
+TEST(Chapter3_tests, Transposing_the_identity_matrix) {
+	Matrix4 identity_matrix = Matrix4().identity();
 	Matrix4 A = identity_matrix.transpose();
 	EXPECT_TRUE(A == identity_matrix);
 }
 
-TEST(MatrixTest, CalculateDeterminantOf2x2Matrix) {
+TEST(Chapter3_tests, Calculating_the_determinant_of_a_2x2_matrix) {
 	Matrix2 A(1, 5, -3, 2);
 	EXPECT_EQ(A.determinant(), 17);
 }
 
-TEST(MatrixTest, SubmatrixOf3x3MatrixIs2x2Matrix) {
+TEST(Chapter3_tests, A_submatrix_of_a_3x3_matrix_is_a_2x2_matrix) {
 	Matrix3 A(1, 5, 0,
 						-3, 2, 7,
 						0, 6, -3);
 	EXPECT_TRUE(A.submatrix(0, 2) == Matrix2(-3, 2,
-																					 0, 6));
+																					0, 6));
 }
 
-TEST(MatrixTest, SubmatrixOf4x4MatrixIs3x3Matrix) {
+TEST(Chapter3_tests, A_submatrix_of_a_4x4_matrix_is_a_3x3_matrix) {
 	Matrix4 A(-6, 1, 1, 6,
 						-8, 5, 8, 6,
 						-1, 0, 8, 2,
 						-7, 1, -1, 1);
 	EXPECT_TRUE(A.submatrix(2, 1) == Matrix3(-6, 1, 6,
-																					 -8, 8, 6,
-																					 -7, -1, 1));
+		-8, 8, 6,
+		-7, -1, 1));
 }
 
-TEST(MatrixTest, CalculateMinorOf3x3Matrix) {
+TEST(Chapter3_tests, Calculating_a_minor_of_a_3x3_matrix) {
 	Matrix3 A(3, 5, 0,
 						2, -1, -7,
 						6, -1, 5);
@@ -520,7 +448,7 @@ TEST(MatrixTest, CalculateMinorOf3x3Matrix) {
 	EXPECT_EQ(A.minor(1, 0), 25);
 }
 
-TEST(MatrixTest, CalculateCofactorOf3x3Matrix) {
+TEST(Chapter3_tests, Calculating_a_cofactor_of_a_3x3_matrix) {
 	Matrix3 A(3, 5, 0,
 						2, -1, -7,
 						6, -1, 5);
@@ -530,7 +458,7 @@ TEST(MatrixTest, CalculateCofactorOf3x3Matrix) {
 	EXPECT_EQ(A.cofactor(1, 0), -25);
 }
 
-TEST(MatrixTest, CalculateDeterminantOf3x3Matrix) {
+TEST(Chapter3_tests, Calculating_the_determinant_of_a_3x3_matrix) {
 	Matrix3 A(1, 2, 6,
 						-5, 8, -4,
 						2, 6, 4);
@@ -540,7 +468,7 @@ TEST(MatrixTest, CalculateDeterminantOf3x3Matrix) {
 	EXPECT_EQ(A.determinant(), -196);
 }
 
-TEST(MatrixTest, CalculateDeterminantOf4x4Matrix) {
+TEST(Chapter3_tests, Calculating_the_determinant_of_a_4x4_matrix) {
 	Matrix4 A(-2, -8, 3, 5,
 						-3, 1, 7, 3,
 						1, 2, -9, 6,
@@ -552,7 +480,7 @@ TEST(MatrixTest, CalculateDeterminantOf4x4Matrix) {
 	EXPECT_EQ(A.determinant(), -4071);
 }
 
-TEST(MatrixTest, MatrixIsInvertible) {
+TEST(Chapter3_tests, Testing_an_invertible_matrix_for_invertibility) {
 	Matrix4 A(6, 4, 4, 4,
 						5, 5, 7, 6,
 						4, -9, 3, -7,
@@ -561,7 +489,7 @@ TEST(MatrixTest, MatrixIsInvertible) {
 	EXPECT_TRUE(A.invertible());
 }
 
-TEST(MatrixTest, MatrixIsNotInvertible) {
+TEST(Chapter3_tests, Testing_an_noninvertible_matrix_for_invertibility) {
 	Matrix4 A(-4, 2, -2, -3,
 						9, 6, 2, 6,
 						0, -5, 1, -5,
@@ -570,7 +498,7 @@ TEST(MatrixTest, MatrixIsNotInvertible) {
 	EXPECT_FALSE(A.invertible());
 }
 
-TEST(MatrixTest, CalculateInverseOfMatrix1) {
+TEST(Chapter3_tests, Calculating_the_inverse_of_a_matrix) {
 	Matrix4 A(-5, 2, 6, -8,
 						1, -5, 1, 8,
 						7, 7, -6, -7,
@@ -579,38 +507,38 @@ TEST(MatrixTest, CalculateInverseOfMatrix1) {
 	Matrix4 B = A.inverse();
 	EXPECT_EQ(A.determinant(), 532);
 	EXPECT_EQ(A.cofactor(2, 3), -160);
-	EXPECT_EQ(B(3, 2), -160.0f/532.0f);
+	EXPECT_EQ(B(3, 2), -160.0f / 532.0f);
 	EXPECT_EQ(A.cofactor(3, 2), 105);
-	EXPECT_EQ(B(2, 3), 105.0f/532.0f);
-	EXPECT_TRUE(B == Matrix4(0.21805,  0.45113,  0.24060, -0.04511,
-													-0.80827, -1.45677, -0.44361,  0.52068,
-													-0.07895, -0.22368, -0.05263,  0.19737,
-													-0.52256, -0.81391, -0.30075,  0.30639));
+	EXPECT_EQ(B(2, 3), 105.0f / 532.0f);
+	EXPECT_TRUE(B == Matrix4(0.21805f, 0.45113f, 0.24060f, -0.04511f,
+													-0.80827f, -1.45677f, -0.44361f, 0.52068f,
+													-0.07895f, -0.22368f, -0.05263f, 0.19737f,
+													-0.52256f, -0.81391f, -0.30075f, 0.30639f));
 }
 
-TEST(MatrixTest, CalculateInverseOfMatrix2) {
+TEST(Chapter3_tests, Calculating_the_inverse_of_another_matrix) {
 	Matrix4 A(8, -5, 9, 2,
 						7, 5, 6, 1,
 						-6, 0, 9, 6,
 						-3, 0, -9, -4);
-	EXPECT_TRUE(A.inverse() == Matrix4(-0.15385, -0.15385, -0.28205, -0.53846,
-																		 -0.07692,  0.12308,  0.02564,  0.03077,
-																		  0.35897,  0.35897,  0.43590,  0.92308,
-																		 -0.69231, -0.69231, -0.76923, -1.92308));
+	EXPECT_TRUE(A.inverse() == Matrix4(-0.15385f, -0.15385f, -0.28205f, -0.53846f,
+																		 -0.07692f, 0.12308f, 0.02564f, 0.03077f,
+																		  0.35897f, 0.35897f, 0.43590f, 0.92308f,
+																		 -0.69231f, -0.69231f, -0.76923f, -1.92308f));
 }
 
-TEST(MatrixTest, CalculateInverseOfMatrix3) {
+TEST(Chapter3_tests, Calculating_the_inverse_of_a_third_matrix) {
 	Matrix4 A(9, 3, 0, 9,
 						-5, -2, -6, -3,
 						-4, 9, 6, 4,
 						-7, 6, 6, 2);
-	EXPECT_TRUE(A.inverse() == Matrix4(-0.04074, -0.07778,  0.14444, -0.22222,
-																		 -0.07778,  0.03333,  0.36667, -0.33333,
-																		 -0.02901, -0.14630, -0.10926,  0.12963,
-																		  0.17778,  0.06667, -0.26667,  0.33333));
+	EXPECT_TRUE(A.inverse() == Matrix4(-0.04074f, -0.07778f, 0.14444f, -0.22222f,
+																		 -0.07778f, 0.03333f, 0.36667f, -0.33333f,
+																		 -0.02901f, -0.14630f, -0.10926f, 0.12963f,
+																		  0.17778f, 0.06667f, -0.26667f, 0.33333f));
 }
 
-TEST(MatrixTest, MultiplyMatrixByItsInverse) {
+TEST(Chapter3_tests, Multiplying_a_product_by_its_inverse) {
 	Matrix4 A(3, -9, 7, 3,
 						3, -8, 2, -9,
 						-4, 4, 4, 1,
@@ -626,131 +554,123 @@ TEST(MatrixTest, MultiplyMatrixByItsInverse) {
 }
 #pragma endregion
 
-#pragma region TranslationMatrixTests
-TEST(TranslationMatrixTest, MultiplyByTranslationMatrix) {
-	TranslationMatrix transform(5, -3, 2);
+#pragma region Chapter4Tests
+TEST(Chapter4_tests, Multiplying_by_a_translation_matrix) {
+	Matrix4 transform = Matrix4().translation(5, -3, 2);
 	Point p(-3, 4, 5);
 	EXPECT_TRUE(transform * p == Point(2, 1, 7));
 }
 
-TEST(TranslationMatrixTest, MultiplyByInverseOfTranslationMatrix) {
-	TranslationMatrix transform(5, -3, 2);
+TEST(Chapter4_tests, Multiplying_by_the_inverse_of_a_translation_matrix) {
+	Matrix4 transform = Matrix4().translation(5, -3, 2);
 	Matrix4 ivn = transform.inverse();
 	Point p(-3, 4, 5);
 	EXPECT_TRUE(ivn * p == Point(-8, 7, 3));
 }
 
-TEST(TranslationMatrixTest, TranslationMatrixDoesNotAffectVectors) {
-	TranslationMatrix transform(5, -3, 2);
+TEST(Chapter4_tests, Translation_does_not_affect_vectors) {
+	Matrix4 transform = Matrix4().translation(5, -3, 2);
 	Vector v(-3, 4, 5);
 	EXPECT_TRUE(transform * v == v);
 }
-#pragma endregion
 
-#pragma region ScalingMatrixTests
-TEST(ScalingMatrixTest, ScalingMatrixAppliedToPoint) {
-	ScalingMatrix transform(2, 3, 4);
+TEST(Chapter4_tests, A_scaling_matrix_applied_to_a_point) {
+	Matrix4 transform = Matrix4().scaling(2, 3, 4);
 	Point p(-4, 6, 8);
 	EXPECT_TRUE(transform * p == Point(-8, 18, 32));
 }
 
-TEST(ScalingMatrixTest, ScalingMatrixAppliedToVector) {
-	ScalingMatrix transform(2, 3, 4);
+TEST(Chapter4_tests, A_scaling_matrix_applied_to_a_vector) {
+	Matrix4 transform = Matrix4().scaling(2, 3, 4);
 	Vector v(-4, 6, 8);
 	EXPECT_TRUE(transform * v == Vector(-8, 18, 32));
 }
 
-TEST(ScalingMatrixTest, MultiplyByInverseOfScalingMatrix) {
-	ScalingMatrix transform(2, 3, 4);
+TEST(Chapter4_tests, Multiplying_by_the_inverse_of_a_scaling_matrix) {
+	Matrix4 transform = Matrix4().scaling(2, 3, 4);
 	Matrix4 inv = transform.inverse();
 	Vector v(-4, 6, 8);
 	EXPECT_TRUE(inv * v == Vector(-2, 2, 2));
 }
 
-TEST(ScalingMatrixTest, Reflection_is_scaling_by_a_negative_value) {
-	ScalingMatrix transform(-1, 1, 1);
+TEST(Chapter4_tests, Reflection_is_scaling_by_a_negative_value) {
+	Matrix4 transform = Matrix4().scaling(-1, 1, 1);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(-2, 3, 4));
 }
-#pragma endregion
 
-#pragma region RotationMatrixTests
-TEST(RotationMatrixTest, Rotating_a_point_around_the_x_axis) {
+TEST(Chapter4_tests, Rotating_a_point_around_the_x_axis) {
 	Point p(0, 1, 0);
-	RotationMatrix half_quarter(utils::kPI / 4, 0, 0);
-	RotationMatrix full_quarter(utils::kPI / 2, 0, 0);
+	Matrix4 half_quarter = Matrix4().rotation_x(utils::kPI / 4.0f);
+	Matrix4 full_quarter = Matrix4().rotation_x(utils::kPI / 2.0f);
 	EXPECT_TRUE(half_quarter * p == Point(0, sqrt(2) / 2, sqrt(2) / 2));
 	EXPECT_TRUE(full_quarter * p == Point(0, 0, 1));
 }
 
-TEST(RotationMatrixTest, The_inverse_of_an_x_rotation_rotates_in_the_opposite_direction) {
+TEST(Chapter4_tests, The_inverse_of_an_x_rotation_rotates_in_the_opposite_direction) {
 	Point p(0, 1, 0);
-	RotationMatrix half_quarter(utils::kPI / 4, 0, 0);
+	Matrix4 half_quarter = Matrix4().rotation_x(utils::kPI / 4.0f);
 	Matrix4 inv = half_quarter.inverse();
 	EXPECT_TRUE(inv * p == Point(0, sqrt(2) / 2, -sqrt(2) / 2));
 }
 
-TEST(RotationMatrixTest, Rotating_a_point_around_the_y_axis) {
+TEST(Chapter4_tests, Rotating_a_point_around_the_y_axis) {
 	Point p(0, 0, 1);
-	RotationMatrix half_quarter(0, utils::kPI / 4, 0);
-	RotationMatrix full_quarter(0, utils::kPI / 2, 0);
+	Matrix4 half_quarter = Matrix4().rotation_y(utils::kPI / 4.0f);
+	Matrix4 full_quarter = Matrix4().rotation_y(utils::kPI / 2.0f);
 	EXPECT_TRUE(half_quarter * p == Point(sqrt(2) / 2, 0, sqrt(2) / 2));
 	EXPECT_TRUE(full_quarter * p == Point(1, 0, 0));
 }
 
-TEST(RotationMatrixTest, Rotating_a_point_around_the_z_axis) {
+TEST(Chapter4_tests, Rotating_a_point_around_the_z_axis) {
 	Point p(0, 1, 0);
-	RotationMatrix half_quarter(0, 0, utils::kPI / 4);
-	RotationMatrix full_quarter(0, 0, utils::kPI / 2);
+	Matrix4 half_quarter = Matrix4().rotation_z(utils::kPI / 4.0f);
+	Matrix4 full_quarter = Matrix4().rotation_z(utils::kPI / 2.0f);
 	EXPECT_TRUE(half_quarter * p == Point(-sqrt(2) / 2, sqrt(2) / 2, 0));
 	EXPECT_TRUE(full_quarter * p == Point(-1, 0, 0));
 }
-#pragma endregion
 
-#pragma region ShearingMatrixTests
-TEST(ShearingMatrixTest, Shearing_transformation_moves_x_in_proportion_to_y) {
-	ShearingMatrix transform(1, 0, 0, 0, 0, 0);
+TEST(Chapter4_tests, Shearing_transformation_moves_x_in_proportion_to_y) {
+	Matrix4 transform = Matrix4().shearing(1, 0, 0, 0, 0, 0);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(5, 3, 4));
 }
 
-TEST(ShearingMatrixTest, Shearing_transformation_moves_x_in_proportion_to_z) {
-	ShearingMatrix transform(0, 1, 0, 0, 0, 0);
+TEST(Chapter4_tests, Shearing_transformation_moves_x_in_proportion_to_z) {
+	Matrix4 transform = Matrix4().shearing(0, 1, 0, 0, 0, 0);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(6, 3, 4));
 }
 
-TEST(ShearingMatrixTest, Shearing_transformation_moves_y_in_proportion_to_x) {
-	ShearingMatrix transform(0, 0, 1, 0, 0, 0);
+TEST(Chapter4_tests, Shearing_transformation_moves_y_in_proportion_to_x) {
+	Matrix4 transform = Matrix4().shearing(0, 0, 1, 0, 0, 0);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(2, 5, 4));
 }
 
-TEST(ShearingMatrixTest, Shearing_transformation_moves_y_in_proportion_to_z) {
-	ShearingMatrix transform(0, 0, 0, 1, 0, 0);
+TEST(Chapter4_tests, Shearing_transformation_moves_y_in_proportion_to_z) {
+	Matrix4 transform = Matrix4().shearing(0, 0, 0, 1, 0, 0);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(2, 7, 4));
 }
 
-TEST(ShearingMatrixTest, Shearing_transformation_moves_z_in_proportion_to_x) {
-	ShearingMatrix transform(0, 0, 0, 0, 1, 0);
+TEST(Chapter4_tests, Shearing_transformation_moves_z_in_proportion_to_x) {
+	Matrix4 transform = Matrix4().shearing(0, 0, 0, 0, 1, 0);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(2, 3, 6));
 }
 
-TEST(ShearingMatrixTest, Shearing_transformation_moves_z_in_proportion_to_y) {
-	ShearingMatrix transform(0, 0, 0, 0, 0, 1);
+TEST(Chapter4_tests, Shearing_transformation_moves_z_in_proportion_to_y) {
+	Matrix4 transform = Matrix4().shearing(0, 0, 0, 0, 0, 1);
 	Point p(2, 3, 4);
 	EXPECT_TRUE(transform * p == Point(2, 3, 7));
 }
-#pragma endregion
 
-#pragma region TransformationTests
-TEST(TransformationTest, Individual_transformations_are_applied_in_sequence) {
+TEST(Chapter4_tests, Individual_transformations_are_applied_in_sequence) {
 	Point p(1, 0, 1);
-	RotationMatrix A(utils::kPI / 2, 0, 0);
-	ScalingMatrix B(5, 5, 5);
-	TranslationMatrix C(10, 5, 7);
+	Matrix4 A = Matrix4().rotation_x(utils::kPI / 2.0f);
+	Matrix4 B = Matrix4().scaling(5, 5, 5);
+	Matrix4 C = Matrix4().translation(10, 5, 7);
 
 	// Apply rotation first
 	Point p2 = A * p;
@@ -763,19 +683,19 @@ TEST(TransformationTest, Individual_transformations_are_applied_in_sequence) {
 	EXPECT_TRUE(p4 == Point(15, 0, 7));
 }
 
-TEST(TransformationTest, Chained_transformations_must_be_applied_in_reverse_order) {
+TEST(Chapter4_tests, Chained_transformations_must_be_applied_in_reverse_order) {
 	Point p(1, 0, 1);
-	RotationMatrix A(utils::kPI / 2, 0, 0);
-	ScalingMatrix B(5, 5, 5);
-	TranslationMatrix C(10, 5, 7);
+	Matrix4 A = Matrix4().rotation_x(utils::kPI / 2.0f);
+	Matrix4 B = Matrix4().scaling(5, 5, 5);
+	Matrix4 C = Matrix4().translation(10, 5, 7);
 
 	Matrix4 T = C * B * A;
 	EXPECT_TRUE(T * p == Point(15, 0, 7));
 }
 #pragma endregion
 
-#pragma region RayTests
-TEST(RayTest, Creating_and_querying_a_ray) {
+#pragma region Chapter5Tests
+TEST(Chapter5_tests, Creating_and_querying_a_ray) {
 	Point origin(1, 2, 3);
 	Vector direction(4, 5, 6);
 	Ray r(origin, direction);
@@ -783,83 +703,65 @@ TEST(RayTest, Creating_and_querying_a_ray) {
 	EXPECT_TRUE(r.GetDirection() == direction);
 }
 
-TEST(RayTest, Computing_a_point_from_a_distance) {
+TEST(Chapter5_tests, Computing_a_point_from_a_distance) {
 	Ray r(Point(2, 3, 4), Vector(1, 0, 0));
 	EXPECT_TRUE(r.position(0) == Point(2, 3, 4));
 	EXPECT_TRUE(r.position(1) == Point(3, 3, 4));
 	EXPECT_TRUE(r.position(-1) == Point(1, 3, 4));
-	EXPECT_TRUE(r.position(2.5) == Point(4.5, 3, 4));
+	EXPECT_TRUE(r.position(2.5f) == Point(4.5f, 3, 4));
 }
 
-TEST(RayTest, A_ray_intersects_a_sphere_at_two_points) {
+TEST(Chapter5_tests, A_ray_intersects_a_sphere_at_two_points) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 4.0);
-	EXPECT_EQ(xs[1].GetTime(), 6.0);
+	EXPECT_EQ(xs[0].GetTime(), 4.0f);
+	EXPECT_EQ(xs[1].GetTime(), 6.0f);
 }
 
-TEST(RayTest, A_ray_intersects_a_sphere_at_a_tangent) {
+TEST(Chapter5_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
 	Sphere s;
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 5.0);
-	EXPECT_EQ(xs[1].GetTime(), 5.0);
+	EXPECT_EQ(xs[0].GetTime(), 5.0f);
+	EXPECT_EQ(xs[1].GetTime(), 5.0f);
 }
 
-TEST(RayTest, A_ray_misses_a_sphere) {
+TEST(Chapter5_tests, A_ray_misses_a_sphere) {
 	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
 	Sphere s;
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 0);
 }
 
-TEST(RayTest, A_ray_originates_inside_a_sphere) {
+TEST(Chapter5_tests, A_ray_originates_inside_a_sphere) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	Sphere s;
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), -1.0);
-	EXPECT_EQ(xs[1].GetTime(), 1.0);
+	EXPECT_EQ(xs[0].GetTime(), -1.0f);
+	EXPECT_EQ(xs[1].GetTime(), 1.0f);
 }
 
-TEST(RayTest, A_sphere_is_behind_a_ray) {
+TEST(Chapter5_tests, A_sphere_is_behind_a_ray) {
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Sphere s;
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), -6.0);
-	EXPECT_EQ(xs[1].GetTime(), -4.0);
+	EXPECT_EQ(xs[0].GetTime(), -6.0f);
+	EXPECT_EQ(xs[1].GetTime(), -4.0f);
 }
 
-TEST(RayTest, Translating_a_ray) {
-	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
-	TranslationMatrix m(3, 4, 5);
-	Ray r2 = r.transform(m);
-	EXPECT_TRUE(r2.GetOrigin() == Point(4, 6, 8));
-	EXPECT_TRUE(r2.GetDirection() == Vector(0, 1, 0));
-}
-
-TEST(RayTest, Scaling_a_ray) {
-	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
-	ScalingMatrix m(2, 3, 4);
-	Ray r2 = r.transform(m);
-	EXPECT_TRUE(r2.GetOrigin() == Point(2, 6, 12));
-	EXPECT_TRUE(r2.GetDirection() == Vector(0, 3, 0));
-}
-#pragma endregion
-
-#pragma region IntersectionTests
-TEST(IntersectionTest, An_intersection_encapsulates_time_and_object) {
+TEST(Chapter5_tests, An_intersection_encapsulates_time_and_object) {
 	Sphere s;
-	Intersection i(3.5, s);
-	EXPECT_EQ(i.GetTime(), 3.5);
+	Intersection i(3.5f, s);
+	EXPECT_EQ(i.GetTime(), 3.5f);
 	EXPECT_TRUE(i.GetObject() == s);
 }
 
-TEST(IntersectionTest, Aggregating_intersections) {
+TEST(Chapter5_tests, Aggregating_intersections) {
 	Sphere s;
 	Intersection i1(1, s);
 	Intersection i2(2, s);
@@ -869,7 +771,7 @@ TEST(IntersectionTest, Aggregating_intersections) {
 	EXPECT_EQ(xs[1].GetTime(), 2);
 }
 
-TEST(IntersectionTest, Intersect_sets_the_object_on_the_intersection) {
+TEST(Chapter5_tests, Intersect_sets_the_object_on_the_intersection) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
 	std::vector<Intersection> xs = r.intersect(s);
@@ -878,7 +780,7 @@ TEST(IntersectionTest, Intersect_sets_the_object_on_the_intersection) {
 	EXPECT_TRUE(xs[1].GetObject() == s);
 }
 
-TEST(IntersectionTest, The_hit_when_all_intersections_have_positive_time) {
+TEST(Chapter5_tests, The_hit_when_all_intersections_have_positive_time) {
 	Sphere s;
 	Intersection i1(1, s);
 	Intersection i2(2, s);
@@ -887,7 +789,7 @@ TEST(IntersectionTest, The_hit_when_all_intersections_have_positive_time) {
 	EXPECT_TRUE(h.i == i1);
 }
 
-TEST(IntersectionTest, The_hit_when_some_intersections_have_negative_time) {
+TEST(Chapter5_tests, The_hit_when_some_intersections_have_negative_time) {
 	Sphere s;
 	Intersection i1(-1, s);
 	Intersection i2(1, s);
@@ -896,7 +798,7 @@ TEST(IntersectionTest, The_hit_when_some_intersections_have_negative_time) {
 	EXPECT_TRUE(h.i == i2);
 }
 
-TEST(IntersectionTest, The_hit_when_all_intersections_have_negative_time) {
+TEST(Chapter5_tests, The_hit_when_all_intersections_have_negative_time) {
 	Sphere s;
 	Intersection i1(-2, s);
 	Intersection i2(-1, s);
@@ -905,7 +807,7 @@ TEST(IntersectionTest, The_hit_when_all_intersections_have_negative_time) {
 	EXPECT_TRUE(h.result == HitResult::NO_HIT);
 }
 
-TEST(IntersectionTest, The_hit_is_always_the_lowest_nonnegative_intersection) {
+TEST(Chapter5_tests, The_hit_is_always_the_lowest_nonnegative_intersection) {
 	Sphere s;
 	Intersection i1(5, s);
 	Intersection i2(7, s);
@@ -915,130 +817,124 @@ TEST(IntersectionTest, The_hit_is_always_the_lowest_nonnegative_intersection) {
 	Hit h = Hit::hit(xs);
 	EXPECT_TRUE(h.i == i4);
 }
-#pragma endregion
 
-#pragma region SphereTests
-TEST(SphereTest, A_spheres_default_transformation) {
+TEST(Chapter5_tests, Translating_a_ray) {
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+	Matrix4 m = Matrix4().translation(3, 4, 5);
+	Ray r2 = r.transform(m);
+	EXPECT_TRUE(r2.GetOrigin() == Point(4, 6, 8));
+	EXPECT_TRUE(r2.GetDirection() == Vector(0, 1, 0));
+}
+
+TEST(Chapter5_tests, Scaling_a_ray) {
+	Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+	Matrix4 m = Matrix4().scaling(2, 3, 4);
+	Ray r2 = r.transform(m);
+	EXPECT_TRUE(r2.GetOrigin() == Point(2, 6, 12));
+	EXPECT_TRUE(r2.GetDirection() == Vector(0, 3, 0));
+}
+
+TEST(Chapter5_tests, A_spheres_default_transformation) {
 	Sphere s;
-	Matrix4 identity_matrix;
+	Matrix4 identity_matrix = Matrix4().identity();
 	EXPECT_TRUE(s.GetTransform() == identity_matrix);
 }
 
-TEST(SphereTest, Changing_a_spheres_transformation) {
+TEST(Chapter5_tests, Changing_a_spheres_transformation) {
 	Sphere s;
-	TranslationMatrix t(2, 3, 4);
+	Matrix4 t = Matrix4().translation(2, 3, 4);
 	s.SetTransform(t);
 	EXPECT_TRUE(s.GetTransform() == t);
 }
 
-TEST(SphereTest, Intersecting_a_scaled_sphere_with_a_ray) {
+TEST(Chapter5_tests, Intersecting_a_scaled_sphere_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
-	s.SetTransform(ScalingMatrix(2, 2, 2));
+	s.SetTransform(Matrix4().scaling(2, 2, 2));
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_EQ(xs[0].GetTime(), 3);
 	EXPECT_EQ(xs[1].GetTime(), 7);
 }
 
-TEST(SphereTest, Intersecting_a_translated_sphere_with_a_ray) {
+TEST(Chapter5_tests, Intersecting_a_translated_sphere_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
-	s.SetTransform(TranslationMatrix(5, 0, 0));
+	s.SetTransform(Matrix4().translation(5, 0, 0));
 	std::vector<Intersection> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 0);
 }
-
-TEST(SphereTest, A_sphere_has_a_default_material) {
-	Sphere s;
-	Material m = s.GetMaterial();
-	EXPECT_TRUE(m == Material());
-}
-
-TEST(SphereTest, A_sphere_may_be_assigned_a_material) {
-	Sphere s;
-	Material m;
-	m.SetAmbient(1);
-	s.SetMaterial(m);
-	EXPECT_TRUE(s.GetMaterial() == m);
-}
 #pragma endregion
 
-#pragma region NormalTests
-TEST(NormalTest, The_normal_on_a_sphere_at_a_point_on_the_x_axis) {
+#pragma region Chapter6Tests
+TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_point_on_the_x_axis) {
 	Sphere s;
 	Vector n = s.normal_at(Point(1, 0, 0));
 	EXPECT_TRUE(n == Vector(1, 0, 0));
 }
 
-TEST(NormalTest, The_normal_on_a_sphere_at_a_point_on_the_y_axis) {
+TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_point_on_the_y_axis) {
 	Sphere s;
 	Vector n = s.normal_at(Point(0, 1, 0));
 	EXPECT_TRUE(n == Vector(0, 1, 0));
 }
 
-TEST(NormalTest, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
+TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
 	Sphere s;
 	Vector n = s.normal_at(Point(0, 0, 1));
 	EXPECT_TRUE(n == Vector(0, 0, 1));
 }
 
-TEST(NormalTest, The_normal_on_a_sphere_at_a_nonaxial_point) {
+TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_nonaxial_point) {
 	Sphere s;
 	Vector n = s.normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	EXPECT_TRUE(n == Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
-TEST(NormalTest, The_normal_is_a_normalized_vector) {
+TEST(Chapter6_tests, The_normal_is_a_normalized_vector) {
 	Sphere s;
 	Vector n = s.normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	EXPECT_TRUE(n == n.normalize());
 }
 
-TEST(NormalTest, Computing_the_normal_on_a_translated_sphere) {
+TEST(Chapter6_tests, Computing_the_normal_on_a_translated_sphere) {
 	Sphere s;
-	s.SetTransform(TranslationMatrix(0, 1, 0));
-	Vector n = s.normal_at(Point(0, 1.70711, -0.70711));
-	EXPECT_TRUE(n == Vector(0, 0.70711, -0.70711));
+	s.SetTransform(Matrix4().translation(0, 1, 0));
+	Vector n = s.normal_at(Point(0, 1.70711f, -0.70711f));
+	EXPECT_TRUE(n == Vector(0, 0.70711f, -0.70711f));
 }
 
-TEST(NormalTest, Computing_the_normal_on_a_transformed_sphere) {
+TEST(Chapter6_tests, Computing_the_normal_on_a_transformed_sphere) {
 	Sphere s;
-	Matrix4 m = ScalingMatrix(1, 0.5, 1) * RotationMatrix(0, 0, utils::kPI / 5);
+	Matrix4 m = Matrix4().scaling(1, 0.5f, 1) * Matrix4().rotation_z(utils::kPI / 5.0f);
 	s.SetTransform(m);
 	Vector n = s.normal_at(Point(0, sqrt(2) / 2, -sqrt(2) / 2));
-	EXPECT_TRUE(n == Vector(0, 0.97014, -0.24254));
+	EXPECT_TRUE(n == Vector(0, 0.97014f, -0.24254f));
 }
-#pragma endregion
 
-#pragma region ReflectionTests
-TEST(ReflectionTest, Reflecting_a_vector_approaching_at_45_degrees) {
+TEST(Chapter6_tests, Reflecting_a_vector_approaching_at_45_degrees) {
 	Vector v(1, -1, 0);
 	Vector n(0, 1, 0);
 	Vector r = v.reflect(n);
 	EXPECT_TRUE(r == Vector(1, 1, 0));
 }
 
-TEST(ReflectionTest, Reflecting_a_vector_off_a_slanted_surface) {
+TEST(Chapter6_tests, Reflecting_a_vector_off_a_slanted_surface) {
 	Vector v(0, -1, 0);
-	Vector n(sqrt(2) /2, sqrt(2) / 2, 0);
+	Vector n(sqrt(2) / 2, sqrt(2) / 2, 0);
 	Vector r = v.reflect(n);
 	EXPECT_TRUE(r == Vector(1, 0, 0));
 }
-#pragma endregion
 
-#pragma region PointLightTests
-TEST(PointLightTest, A_point_light_has_a_position_and_intensity) {
+TEST(Chapter6_tests, A_point_light_has_a_position_and_intensity) {
 	Color intensity(1, 1, 1);
 	Point position(0, 0, 0);
 	PointLight light(position, intensity);
 	EXPECT_TRUE(light.GetPosition() == position);
 	EXPECT_TRUE(light.GetIntensity() == intensity);
 }
-#pragma endregion
 
-#pragma region MaterialTests
-TEST(MaterialTest, The_default_material) {
+TEST(Chapter6_tests, The_default_material) {
 	Material m;
 	EXPECT_TRUE(m.GetColor() == Color(1, 1, 1));
 	EXPECT_EQ(m.GetAmbient(), 0.1f);
@@ -1046,56 +942,278 @@ TEST(MaterialTest, The_default_material) {
 	EXPECT_EQ(m.GetSpecular(), 0.9f);
 	EXPECT_EQ(m.GetShininess(), 200.0f);
 }
-#pragma endregion
 
-#pragma region LightingTests
-TEST(LightingTest, Lighting_with_the_eye_between_the_light_and_the_surface) {
+TEST(Chapter6_tests, A_sphere_has_a_default_material) {
+	Sphere s;
+	Material m = s.GetMaterial();
+	EXPECT_TRUE(m == Material());
+}
+
+TEST(Chapter6_tests, A_sphere_may_be_assigned_a_material) {
+	Sphere s;
+	Material m;
+	m.SetAmbient(1);
+	s.SetMaterial(m);
+	EXPECT_TRUE(s.GetMaterial() == m);
+}
+
+TEST(Chapter6_tests, Lighting_with_the_eye_between_the_light_and_the_surface) {
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
-	Color result = LightSource::lighting(m, light, position, evev, normalv);
-	EXPECT_TRUE(result == Color(1.9, 1.9, 1.9));
+	Color result = Engine::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(1.9f, 1.9f, 1.9f));
 }
 
-TEST(LightingTest, Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees) {
+TEST(Chapter6_tests, Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees) {
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
-	Color result = LightSource::lighting(m, light, position, evev, normalv);
-	EXPECT_TRUE(result == Color(1.0, 1.0, 1.0));
+	Color result = Engine::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(1.0f, 1.0f, 1.0f));
 }
 
-TEST(LightingTest, Lighting_with_eye_opposite_surface_light_offset_45_degrees) {
+TEST(Chapter6_tests, Lighting_with_eye_opposite_surface_light_offset_45_degrees) {
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
-	Color result = LightSource::lighting(m, light, position, evev, normalv);
-	EXPECT_TRUE(result == Color(0.7364, 0.7364, 0.7364));
+	Color result = Engine::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(0.7364f, 0.7364f, 0.7364f));
 }
 
-TEST(LightingTest, Lighting_with_eye_in_the_path_of_the_reflection_vector) {
+TEST(Chapter6_tests, Lighting_with_eye_in_the_path_of_the_reflection_vector) {
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
-	Color result = LightSource::lighting(m, light, position, evev, normalv);
-	EXPECT_TRUE(result == Color(1.6364, 1.6364, 1.6364));
+	Color result = Engine::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result.round(4) == Color(1.6364f, 1.6364f, 1.6364f));
 }
 
-TEST(LightingTest, Lighting_with_the_light_behind_the_surface) {
+TEST(Chapter6_tests, Lighting_with_the_light_behind_the_surface) {
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, 10), Color(1, 1, 1));
-	Color result = LightSource::lighting(m, light, position, evev, normalv);
-	EXPECT_TRUE(result == Color(0.1, 0.1, 0.1));
+	Color result = Engine::lighting(m, light, position, evev, normalv);
+	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
+}
+#pragma endregion
+
+#pragma region Chapter7Tests
+TEST(Chapter7_tests, Creating_a_world) {
+	World w;
+	EXPECT_EQ(w.GetObjectCount(), 0);
+	EXPECT_TRUE(w.ContainsLightSource() == false);
+}
+
+TEST(Chapter7_tests, The_default_world) {
+	PointLight light("pointlight1", Point(-10, 10, -10), Color(1, 1, 1));
+	Sphere s1("sphere1");
+	Material m;
+	m.SetColor(Color(0.8, 1.0, 0.6));
+	m.SetDiffuse(0.7);
+	m.SetSpecular(0.2);
+	s1.SetMaterial(m);
+	Sphere s2("sphere2");
+	s2.SetTransform(Matrix4().scaling(0.5f, 0.5f, 0.5f));
+
+	World w = World(WorldType::DEFAULT);
+	EXPECT_TRUE((*w.GetLights()[0]) == light);
+	EXPECT_TRUE(w.ContainsObject(&s1));
+	EXPECT_TRUE(w.ContainsObject(&s2));
+}
+
+TEST(Chapter7_tests, Intersect_a_world_with_a_ray) {
+	World w = World(WorldType::DEFAULT);
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	std::vector<Intersection> xs = r.intersect(w);
+	EXPECT_EQ(xs.size(), 4);
+	EXPECT_EQ(xs[0].GetTime(), 4);
+	EXPECT_EQ(xs[1].GetTime(), 4.5f);
+	EXPECT_EQ(xs[2].GetTime(), 5.5f);
+	EXPECT_EQ(xs[3].GetTime(), 6);
+}
+
+TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere shape;
+	Intersection i(4, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	EXPECT_EQ(comps.time_, i.GetTime());
+	EXPECT_EQ(comps.object_, i.GetObject());
+	EXPECT_TRUE(comps.point_ == Point(0, 0, -1));
+	EXPECT_TRUE(comps.eyev_ == Vector(0, 0, -1));
+	EXPECT_TRUE(comps.normalv_ == Vector(0, 0, -1));
+}
+
+TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere shape;
+	Intersection i(4, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	EXPECT_FALSE(comps.inside_);
+}
+
+TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+	Sphere shape;
+	Intersection i(1, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	EXPECT_TRUE(comps.point_ == Point(0, 0, 1));
+	EXPECT_TRUE(comps.eyev_ == Vector(0, 0, -1));
+	EXPECT_TRUE(comps.inside_);
+	EXPECT_TRUE(comps.normalv_ == Vector(0, 0, -1)); // normal would have been (0, 0, 1), but is inverted!
+}
+
+TEST(Chapter7_tests, Shading_an_intersection) {
+	World w = World(WorldType::DEFAULT);
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Mesh shape = (*w.GetMeshes()[0]);
+	Intersection i(4, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color c = Engine::shade_hit(w, comps);
+	EXPECT_TRUE(c == Color(0.38066f, 0.47583f, 0.2855f));
+}
+
+TEST(Chapter7_tests, Shading_an_intersection_from_the_inside) {
+	World w = World(WorldType::DEFAULT);
+	// remove the default light and add a new light
+	w.DeleteObject("pointlight1");
+	w.AddObject(new PointLight("pointlight1", Point(0, 0.25, 0), Color(1, 1, 1)));
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+	Mesh shape = (*w.GetMeshes()[1]);
+	Intersection i(0.5, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color c = Engine::shade_hit(w, comps);
+	EXPECT_TRUE(c == Color(0.90498f, 0.90498f, 0.90498f));
+}
+
+TEST(Chapter7_tests, The_color_when_a_ray_misses) {
+	World w = World(WorldType::DEFAULT);
+	Ray r(Point(0, 0, -5), Vector(0, 1, 0));
+	Color c = Engine::color_at(w, r);
+	EXPECT_TRUE(c == Color(0, 0, 0));
+}
+
+TEST(Chapter7_tests, The_color_when_a_ray_hits) {
+	World w = World(WorldType::DEFAULT);
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Color c = Engine::color_at(w, r);
+	EXPECT_TRUE(c == Color(0.38066f, 0.47583, 0.2855f));
+}
+
+TEST(Chapter7_tests, The_color_with_an_intersection_behind_the_ray) {
+	World w = World(WorldType::DEFAULT);
+	Mesh* outer = w.GetMeshes()[0];
+	Material outer_mat = outer->GetMaterial();
+	outer_mat.SetAmbient(1);
+	outer->SetMaterial(outer_mat);
+	Mesh* inner = w.GetMeshes()[1];
+	Material inner_mat = inner->GetMaterial();
+	inner_mat.SetAmbient(1);
+	inner->SetMaterial(inner_mat);
+	Ray r(Point(0, 0, 0.75f), Vector(0, 0, -1));
+	Color c = Engine::color_at(w, r);
+	EXPECT_TRUE(c == inner->GetMaterial().GetColor());
+}
+
+TEST(Chapter7_tests, The_transformation_matrix_for_the_default_orientation) {
+	Matrix4 identity_matrix = Matrix4().identity();
+	Point from(0, 0, 0);
+	Point to(0, 0, -1);
+	Vector up(0, 1, 0);
+	Matrix4 t = Matrix4().view_transform(from, to, up);
+	EXPECT_TRUE(t == identity_matrix);
+}
+
+TEST(Chapter7_tests, A_view_transformation_matrix_looking_in_positive_z_direction) {
+	Point from(0, 0, 0);
+	Point to(0, 0, 1);
+	Vector up(0, 1, 0);
+	Matrix4 t = Matrix4().view_transform(from, to, up);
+	EXPECT_TRUE(t == Matrix4().scaling(-1, 1, -1));
+}
+
+TEST(Chapter7_tests, The_view_transformation_moves_the_world) {
+	Point from(0, 0, 8);
+	Point to(0, 0, 1);
+	Vector up(0, 1, 0);
+	Matrix4 t = Matrix4().view_transform(from, to, up);
+	EXPECT_TRUE(t == Matrix4().translation(0, 0, -8));
+}
+
+TEST(Chapter7_tests, An_arbitrary_view_transformation) {
+	Point from(1, 3, 2);
+	Point to(4, -2, 8);
+	Vector up(1, 1, 0);
+	Matrix4 t = Matrix4().view_transform(from, to, up);
+	EXPECT_TRUE(t == Matrix4(-0.50709f, 0.50709f,  0.67612f, -2.36643f,
+														0.76772f, 0.60609f,  0.12122f, -2.82843f,
+													 -0.35857f, 0.59761f, -0.71714f,  0.00000f,
+														0.00000f, 0.00000f,  0.00000f,  1.00000f));
+}
+
+TEST(Chapter7_tests, Constructing_a_camera) {
+	int hsize = 160;
+	int vsize = 120;
+	float field_of_view = utils::kPI / 2.0f;
+	Camera c(hsize, vsize, field_of_view);
+	EXPECT_EQ(c.GetHorizontalSize(), 160);
+	EXPECT_EQ(c.GetVerticalSize(), 120);
+	EXPECT_EQ(c.GetFieldOfView(), utils::kPI / 2.0f);
+	Matrix4 identity_matrix = Matrix4().identity();
+	EXPECT_TRUE(c.GetTransform() == identity_matrix);
+}
+
+TEST(Chapter7_tests, The_pixel_size_for_a_horizontal_canvas) {
+	Camera c(200, 125, utils::kPI / 2.0f);
+	EXPECT_EQ(c.GetPixelSize(), 0.01f);
+}
+
+TEST(Chapter7_tests, The_pixel_size_for_a_vertical_canvas) {
+	Camera c(125, 200, utils::kPI / 2.0f);
+	EXPECT_EQ(c.GetPixelSize(), 0.01f);
+}
+
+TEST(Chapter7_tests, Constructing_a_ray_through_the_center_of_the_canvas) {
+	Camera c(201, 101, utils::kPI / 2.0f);
+	Ray r = Engine::ray_for_pixel(c, 100, 50);
+	EXPECT_TRUE(r.GetOrigin() == Point(0, 0, 0));
+	EXPECT_TRUE(r.GetDirection() == Vector(0, 0, -1));
+}
+
+TEST(Chapter7_tests, Constructing_a_ray_through_a_corner_of_the_canvas) {
+	Camera c(201, 101, utils::kPI / 2.0f);
+	Ray r = Engine::ray_for_pixel(c, 0, 0);
+	EXPECT_TRUE(r.GetOrigin() == Point(0, 0, 0));
+	EXPECT_TRUE(r.GetDirection() == Vector(0.66519f, 0.33259f, -0.66851f));
+}
+
+TEST(Chapter7_tests, Constructing_a_ray_when_the_camera_is_transformed) {
+	Camera c(201, 101, utils::kPI / 2.0f);
+	c.SetTransform(Matrix4().rotation_y(utils::kPI / 4.0f) * Matrix4().translation(0, -2, 5));
+	Ray r = Engine::ray_for_pixel(c, 100, 50);
+	EXPECT_TRUE(r.GetOrigin() == Point(0, 2, -5));
+	EXPECT_TRUE(r.GetDirection() == Vector(sqrt(2) / 2, 0, -sqrt(2) / 2));
+}
+
+TEST(Chapter7_tests, Rendering_a_world_with_a_camera) {
+	World w = World(WorldType::DEFAULT);
+	Camera c(11, 11, utils::kPI / 2.0f);
+	Point from(0, 0, -5);
+	Point to(0, 0, 0);
+	Vector up(0, 1, 0);
+	c.SetTransform(Matrix4().view_transform(from, to, up));
+	Canvas image = Engine::render(c, w);
+	EXPECT_TRUE(image.PixelAt(5, 5) == Color(0.38066f, 0.47583f, 0.2855f));
 }
 #pragma endregion

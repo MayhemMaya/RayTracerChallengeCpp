@@ -6,18 +6,12 @@
 #include "utils.h"
 
 Canvas::Canvas(int width, int height)
-    : width_(width), height_(height), pixels_(width * height) {
+    : width_(width), height_(height) {
   if ((width != 0) || (height != 0)) {
-    
-    for (int i = 0; i < pixels_.size(); i++) {
-      pixels_[i] = new Color(0, 0, 0);
+    int pixel_count = width * height;
+    for (int i = 0; i < pixel_count; i++) {
+      pixels_.push_back(Color(0, 0, 0));
     }
-  }
-}
-
-Canvas::~Canvas() {
-  for (size_t i = 0; i < pixels_.size(); i++) {
-    delete pixels_[i];
   }
 }
 
@@ -34,13 +28,13 @@ std::ostream& operator<<(std::ostream& os, const Canvas& obj) {
   return os;
 }
 
-Color& Canvas::PixelAt(int x, int y) const {
+Color Canvas::PixelAt(int x, int y) const {
   if ((x >= width_) || (y >= height_)) {
     std::cout << "Canvas index out of range." << std::endl;
-    exit(0);
+    //exit(0);
   }
   int index = width_ * y + x;
-  return (*pixels_[index]);
+  return pixels_[index];
 }
 
 void Canvas::WritePixel(int x, int y, const Color& color) {
@@ -49,7 +43,7 @@ void Canvas::WritePixel(int x, int y, const Color& color) {
     return;
   }
   int index = width_ * y + x;
-  (*pixels_[index]) = color.clamp();
+  pixels_[index] = color.clamp();
 }
 
 int Canvas::MaxValuesPerLine() const {

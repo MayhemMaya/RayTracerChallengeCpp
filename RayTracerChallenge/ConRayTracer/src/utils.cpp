@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <cstdlib>
 #include <vector>
 #include <sstream>
@@ -88,6 +89,16 @@ float radians(float degrees) {
 float roundoff(float value, int precision) {
   float pow_10 = pow(10.0f, precision);
   return round(value * pow_10) / pow_10;
+}
+
+float map(int value, int in_min, int in_max, float out_min, float out_max)
+{
+  return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+void ClearScreen()
+{
+  std::cout << std::string(100, '\n');
 }
 
 } // namespace utils

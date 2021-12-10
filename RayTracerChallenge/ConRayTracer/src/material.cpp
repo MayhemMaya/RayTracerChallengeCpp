@@ -12,10 +12,19 @@ Material::Material()
 Material::Material(const Color& color, float ambient, float diffuse,
                    float specular, float shininess)
     : color_(color),
-      ambient_(utils::clamp(ambient, 0.0, 1.0)),
-      diffuse_(utils::clamp(diffuse, 0.0, 1.0)),
-      specular_(utils::clamp(specular, 0.0, 1.0)),
-      shininess_(utils::clamp(shininess, 0.0, 1000.0)) {}
+      ambient_(utils::clamp(ambient, 0.0f, 1.0f)),
+      diffuse_(utils::clamp(diffuse, 0.0f, 1.0f)),
+      specular_(utils::clamp(specular, 0.0f, 1.0f)),
+      shininess_(utils::clamp(shininess, 0.0f, 200.0f)) {}
+
+std::ostream& operator<<(std::ostream& os, const Material& obj) {
+  os << "Color: " << obj.color_ << "\n"
+    << "Ambient: " << obj.ambient_ << "\n"
+    << "Diffuse: " << obj.diffuse_ << "\n"
+    << "Specular: " << obj.specular_ << "\n"
+    << "Shininess: " << obj.shininess_;
+  return os;
+}
 
 Color Material::GetColor() const { return color_; }
 
@@ -32,19 +41,19 @@ void Material::SetColor(const Color& color) {
 }
 
 void Material::SetAmbient(float ambient) {
-  ambient_ = utils::clamp(ambient, 0.0, 1.0);
+  ambient_ = utils::clamp(ambient, 0.0f, 1.0f);
 }
 
 void Material::SetDiffuse(float diffuse) {
-  diffuse_ = utils::clamp(diffuse, 0.0, 1.0);
+  diffuse_ = utils::clamp(diffuse, 0.0f, 1.0f);
 }
 
 void Material::SetSpecular(float specular) {
-  specular_ = utils::clamp(specular, 0.0, 1.0);
+  specular_ = utils::clamp(specular, 0.0f, 1.0f);
 }
 
 void Material::SetShininess(float shininess) {
-  shininess_ = utils::clamp(shininess, 0.0, 1000.0);
+  shininess_ = utils::clamp(shininess, 0.0f, 200.0f);
 }
 
 bool Material::operator==(const Material& other) const {
@@ -53,4 +62,23 @@ bool Material::operator==(const Material& other) const {
          utils::equal(diffuse_, other.diffuse_) &&
          utils::equal(specular_, other.specular_) &&
          utils::equal(shininess_, other.shininess_));
+}
+
+Material& Material::operator=(const Material& other) {
+  color_ = other.color_;
+  ambient_ = other.ambient_;
+  diffuse_ = other.diffuse_;
+  specular_ = other.specular_;
+  shininess_ = other.shininess_;
+  return *this;
+}
+
+std::string Material::format() const {
+  std::stringstream ss;
+  ss << "Color: " << color_ << "\n"
+    << "Ambient: " << ambient_ << "\n"
+    << "Diffuse: " << diffuse_ << "\n"
+    << "Specular: " << specular_ << "\n"
+    << "Shininess: " << shininess_ << std::endl;
+  return ss.str();
 }

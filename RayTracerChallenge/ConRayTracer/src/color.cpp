@@ -52,9 +52,16 @@ Color Color::operator*(const Color& other) const {
   return Color(utils::hadamard_product(*this, other));
 }
 
+Color& Color::operator+=(const Color& other) {
+  this->r_ += other[0];
+  this->g_ += other[1];
+  this->b_ += other[2];
+  return *this;
+}
+
 Color Color::clamp() const {
-  return Color(utils::clamp(r_, 0.0, 1.0), utils::clamp(g_, 0.0, 1.0),
-                                           utils::clamp(b_, 0.0, 1.0));
+  return Color(utils::clamp(r_, 0.0, 1.0), utils::clamp(g_, 0.0f, 1.0f),
+                                           utils::clamp(b_, 0.0f, 1.0f));
 }
 
 Color Color::round(int roundoff_amount) const {
