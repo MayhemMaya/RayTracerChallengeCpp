@@ -7,10 +7,10 @@
 
 class Mesh : public Object {
  public:
-  Mesh(std::string name, const ObjectType& type);
-  Mesh(std::string name, const ObjectType& type, const Matrix4& transform);
-  Mesh(std::string name, const ObjectType& type, const Material& material);
-  Mesh(std::string name, const ObjectType& type, const Material& material,
+  Mesh(const std::string& name, const ObjectType& type);
+  Mesh(const std::string& name, const ObjectType& type, const Matrix4& transform);
+  Mesh(const std::string& name, const ObjectType& type, const Material& material);
+  Mesh(const std::string& name, const ObjectType& type, const Material& material,
                                                const Matrix4& transform);
   virtual ~Mesh();
   void ListDetails() const override;

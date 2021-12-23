@@ -19,11 +19,11 @@ Matrix3::Matrix3(float a11, float a12, float a13,
   data_[2][2] = a33;
 }
 
-float Matrix3::operator()(unsigned int y, unsigned int x) const {
+float Matrix3::operator()(int y, int x) const {
   return data_[y][x];
 }
 
-void Matrix3::operator()(unsigned int y, unsigned int x, float value) {
+void Matrix3::operator()(int y, int x, float value) {
   data_[y][x] = value;
 }
 

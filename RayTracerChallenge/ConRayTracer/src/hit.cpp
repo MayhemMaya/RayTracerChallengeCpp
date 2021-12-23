@@ -2,7 +2,7 @@
 #include "hit.h"
 #include "intersection.h"
 
-Hit Hit::hit(std::vector<Intersection> intersections) {
+Hit Hit::hit(const std::vector<Intersection>& intersections) {
   Hit hit;
   for (Intersection i : intersections) {
     if (i.GetTime() > 0) {

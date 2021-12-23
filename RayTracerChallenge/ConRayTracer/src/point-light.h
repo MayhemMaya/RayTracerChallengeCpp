@@ -7,7 +7,7 @@
 class PointLight : public LightSource {
  public:
    PointLight(const Point& position, const Color& intensity);
-   PointLight(std::string name, const Point& position, const Color& intensity);
+   PointLight(const std::string& name, const Point& position, const Color& intensity);
    bool operator==(const Object& object) const override;
    PointLight& operator=(const Object& other) override;
 };

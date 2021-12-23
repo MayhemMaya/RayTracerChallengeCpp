@@ -5,7 +5,7 @@
 
 class Environment {
  public:
-   Environment(Vector gravity, Vector wind);
+   Environment(const Vector& gravity, const Vector& wind);
    Vector GetGravity() const;
    Vector GetWind() const;
  private:

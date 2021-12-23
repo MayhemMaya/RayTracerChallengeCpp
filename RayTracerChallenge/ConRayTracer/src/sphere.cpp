@@ -4,24 +4,24 @@
 
 Sphere::Sphere() : Mesh("sphere", ObjectType::kSphere) {}
 
-Sphere::Sphere(std::string name) : Mesh(name, ObjectType::kSphere) {}
+Sphere::Sphere(const std::string& name) : Mesh(name, ObjectType::kSphere) {}
 
-Sphere::Sphere(Material material)
+Sphere::Sphere(const Material& material)
     : Mesh("sphere", ObjectType::kSphere, material) {}
 
-Sphere::Sphere(Matrix4 transform)
+Sphere::Sphere(const Matrix4& transform)
     : Mesh("sphere", ObjectType::kSphere, transform) {}
 
-Sphere::Sphere(std::string name, Material material)
+Sphere::Sphere(const std::string& name, const Material& material)
     : Mesh(name, ObjectType::kSphere, material) {}
 
-Sphere::Sphere(std::string name, Matrix4 transform)
+Sphere::Sphere(const std::string& name, const Matrix4& transform)
     : Mesh(name, ObjectType::kSphere, transform) {}
 
-Sphere::Sphere(Material material, Matrix4 transform)
+Sphere::Sphere(const Material& material, const Matrix4& transform)
     : Mesh("sphere", ObjectType::kSphere, material, transform) {}
 
-Sphere::Sphere(std::string name, Material material, Matrix4 transform)
+Sphere::Sphere(const std::string& name, const Material& material, const Matrix4& transform)
     : Mesh(name, ObjectType::kSphere, material, transform) {}
 
 bool Sphere::operator==(const Object& object) const {

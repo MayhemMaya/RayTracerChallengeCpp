@@ -1,7 +1,7 @@
 
 #include "environment.h"
 
-Environment::Environment(Vector gravity, Vector wind)
+Environment::Environment(const Vector& gravity, const Vector& wind)
     : gravity_(gravity), wind_(wind) {}
 
 Vector Environment::GetGravity() const { return gravity_; }

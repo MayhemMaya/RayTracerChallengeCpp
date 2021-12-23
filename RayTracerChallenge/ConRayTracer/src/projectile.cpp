@@ -2,7 +2,7 @@
 #include <iostream>
 #include "projectile.h"
 
-Projectile::Projectile(Point position, Vector velocity) 
+Projectile::Projectile(const Point& position, const Vector& velocity) 
     : position_(position), velocity_(velocity) {}
 
 Point Projectile::GetPosition() const { return position_; }

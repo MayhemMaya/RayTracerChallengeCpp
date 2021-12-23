@@ -4,7 +4,7 @@
 
 int Mesh::mesh_count_ = 0;
 
-Mesh::Mesh(std::string name, const ObjectType& type)
+Mesh::Mesh(const std::string& name, const ObjectType& type)
     : Object(name, type) {
   mesh_count_++;
   if (name == "sphere" || name == "mesh") {
@@ -14,7 +14,7 @@ Mesh::Mesh(std::string name, const ObjectType& type)
   }
 }
 
-Mesh::Mesh(std::string name, const ObjectType& type, const Matrix4& transform)
+Mesh::Mesh(const std::string& name, const ObjectType& type, const Matrix4& transform)
     : Object(name, type, transform) {
   mesh_count_++;
   if (name == "sphere" || name == "mesh") {
@@ -24,7 +24,7 @@ Mesh::Mesh(std::string name, const ObjectType& type, const Matrix4& transform)
   }
 }
 
-Mesh::Mesh(std::string name, const ObjectType& type, const Material& material)
+Mesh::Mesh(const std::string& name, const ObjectType& type, const Material& material)
     : Object(name, type) {
   mesh_count_++;
   if (name == "sphere" || name == "mesh") {
@@ -35,7 +35,7 @@ Mesh::Mesh(std::string name, const ObjectType& type, const Material& material)
   this->material_ = material;
 }
 
-Mesh::Mesh(std::string name, const ObjectType& type, const Material& material,
+Mesh::Mesh(const std::string& name, const ObjectType& type, const Material& material,
                                                    const Matrix4& transform)
     : Object(name, type, transform) {
   mesh_count_++;

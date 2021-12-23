@@ -6,7 +6,7 @@
 
 class Projectile {
  public:
-  Projectile(Point position, Vector velocity);
+  Projectile(const Point& position, const Vector& velocity);
   Point GetPosition() const;
   Vector GetVelocity() const;
   friend std::ostream& operator<<(std::ostream& os, const Projectile& obj);

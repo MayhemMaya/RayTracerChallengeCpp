@@ -3,10 +3,18 @@
 #include "mesh.h"
 
 Intersection::Intersection()
-    : time_(0.0), mesh_object_(Mesh("", ObjectType::kUnknown)) {}
+    : time_(0.0), mesh_object_(new Mesh("mesh", ObjectType::kUnknown)) {}
 
-Intersection::Intersection(float time, const Mesh& object)
+Intersection::Intersection(float time, Mesh* object)
     : time_(time), mesh_object_(object) {}
+
+Intersection::Intersection(const Intersection& other)
+  : time_(other.GetTime()), mesh_object_(other.GetObject()) {}
+
+Intersection::~Intersection() {
+  mesh_object_ = nullptr;
+  delete mesh_object_;
+}
 
 float Intersection::GetTime() const {
   return time_;
@@ -15,20 +23,27 @@ float Intersection::GetTime() const {
 void Intersection::SetTime(float time) {
   time_ = time;
 }
-Mesh Intersection::GetObject() const {
+Mesh* Intersection::GetObject() const {
   return mesh_object_;
 }
 
-void Intersection::SetObject(const Mesh& mesh) {
-  mesh_object_ = mesh;
+void Intersection::SetObject(Mesh* object) {
+  mesh_object_ = object;
 }
 
 bool Intersection::operator==(const Intersection& other) const {
   return(time_ == other.GetTime() && mesh_object_ == other.GetObject());
 }
 
+Intersection& Intersection::operator=(const Intersection& other) {
+  this->SetTime(other.GetTime());
+  this->SetObject(other.GetObject());
+  return *this;
+}
+
 void Intersection::swap(Intersection& a, Intersection& b) {
   Intersection temp;
+
   temp.SetTime(a.GetTime());
   temp.SetObject(a.GetObject());
 
@@ -39,7 +54,7 @@ void Intersection::swap(Intersection& a, Intersection& b) {
   b.SetObject(temp.GetObject());
 }
 
-std::vector<Intersection> Intersection::intersections(std::vector<Intersection> intersections) {
+std::vector<Intersection> Intersection::intersections(const std::vector<Intersection>& intersections) {
   if (intersections.size() <= 0) return intersections;
   std::vector<Intersection> xs = intersections;
   for (int i = 0; i < xs.size() - 1; i++) {
@@ -47,6 +62,5 @@ std::vector<Intersection> Intersection::intersections(std::vector<Intersection> 
       if (xs[j].GetTime() > xs[j + 1].GetTime())
         swap(xs[j], xs[j + 1]);
   }
-    
   return xs;
 }

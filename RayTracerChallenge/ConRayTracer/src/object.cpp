@@ -2,17 +2,17 @@
 
 int Object::object_count_ = 0;
 
-Object::Object(std::string name, const ObjectType& type)
+Object::Object(const std::string& name, const ObjectType& type)
     : transform_(Matrix4()), name_(name), type_(type) {
       object_count_++;
 }
 
-Object::Object(std::string name, const ObjectType& type, const Matrix4& transform)
+Object::Object(const std::string& name, const ObjectType& type, const Matrix4& transform)
   : transform_(transform), name_(name), type_(type) {
   object_count_++;
 }
 
-Object::Object(std::string name, const ObjectType& type, const Point& position)
+Object::Object(const std::string& name, const ObjectType& type, const Point& position)
     : transform_(Matrix4().translation(position[0], position[1], position[2])), 
       name_(name), type_(type) {
   object_count_++;

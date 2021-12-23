@@ -7,7 +7,7 @@
 
 int LightSource::light_count_ = 0;
 
-LightSource::LightSource(std::string name, const ObjectType& type,
+LightSource::LightSource(const std::string& name, const ObjectType& type,
                                            const Point& position,
                                            const Color& intensity)
     : Object(name, type, position), intensity_(intensity) {

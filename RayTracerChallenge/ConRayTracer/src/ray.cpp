@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "intersection.h"
 
-Ray::Ray(Point origin, Vector direction)
+Ray::Ray(const Point& origin, const Vector& direction)
     : origin_(origin), direction_(direction) {}
 
 Point Ray::GetOrigin() const {
@@ -22,7 +22,7 @@ Point Ray::position(float time) const {
   return(origin_ + direction_ * time);
 }
 
-std::vector<Intersection> Ray::intersect(const Sphere& sphere) const {
+std::vector<float> Ray::intersect(const Sphere& sphere) const {
   Matrix4 sphere_inverse = sphere.GetTransform().inverse();
   Ray ray2 = this->transform(sphere_inverse);
   
@@ -36,18 +36,18 @@ std::vector<Intersection> Ray::intersect(const Sphere& sphere) const {
   float t1 = (-b - sqrt(discriminant)) / (2 * a);
   float t2 = (-b + sqrt(discriminant)) / (2 * a);
   
-  Intersection i1(t1, sphere);
-  Intersection i2(t2, sphere);
-  return { i1, i2 };
+  return { t1, t2 };
 }
 
 std::vector<Intersection> Ray::intersect(const World& world) const {
   std::vector<Intersection> intersections;
   
   for (Mesh* m : world.GetMeshes()) {
-    Sphere* s = dynamic_cast<Sphere*>(m); 
-    std::vector<Intersection> xs = this->intersect((*s));
-    intersections.insert(intersections.end(), xs.begin(), xs.end());
+    Sphere* s = (Sphere*)m;
+    for (float t : this->intersect((*s))) {
+      Intersection i(t, s);
+      intersections.push_back(i);
+    }
   }
   return Intersection::intersections(intersections);
 }

@@ -61,7 +61,7 @@ Camera::Camera(int hsize, int vsize, float field_of_view,
   half_height_ = data.half_height;
 }
 
-Camera::Camera(std::string name, int hsize, int vsize, float field_of_view)
+Camera::Camera(const std::string& name, int hsize, int vsize, float field_of_view)
     : hsize_(hsize), vsize_(vsize),
       field_of_view_(field_of_view),
       Object(name, ObjectType::kCamera) {
@@ -77,7 +77,7 @@ Camera::Camera(std::string name, int hsize, int vsize, float field_of_view)
   half_height_ = data.half_height;
 }
 
-Camera::Camera(std::string name, int hsize, int vsize, float field_of_view,
+Camera::Camera(const std::string& name, int hsize, int vsize, float field_of_view,
                                                        const Matrix4& transform)
     : hsize_(hsize), vsize_(vsize),
       field_of_view_(field_of_view),

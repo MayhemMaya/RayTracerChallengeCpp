@@ -11,5 +11,5 @@ enum class HitResult {
 struct Hit {
   Intersection i;
   HitResult result = HitResult::NO_HIT;
-  static Hit hit(std::vector<Intersection> intersections);
+  static Hit hit(const std::vector<Intersection>& intersections);
 };

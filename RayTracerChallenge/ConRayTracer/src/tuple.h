@@ -8,8 +8,8 @@ class Tuple {
   Tuple(float x, float y, float z, float w);
   virtual ~Tuple();
   friend std::ostream& operator<<(std::ostream& os, const Tuple& obj);
-  float operator [] (unsigned int index) const;
-  void operator()(unsigned int index, float value);
+  float operator [] (int index) const;
+  void operator()(int index, float value);
   virtual bool operator == (const Tuple& other) const;
   bool IsPoint() const;
   bool IsVector() const;

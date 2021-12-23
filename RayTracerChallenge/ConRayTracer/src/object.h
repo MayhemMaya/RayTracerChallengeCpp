@@ -23,9 +23,9 @@ static std::string type_enum_names[] = {
 
 class Object {
  public:
-   Object(std::string name, const ObjectType& type);
-   Object(std::string name, const ObjectType& type, const Matrix4& transform);
-   Object(std::string name, const ObjectType& type, const Point& position);
+   Object(const std::string& name, const ObjectType& type);
+   Object(const std::string& name, const ObjectType& type, const Matrix4& transform);
+   Object(const std::string& name, const ObjectType& type, const Point& position);
    virtual ~Object() = 0;
    virtual void ListDetails() const;
    std::string GetName() const;
@@ -35,7 +35,7 @@ class Object {
    ObjectType GetObjectType() const;
    std::string GetObjectTypeName() const;
    void SetObjectType(const ObjectType& type);
-   Point GetPosition() const;
+   virtual Point GetPosition() const;
    virtual bool operator==(const Object& other) const;
    virtual Object& operator=(const Object& other);
    static int GetCount();

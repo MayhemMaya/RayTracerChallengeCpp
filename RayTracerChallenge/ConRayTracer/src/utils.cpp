@@ -16,20 +16,20 @@ bool equal(float a, float b) {
   return false;
 }
 
-float dot(Tuple a, Tuple b) {
+float dot(const Tuple& a, const Tuple& b) {
   return(a[0] * b[0] +
          a[1] * b[1] +
          a[2] * b[2] +
          a[3] * b[3]);
 }
 
-Vector cross(Vector a, Vector b) {
+Vector cross(const Vector& a, const Vector& b) {
   return Vector(a[1] * b[2] - a[2] * b[1],
                 a[2] * b[0] - a[0] * b[2],
                 a[0] * b[1] - a[1] * b[0]);
 }
 
-Color hadamard_product(Color c1, Color c2) {
+Color hadamard_product(const Color& c1, const Color& c2) {
   return Color(c1[0] * c2[0], c1[1] * c2[1], c1[2] * c2[2]);
 }
 
@@ -39,7 +39,7 @@ float clamp(float value, float min, float max) {
   return value;
 }
 
-std::vector<std::string> split_lines(std::string str) {
+std::vector<std::string> split_lines(const std::string& str) {
   std::istringstream stream(str);
   std::vector<std::string> lines;
   std::string current_line;
@@ -57,7 +57,7 @@ std::string ToString(float value) {
   return ss.str();
 }
 
-void ExportFile(std::string file_name, std::string contents) {
+void ExportFile(const std::string& file_name, const std::string& contents) {
   std::ofstream file(file_name);
   file << contents;
   file.close();
@@ -83,7 +83,7 @@ void swap(double& a, double& b) {
 }
 
 float radians(float degrees) {
-  return(degrees * kPI / 180);
+  return(degrees * kPI / 180.0f);
 }
 
 float roundoff(float value, int precision) {

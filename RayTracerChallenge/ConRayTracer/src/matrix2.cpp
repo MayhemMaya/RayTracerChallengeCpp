@@ -12,11 +12,11 @@ Matrix2::Matrix2(float a11, float a12,
   data_[1][1] = a22;
 }
 
-float Matrix2::operator()(unsigned int y, unsigned int x) const {
+float Matrix2::operator()(int y, int x) const {
   return data_[y][x];
 }
 
-void Matrix2::operator()(unsigned int y, unsigned int x, float value) {
+void Matrix2::operator()(int y, int x, float value) {
   data_[y][x] = value;
 }
 

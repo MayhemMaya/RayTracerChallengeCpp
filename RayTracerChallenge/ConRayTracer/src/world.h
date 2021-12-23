@@ -24,9 +24,9 @@ class World {
    std::vector<Camera*> GetCameras() const;
    int GetObjectCount() const;
    void ListObjects() const;
-   void ListObjects(ObjectType type) const;
+   void ListObjects(const ObjectType& type) const;
    void AddObject(Object* object);
-   void DeleteObject(std::string name);
+   void DeleteObject(const std::string& name);
    bool ContainsLightSource() const;
    bool ContainsCamera() const;
    bool ContainsObject(Object* object) const;

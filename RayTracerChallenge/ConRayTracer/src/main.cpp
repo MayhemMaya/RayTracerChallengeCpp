@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <array>
+#include <memory>
 #include "utils.h"
 #include "tuple.h"
 #include "point.h"
@@ -25,7 +26,6 @@
 #include "camera.h"
 
 int main() {
-	
 	World world = World(WorldType::EMPTY);
 
 	Sphere floor("floor", Matrix4().scaling(10.0f, 0.01f, 10.0f));
@@ -75,7 +75,7 @@ int main() {
 	
 	PointLight light(Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
 
-	Camera camera(1280, 720, utils::kPI / 3.0f);
+	Camera camera(100, 50, utils::kPI / 3.0f);
 	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 1.5f, -5.0f),
 																							 Point(0.0f, 1.0f, 0.0f),
 																							 Vector(0.0f, 1.0f, 0.0f)));
@@ -92,8 +92,8 @@ int main() {
 	Canvas image = Engine::render(camera, world);
 	
 	utils::ExportFile("render_test.ppm", image.ToPPM());
-
 	
+	std::cout << "\n\nPress any key to exit...";
 	std::cin.get();
 	return 0;
 }

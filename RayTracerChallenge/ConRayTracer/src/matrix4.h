@@ -17,8 +17,8 @@ class Matrix4 {
           float a21, float a22, float a23, float a24,
           float a31, float a32, float a33, float a34,
           float a41, float a42, float a43, float a44);
-  float operator()(unsigned int row, unsigned int col) const;
-  void operator()(unsigned int row, unsigned int col, float value);
+  float operator()(int row, int col) const;
+  void operator()(int row, int col, float value);
   friend std::ostream& operator<<(std::ostream& os, const Matrix4& obj);
   bool operator==(const Matrix4& other) const;
   bool operator!=(const Matrix4& other) const;

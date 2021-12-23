@@ -5,7 +5,7 @@
 PointLight::PointLight(const Point& position, const Color& intensity)
     : LightSource("pointlight", ObjectType::kPointLight, position, intensity) {}
 
-PointLight::PointLight(std::string name, const Point& position, const Color& intensity)
+PointLight::PointLight(const std::string& name, const Point& position, const Color& intensity)
     : LightSource(name, ObjectType::kPointLight, position, intensity) {}
 
 bool PointLight::operator==(const Object& object) const {

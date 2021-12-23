@@ -12,7 +12,7 @@ std::ostream& operator<<(std::ostream& os, const Tuple& obj) {
   return os;
 }
 
-float Tuple::operator[] (unsigned int index) const {
+float Tuple::operator[] (int index) const {
   switch (index) {
   case 0: return x_;
   case 1: return y_;
@@ -21,7 +21,7 @@ float Tuple::operator[] (unsigned int index) const {
   }
 }
 
-void Tuple::operator()(unsigned int index, float value) {
+void Tuple::operator()(int index, float value) {
   switch (index) {
   case 0:
     x_ = value;

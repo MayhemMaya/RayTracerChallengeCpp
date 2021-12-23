@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <cmath>
 #include <vector>
+#include <memory>
 #include "utils.cpp"
 #include "tuple.cpp"
 #include "point.cpp"
@@ -57,15 +58,15 @@ TEST(UtilsTests, SwapDoubleValues) {
 }
 
 TEST(UtilsTests, SwapIntersectionValues) {
-	Mesh m1("mesh1", ObjectType::kMesh);
-	Mesh m2("mesh2", ObjectType::kMesh);
+	Mesh* m1 = new Mesh("mesh1", ObjectType::kMesh);
+	Mesh* m2 = new Mesh("mesh2", ObjectType::kMesh);
 	Intersection i1(1.0f, m1);
 	Intersection i2(2.0f, m2);
 	Intersection::swap(i1, i2);
 	EXPECT_EQ(i1.GetTime(), 2.0f);
-	EXPECT_TRUE(i1.GetObject() == m2);
+	EXPECT_TRUE((*i1.GetObject()) == (*m2));
 	EXPECT_EQ(i2.GetTime(), 1.0f);
-	EXPECT_TRUE(i2.GetObject() == m1);
+	EXPECT_TRUE((*i2.GetObject()) == (*m1));
 }
 #pragma endregion
 
@@ -714,55 +715,55 @@ TEST(Chapter5_tests, Computing_a_point_from_a_distance) {
 TEST(Chapter5_tests, A_ray_intersects_a_sphere_at_two_points) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 4.0f);
-	EXPECT_EQ(xs[1].GetTime(), 6.0f);
+	EXPECT_EQ(xs[0], 4.0f);
+	EXPECT_EQ(xs[1], 6.0f);
 }
 
 TEST(Chapter5_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 5.0f);
-	EXPECT_EQ(xs[1].GetTime(), 5.0f);
+	EXPECT_EQ(xs[0], 5.0f);
+	EXPECT_EQ(xs[1], 5.0f);
 }
 
 TEST(Chapter5_tests, A_ray_misses_a_sphere) {
 	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Chapter5_tests, A_ray_originates_inside_a_sphere) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), -1.0f);
-	EXPECT_EQ(xs[1].GetTime(), 1.0f);
+	EXPECT_EQ(xs[0], -1.0f);
+	EXPECT_EQ(xs[1], 1.0f);
 }
 
 TEST(Chapter5_tests, A_sphere_is_behind_a_ray) {
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), -6.0f);
-	EXPECT_EQ(xs[1].GetTime(), -4.0f);
+	EXPECT_EQ(xs[0], -6.0f);
+	EXPECT_EQ(xs[1], -4.0f);
 }
 
 TEST(Chapter5_tests, An_intersection_encapsulates_time_and_object) {
-	Sphere s;
+	Sphere* s = new Sphere();
 	Intersection i(3.5f, s);
 	EXPECT_EQ(i.GetTime(), 3.5f);
-	EXPECT_TRUE(i.GetObject() == s);
+	EXPECT_TRUE((*i.GetObject()) == (*s));
 }
 
 TEST(Chapter5_tests, Aggregating_intersections) {
-	Sphere s;
+	Sphere* s = new Sphere();
 	Intersection i1(1, s);
 	Intersection i2(2, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i1, i2 });
@@ -771,17 +772,18 @@ TEST(Chapter5_tests, Aggregating_intersections) {
 	EXPECT_EQ(xs[1].GetTime(), 2);
 }
 
+/*
 TEST(Chapter5_tests, Intersect_sets_the_object_on_the_intersection) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_TRUE(xs[0].GetObject() == s);
 	EXPECT_TRUE(xs[1].GetObject() == s);
-}
+}*/
 
 TEST(Chapter5_tests, The_hit_when_all_intersections_have_positive_time) {
-	Sphere s;
+	Sphere* s = new Sphere();
 	Intersection i1(1, s);
 	Intersection i2(2, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
@@ -790,7 +792,7 @@ TEST(Chapter5_tests, The_hit_when_all_intersections_have_positive_time) {
 }
 
 TEST(Chapter5_tests, The_hit_when_some_intersections_have_negative_time) {
-	Sphere s;
+	Sphere* s = new Sphere();
 	Intersection i1(-1, s);
 	Intersection i2(1, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
@@ -799,7 +801,7 @@ TEST(Chapter5_tests, The_hit_when_some_intersections_have_negative_time) {
 }
 
 TEST(Chapter5_tests, The_hit_when_all_intersections_have_negative_time) {
-	Sphere s;
+	Sphere* s = new Sphere();
 	Intersection i1(-2, s);
 	Intersection i2(-1, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
@@ -808,7 +810,7 @@ TEST(Chapter5_tests, The_hit_when_all_intersections_have_negative_time) {
 }
 
 TEST(Chapter5_tests, The_hit_is_always_the_lowest_nonnegative_intersection) {
-	Sphere s;
+	Sphere* s = new Sphere();
 	Intersection i1(5, s);
 	Intersection i2(7, s);
 	Intersection i3(-3, s);
@@ -851,17 +853,17 @@ TEST(Chapter5_tests, Intersecting_a_scaled_sphere_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
 	s.SetTransform(Matrix4().scaling(2, 2, 2));
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 3);
-	EXPECT_EQ(xs[1].GetTime(), 7);
+	EXPECT_EQ(xs[0], 3);
+	EXPECT_EQ(xs[1], 7);
 }
 
 TEST(Chapter5_tests, Intersecting_a_translated_sphere_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
 	s.SetTransform(Matrix4().translation(5, 0, 0));
-	std::vector<Intersection> xs = r.intersect(s);
+	std::vector<float> xs = r.intersect(s);
 	EXPECT_EQ(xs.size(), 0);
 }
 #pragma endregion
@@ -963,7 +965,8 @@ TEST(Chapter6_tests, Lighting_with_the_eye_between_the_light_and_the_surface) {
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
-	Color result = Engine::lighting(m, light, position, evev, normalv);
+	bool in_shadow = false;
+	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(1.9f, 1.9f, 1.9f));
 }
 
@@ -973,7 +976,8 @@ TEST(Chapter6_tests, Lighting_with_the_eye_between_light_and_surface_eye_offset_
 	Vector evev(0, sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
-	Color result = Engine::lighting(m, light, position, evev, normalv);
+	bool in_shadow = false;
+	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(1.0f, 1.0f, 1.0f));
 }
 
@@ -983,7 +987,8 @@ TEST(Chapter6_tests, Lighting_with_eye_opposite_surface_light_offset_45_degrees)
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
-	Color result = Engine::lighting(m, light, position, evev, normalv);
+	bool in_shadow = false;
+	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.7364f, 0.7364f, 0.7364f));
 }
 
@@ -993,7 +998,8 @@ TEST(Chapter6_tests, Lighting_with_eye_in_the_path_of_the_reflection_vector) {
 	Vector evev(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
-	Color result = Engine::lighting(m, light, position, evev, normalv);
+	bool in_shadow = false;
+	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result.round(4) == Color(1.6364f, 1.6364f, 1.6364f));
 }
 
@@ -1003,7 +1009,8 @@ TEST(Chapter6_tests, Lighting_with_the_light_behind_the_surface) {
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, 10), Color(1, 1, 1));
-	Color result = Engine::lighting(m, light, position, evev, normalv);
+	bool in_shadow = true;
+	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
 }
 #pragma endregion
@@ -1026,14 +1033,14 @@ TEST(Chapter7_tests, The_default_world) {
 	Sphere s2("sphere2");
 	s2.SetTransform(Matrix4().scaling(0.5f, 0.5f, 0.5f));
 
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	EXPECT_TRUE((*w.GetLights()[0]) == light);
 	EXPECT_TRUE(w.ContainsObject(&s1));
 	EXPECT_TRUE(w.ContainsObject(&s2));
 }
 
 TEST(Chapter7_tests, Intersect_a_world_with_a_ray) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	std::vector<Intersection> xs = r.intersect(w);
 	EXPECT_EQ(xs.size(), 4);
@@ -1045,11 +1052,11 @@ TEST(Chapter7_tests, Intersect_a_world_with_a_ray) {
 
 TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere shape;
+	Sphere* shape = new Sphere();
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_EQ(comps.time_, i.GetTime());
-	EXPECT_EQ(comps.object_, i.GetObject());
+	EXPECT_TRUE(comps.object_ == i.GetObject());
 	EXPECT_TRUE(comps.point_ == Point(0, 0, -1));
 	EXPECT_TRUE(comps.eyev_ == Vector(0, 0, -1));
 	EXPECT_TRUE(comps.normalv_ == Vector(0, 0, -1));
@@ -1057,7 +1064,7 @@ TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
 
 TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere shape;
+	Sphere* shape = new Sphere();
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_FALSE(comps.inside_);
@@ -1065,7 +1072,7 @@ TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
 
 TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
-	Sphere shape;
+	Sphere* shape = new Sphere();
 	Intersection i(1, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_TRUE(comps.point_ == Point(0, 0, 1));
@@ -1075,9 +1082,9 @@ TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
 }
 
 TEST(Chapter7_tests, Shading_an_intersection) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Mesh shape = (*w.GetMeshes()[0]);
+	Mesh* shape = w.GetMeshes()[0];
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	Color c = Engine::shade_hit(w, comps);
@@ -1085,34 +1092,34 @@ TEST(Chapter7_tests, Shading_an_intersection) {
 }
 
 TEST(Chapter7_tests, Shading_an_intersection_from_the_inside) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	// remove the default light and add a new light
 	w.DeleteObject("pointlight1");
-	w.AddObject(new PointLight("pointlight1", Point(0, 0.25, 0), Color(1, 1, 1)));
+	w.AddObject(new PointLight("pointlight1", Point(0, 0.25f, 0), Color(1, 1, 1)));
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
-	Mesh shape = (*w.GetMeshes()[1]);
-	Intersection i(0.5, shape);
+	Mesh* shape = w.GetMeshes()[1];
+	Intersection i(0.5f, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	Color c = Engine::shade_hit(w, comps);
 	EXPECT_TRUE(c == Color(0.90498f, 0.90498f, 0.90498f));
 }
 
 TEST(Chapter7_tests, The_color_when_a_ray_misses) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	Ray r(Point(0, 0, -5), Vector(0, 1, 0));
 	Color c = Engine::color_at(w, r);
 	EXPECT_TRUE(c == Color(0, 0, 0));
 }
 
 TEST(Chapter7_tests, The_color_when_a_ray_hits) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Color c = Engine::color_at(w, r);
-	EXPECT_TRUE(c == Color(0.38066f, 0.47583, 0.2855f));
+	EXPECT_TRUE(c == Color(0.38066f, 0.47583f, 0.2855f));
 }
 
 TEST(Chapter7_tests, The_color_with_an_intersection_behind_the_ray) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	Mesh* outer = w.GetMeshes()[0];
 	Material outer_mat = outer->GetMaterial();
 	outer_mat.SetAmbient(1);
@@ -1169,7 +1176,7 @@ TEST(Chapter7_tests, Constructing_a_camera) {
 	Camera c(hsize, vsize, field_of_view);
 	EXPECT_EQ(c.GetHorizontalSize(), 160);
 	EXPECT_EQ(c.GetVerticalSize(), 120);
-	EXPECT_EQ(c.GetFieldOfView(), utils::kPI / 2.0f);
+	EXPECT_TRUE(utils::equal(c.GetFieldOfView(), utils::kPI / 2.0f));
 	Matrix4 identity_matrix = Matrix4().identity();
 	EXPECT_TRUE(c.GetTransform() == identity_matrix);
 }
@@ -1207,7 +1214,7 @@ TEST(Chapter7_tests, Constructing_a_ray_when_the_camera_is_transformed) {
 }
 
 TEST(Chapter7_tests, Rendering_a_world_with_a_camera) {
-	World w = World(WorldType::DEFAULT);
+	World w(WorldType::DEFAULT);
 	Camera c(11, 11, utils::kPI / 2.0f);
 	Point from(0, 0, -5);
 	Point to(0, 0, 0);
@@ -1215,5 +1222,66 @@ TEST(Chapter7_tests, Rendering_a_world_with_a_camera) {
 	c.SetTransform(Matrix4().view_transform(from, to, up));
 	Canvas image = Engine::render(c, w);
 	EXPECT_TRUE(image.PixelAt(5, 5) == Color(0.38066f, 0.47583f, 0.2855f));
+}
+#pragma endregion
+
+#pragma region Chapter8Tests
+TEST(Chapter8_tests, Lighting_with_the_surface_in_shadow) {
+	Material m;
+	Point position(0, 0, 0);
+	Vector evev(0, 0, -1);
+	Vector normalv(0, 0, -1);
+	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
+	bool in_shadow = true;
+	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
+}
+
+TEST(Chapter8_tests, There_is_no_shadow_when_nothing_is_collinear_with_point_and_light) {
+	World w(WorldType::DEFAULT);
+	Point p(0, 10, 0);
+	EXPECT_FALSE(Engine::is_shadowed(w, p));
+}
+
+TEST(Chapter8_tests, The_shadow_when_an_object_is_between_the_point_and_the_light) {
+	World w(WorldType::DEFAULT);
+	Point p(10, -10, 10);
+	EXPECT_TRUE(Engine::is_shadowed(w, p));
+}
+
+TEST(Chapter8_tests, There_is_no_shadow_when_an_object_is_behind_the_light) {
+	World w(WorldType::DEFAULT);
+	Point p(-20, 20, -20);
+	EXPECT_FALSE(Engine::is_shadowed(w, p));
+}
+
+TEST(Chapter8_tests, There_is_no_shadow_when_an_object_is_behind_the_point) {
+	World w(WorldType::DEFAULT);
+	Point p(-2, 2, -2);
+	EXPECT_FALSE(Engine::is_shadowed(w, p));
+}
+
+TEST(Chapter8_tests, shade_hit_is_given_an_intersection_in_shadow) {
+	World w(WorldType::EMPTY);
+	PointLight light(Point(0, 0, -10), Color(1.0f, 1.0f, 1.0f));
+	w.AddObject(&light);
+	Sphere* s1 = new Sphere();
+	w.AddObject(s1);
+	Sphere* s2 = new Sphere((Matrix4().translation(0, 0, 10)));
+	w.AddObject(s2);
+	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+	Intersection i(4, s2);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color c = Engine::shade_hit(w, comps);
+	EXPECT_TRUE(c == Color(0.1f, 0.1f, 0.1f));
+}
+
+TEST(Chapter8_tests, The_hit_should_offset_the_point) {
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere* shape = new Sphere((Matrix4().translation(0, 0, 1)));
+	Intersection i(5, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	EXPECT_TRUE(comps.over_point_[2] < -utils::kEPSILON / 2);
+	EXPECT_TRUE(comps.point_[2] > comps.over_point_[2]);
 }
 #pragma endregion

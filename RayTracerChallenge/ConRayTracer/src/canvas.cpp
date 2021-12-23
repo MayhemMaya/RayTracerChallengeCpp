@@ -6,10 +6,9 @@
 #include "utils.h"
 
 Canvas::Canvas(int width, int height)
-    : width_(width), height_(height) {
+  : width_(width), height_(height) {
   if ((width != 0) || (height != 0)) {
-    int pixel_count = width * height;
-    for (int i = 0; i < pixel_count; i++) {
+    for (int i = 0; i < width * height; i++) {
       pixels_.push_back(Color(0, 0, 0));
     }
   }
@@ -34,7 +33,8 @@ Color Canvas::PixelAt(int x, int y) const {
     //exit(0);
   }
   int index = width_ * y + x;
-  return pixels_[index];
+  Color c = pixels_[index];
+  return c;
 }
 
 void Canvas::WritePixel(int x, int y, const Color& color) {

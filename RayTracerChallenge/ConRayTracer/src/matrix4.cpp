@@ -38,11 +38,11 @@ Matrix4::Matrix4(float a11, float a12, float a13, float a14,
   data_[3][3] = a44;
 }
 
-float Matrix4::operator()(unsigned int row, unsigned int col) const {
+float Matrix4::operator()(int row, int col) const {
   return data_[row][col];
 }
 
-void Matrix4::operator()(unsigned int row, unsigned int col, float value) {
+void Matrix4::operator()(int row, int col, float value) {
   data_[row][col] = value;
 }
 

@@ -10,11 +10,11 @@
 
 class Ray {
  public:
-  Ray(Point origin, Vector direction);
+  Ray(const Point& origin, const Vector& direction);
   Point GetOrigin() const;
   Vector GetDirection() const;
   Point position(float time) const;
-  std::vector<Intersection> intersect(const Sphere& sphere) const;
+  std::vector<float> intersect(const Sphere& sphere) const;
   std::vector<Intersection> intersect(const World& world) const;
   Ray transform(const Matrix4& matrix) const;
  private:

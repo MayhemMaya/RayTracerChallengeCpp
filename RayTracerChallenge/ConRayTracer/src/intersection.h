@@ -6,15 +6,18 @@
 class Intersection {
  public:
   Intersection();
-  Intersection(float time, const Mesh& object);
+  Intersection(float time, Mesh* object);
+  Intersection(const Intersection& other);
+  ~Intersection();
   float GetTime() const;
   void SetTime(float time);
-  Mesh GetObject() const;
-  void SetObject(const Mesh& mesh);
+  Mesh* GetObject() const;
+  void SetObject(Mesh* object);
   bool operator==(const Intersection& other) const;
+  Intersection& operator=(const Intersection& other);
   static void swap(Intersection& a, Intersection& b);
-  static std::vector<Intersection> intersections(std::vector<Intersection> intersections);
+  static std::vector<Intersection> intersections(const std::vector<Intersection>& intersections);
  private:
   float time_;
-  Mesh mesh_object_;
+  Mesh* mesh_object_;
 };

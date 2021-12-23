@@ -10,8 +10,8 @@ class Matrix3 {
   Matrix3(float a11, float a12, float a13,
           float a21, float a22, float a23,
           float a31, float a32, float a33);
-  float operator()(unsigned int y, unsigned int x) const;
-  void operator()(unsigned int y, unsigned int x, float value);
+  float operator()(int y, int x) const;
+  void operator()(int y, int x, float value);
   friend std::ostream& operator<<(std::ostream& os, const Matrix3& obj);
   bool operator==(const Matrix3& other) const;
   bool operator!=(const Matrix3& other) const;

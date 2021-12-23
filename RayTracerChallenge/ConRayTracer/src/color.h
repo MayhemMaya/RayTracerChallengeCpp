@@ -13,7 +13,7 @@ class Color {
    bool operator==(const Color& other) const;
    Color operator+(const Color& other) const;
    Color operator-(const Color& other) const;
-   Color operator*(const float& scalar) const;
+   Color operator*(float scalar) const;
    Color operator*(const Color& other) const;
    Color& operator+=(const Color& other);
    Color clamp() const;

@@ -44,7 +44,7 @@ Color Color::operator-(const Color& other) const {
   return Color(r_ - other[0], g_ - other[1], b_ - other[2]);
 }
 
-Color Color::operator*(const float& scalar) const {
+Color Color::operator*(float scalar) const {
   return Color(r_ * scalar, g_ * scalar, b_ * scalar);
 }
 
