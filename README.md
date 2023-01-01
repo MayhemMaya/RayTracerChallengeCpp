@@ -17,7 +17,7 @@ Eventually this renderer wll be integrated into Autodesk Maya as a Maya Plug-in 
 
 ## Tools and resources
 
-- Visual Studio 2017 <https://visualstudio.microsoft.com/vs/older-downloads/>
+- Visual Studio 2019 <https://visualstudio.microsoft.com/vs/older-downloads/>
 - Git for Windows <https://gitforwindows.org/>
 - GoogleTest <https://github.com/google/googletest>
 - Google C++ Style Guide <https://google.github.io/styleguide/cppguide.html#C++_Version>
