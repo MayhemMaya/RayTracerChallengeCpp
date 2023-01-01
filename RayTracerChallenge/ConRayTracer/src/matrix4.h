@@ -4,7 +4,7 @@
 #include <sstream>
 #include <cmath>
 #include "matrix3.h"
-#include "tuple.h"
+#include "mock-tuple.h"
 #include "point.h"
 
 class Matrix3;
@@ -23,8 +23,9 @@ class Matrix4 {
   bool operator==(const Matrix4& other) const;
   bool operator!=(const Matrix4& other) const;
   Matrix4 operator*(const Matrix4& other) const;
-  Tuple operator*(const Tuple& other) const;
+  MockTuple operator*(const MockTuple& other) const;
   Point operator*(const Point& other) const;
+  Vector operator*(const Vector& other) const;
   Matrix4& operator=(const Matrix4& other);
   Matrix4 transpose() const;
   Matrix3 submatrix(int row, int col) const;

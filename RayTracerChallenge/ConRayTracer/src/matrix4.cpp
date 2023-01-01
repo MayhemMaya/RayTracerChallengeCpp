@@ -3,7 +3,7 @@
 #include <cmath>
 #include "matrix4.h"
 #include "matrix3.h"
-#include "tuple.h"
+#include "mock-tuple.h"
 #include "point.h"
 
 Matrix4::Matrix4() {}
@@ -112,8 +112,8 @@ Matrix4 Matrix4::operator*(const Matrix4& other) const {
   return M;
 }
 
-Tuple Matrix4::operator*(const Tuple& other) const {
-  Tuple t;
+MockTuple Matrix4::operator*(const MockTuple& other) const {
+  MockTuple t;
 
   for (int r = 0; r < 4; r++) {
     for (int c = 0; c < 4; c++) {
@@ -140,6 +140,21 @@ Point Matrix4::operator*(const Point& other) const {
     }
   }
   return p;
+}
+
+Vector Matrix4::operator*(const Vector& other) const {
+  Vector v(0, 0, 0);
+
+  for (int r = 0; r < 4; r++) {
+    for (int c = 0; c < 4; c++) {
+      float temp = data_[r][0] * other[0] +
+        data_[r][1] * other[1] +
+        data_[r][2] * other[2] +
+        data_[r][3] * other[3];
+      v(r, temp);
+    }
+  }
+  return v;
 }
 
 Matrix4& Matrix4::operator=(const Matrix4& other) {

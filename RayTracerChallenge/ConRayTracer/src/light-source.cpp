@@ -23,12 +23,13 @@ LightSource::~LightSource() {
   light_count_--;
 }
 
+/*
 void LightSource::ListDetails() const {
   std::cout << "Name: " << this->GetName() << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
       << "Transform:\n" << this->GetTransform().format()
       << "Intensity: " << intensity_ << std::endl;
-}
+}*/
 
 Color LightSource::GetIntensity() const {
   return intensity_;
@@ -50,6 +51,7 @@ bool LightSource::operator==(const Object& object) const {
     this->GetIntensity() == other->GetIntensity());
 }
 
+/*
 LightSource& LightSource::operator=(const Object& object) {
   LightSource* other = (LightSource*)&object;
   this->SetName(other->GetName());
@@ -57,4 +59,4 @@ LightSource& LightSource::operator=(const Object& object) {
   this->SetTransform(other->GetTransform());
   intensity_ = other->GetIntensity();
   return *this;
-}
+}*/

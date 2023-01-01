@@ -39,7 +39,7 @@ class Object {
    virtual bool operator==(const Object& other) const;
    virtual Object& operator=(const Object& other);
    static int GetCount();
- private:
+ protected:
    static int object_count_;
    std::string name_;
    ObjectType type_;

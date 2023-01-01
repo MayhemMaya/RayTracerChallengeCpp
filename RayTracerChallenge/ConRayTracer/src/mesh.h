@@ -5,6 +5,7 @@
 #include "vector.h"
 #include "point.h"
 
+// Previously known as Mesh
 class Mesh : public Object {
  public:
   Mesh(const std::string& name, const ObjectType& type);

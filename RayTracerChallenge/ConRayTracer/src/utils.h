@@ -7,7 +7,6 @@
 #include <fstream>
 #include <string>
 #include "vector.h"
-#include "tuple.h"
 #include "color.h"
 
 namespace utils {
@@ -17,7 +16,7 @@ namespace utils {
 static float kEPSILON = 0.001f;
 static double kPI = 3.141592653589793;
 bool equal(float a, float b);
-float dot(const Tuple& a, const Tuple& b);
+float dot(const Vector& a, const Vector& b);
 Vector cross(const Vector& a, const Vector& b);
 Color hadamard_product(const Color& c1, const Color& c2);
 float clamp(float value, float min, float max);

@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "utils.cpp"
+#include "mock-tuple.cpp"
 #include "tuple.cpp"
 #include "point.cpp"
 #include "vector.cpp"
@@ -72,7 +73,7 @@ TEST(UtilsTests, SwapIntersectionValues) {
 
 #pragma region Chapter1Tests
 TEST(Chapter1_tests, A_tuple_with_w_as_1_is_a_point) {
-	Tuple a(4.3f, -4.2f, 3.1f, 1.0f);
+	MockTuple a(4.3f, -4.2f, 3.1f, 1.0f);
 	EXPECT_EQ(a[0], 4.3f);
 	EXPECT_EQ(a[1], -4.2f);
 	EXPECT_EQ(a[2], 3.1f);
@@ -82,7 +83,7 @@ TEST(Chapter1_tests, A_tuple_with_w_as_1_is_a_point) {
 }
 
 TEST(Chapter1_tests, A_tuple_with_w_as_0_is_a_vector) {
-	Tuple a(4.3f, -4.2f, 3.1f, 0.0f);
+	MockTuple a(4.3f, -4.2f, 3.1f, 0.0f);
 	EXPECT_EQ(a[0], 4.3f);
 	EXPECT_EQ(a[1], -4.2f);
 	EXPECT_EQ(a[2], 3.1f);
@@ -93,18 +94,18 @@ TEST(Chapter1_tests, A_tuple_with_w_as_0_is_a_vector) {
 
 TEST(Chapter1_tests, Create_a_point) {
 	Point p(4, -4, 3);
-	EXPECT_TRUE(p == Tuple(4, -4, 3, 1));
+	EXPECT_TRUE(p == MockTuple(4, -4, 3, 1));
 }
 
 TEST(Chapter1_tests, Create_a_vector) {
 	Vector v(4, -4, 3);
-	EXPECT_TRUE(v == Tuple(4, -4, 3, 0));
+	EXPECT_TRUE(v == MockTuple(4, -4, 3, 0));
 }
 
 TEST(Chapter1_tests, Adding_two_tuples) {
-	Tuple a1(3, -2, 5, 1);
-	Tuple a2(-2, 3, 1, 0);
-	EXPECT_TRUE(a1 + a2 == Tuple(1, 1, 6, 1));
+	MockTuple a1(3, -2, 5, 1);
+	MockTuple a2(-2, 3, 1, 0);
+	EXPECT_TRUE(a1 + a2 == MockTuple(1, 1, 6, 1));
 }
 
 TEST(Chapter1_tests, Subtracting_two_points) {
@@ -132,23 +133,23 @@ TEST(Chapter1_tests, Subtracting_a_vector_from_the_zero_vector) {
 }
 
 TEST(Chapter1_tests, Negating_a_Tuple) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(-a == Tuple(-1, 2, -3, 4));
+	MockTuple a(1, -2, 3, -4);
+	EXPECT_TRUE(-a == MockTuple(-1, 2, -3, 4));
 }
 
 TEST(Chapter1_tests, Multiplying_a_tuple_by_a_scalar) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(a * 3.5f == Tuple(3.5f, -7, 10.5f, -14));
+	MockTuple a(1, -2, 3, -4);
+	EXPECT_TRUE(a * 3.5f == MockTuple(3.5f, -7, 10.5f, -14));
 }
 
 TEST(Chapter1_tests, Multiplying_a_tuple_by_a_fraction) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(a * 0.5f == Tuple(0.5f, -1, 1.5f, -2));
+	MockTuple a(1, -2, 3, -4);
+	EXPECT_TRUE(a * 0.5f == MockTuple(0.5f, -1, 1.5f, -2));
 }
 
 TEST(Chapter1_tests, Dividing_a_tuple_by_a_scalar) {
-	Tuple a(1, -2, 3, -4);
-	EXPECT_TRUE(a / 2 == Tuple(0.5f, -1, 1.5f, -2));
+	MockTuple a(1, -2, 3, -4);
+	EXPECT_TRUE(a / 2 == MockTuple(0.5f, -1, 1.5f, -2));
 }
 
 TEST(Chapter1_tests, Computing_the_magnitude_of_vector_1_0_0) {
@@ -380,9 +381,9 @@ TEST(Chapter3_tests, A_matrix_multiplied_by_a_tuple) {
 						2, 4, 4, 2,
 						8, 6, 4, 1,
 						0, 0, 0, 1);
-	Tuple b(1, 2, 3, 1);
-	Tuple c = A * b;
-	EXPECT_TRUE(c == Tuple(18, 24, 33, 1));
+	MockTuple b(1, 2, 3, 1);
+	MockTuple c = A * b;
+	EXPECT_TRUE(c == MockTuple(18, 24, 33, 1));
 }
 
 TEST(Chapter3_tests, Multiplying_a_matrix_by_the_identity_matrix) {
@@ -395,7 +396,7 @@ TEST(Chapter3_tests, Multiplying_a_matrix_by_the_identity_matrix) {
 }
 
 TEST(Chapter3_tests, Multiplying_the_identity_matrix_by_a_tuple) {
-	Tuple a(1, 2, 3, 4);
+	MockTuple a(1, 2, 3, 4);
 	Matrix4 identity_matrix = Matrix4().identity();
 	EXPECT_TRUE(identity_matrix * a == a);
 }

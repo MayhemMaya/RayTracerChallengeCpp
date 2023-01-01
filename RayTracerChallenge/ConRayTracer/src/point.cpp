@@ -6,7 +6,7 @@
 Point::Point(float x, float y, float z) : Tuple(x, y, z, 1) {}
 
 std::ostream& operator<<(std::ostream& os, const Point& obj) {
-  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")";
+  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")" << std::endl;
   return os;
 }
 

@@ -5,12 +5,9 @@
 #include "utils.h"
 
 Vector::Vector(float x, float y, float z) : Tuple(x, y, z, 0) {}
-Vector::Vector(const Tuple& tuple)
-    : Tuple(tuple[0], tuple[1],
-            tuple[2], tuple[3]) {}
 
 std::ostream& operator<<(std::ostream& os, const Vector& obj) {
-  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")";
+  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")" << std::endl;
   return os;
 }
 
@@ -48,10 +45,14 @@ float Vector::magnitude() const {
 }
 
 Vector Vector::normalize() const {
+  /*
   return Vector(Tuple(x_ / this->magnitude(),
                       y_ / this->magnitude(),
                       z_ / this->magnitude(),
-                      w_ / this->magnitude()));
+                      w_ / this->magnitude()));*/
+  return Vector(x_ / this->magnitude(),
+    y_ / this->magnitude(),
+    z_ / this->magnitude());
 }
 
 Vector Vector::reflect(const Vector& normal) const {

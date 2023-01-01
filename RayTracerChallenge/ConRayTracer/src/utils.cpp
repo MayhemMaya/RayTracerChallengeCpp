@@ -16,7 +16,7 @@ bool equal(float a, float b) {
   return false;
 }
 
-float dot(const Tuple& a, const Tuple& b) {
+float dot(const Vector& a, const Vector& b) {
   return(a[0] * b[0] +
          a[1] * b[1] +
          a[2] * b[2] +
