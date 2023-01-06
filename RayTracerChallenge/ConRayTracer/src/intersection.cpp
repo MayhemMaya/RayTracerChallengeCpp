@@ -1,19 +1,19 @@
 #include <vector>
 #include "intersection.h"
-#include "mesh.h"
+#include "shape.h"
 
 Intersection::Intersection()
-    : time_(0.0), mesh_object_(new Mesh("mesh", ObjectType::kUnknown)) {}
+    : time_(0.0), shape_object_(nullptr) {}
 
-Intersection::Intersection(float time, Mesh* object)
-    : time_(time), mesh_object_(object) {}
+Intersection::Intersection(float time, Shape* object)
+    : time_(time), shape_object_(object) {}
 
 Intersection::Intersection(const Intersection& other)
-  : time_(other.GetTime()), mesh_object_(other.GetObject()) {}
+  : time_(other.GetTime()), shape_object_(other.GetObject()) {}
 
 Intersection::~Intersection() {
-  mesh_object_ = nullptr;
-  delete mesh_object_;
+  shape_object_ = nullptr;
+  delete shape_object_;
 }
 
 float Intersection::GetTime() const {
@@ -23,16 +23,16 @@ float Intersection::GetTime() const {
 void Intersection::SetTime(float time) {
   time_ = time;
 }
-Mesh* Intersection::GetObject() const {
-  return mesh_object_;
+Shape* Intersection::GetObject() const {
+  return shape_object_;
 }
 
-void Intersection::SetObject(Mesh* object) {
-  mesh_object_ = object;
+void Intersection::SetObject(Shape* object) {
+  shape_object_ = object;
 }
 
 bool Intersection::operator==(const Intersection& other) const {
-  return(time_ == other.GetTime() && mesh_object_ == other.GetObject());
+  return(time_ == other.GetTime() && shape_object_ == other.GetObject());
 }
 
 Intersection& Intersection::operator=(const Intersection& other) {

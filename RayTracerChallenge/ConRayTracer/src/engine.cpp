@@ -52,13 +52,14 @@ Color lighting(const Material& material, const LightSource& light,
 }
 
 Computation prepare_computations(const Intersection& intersection, const Ray& ray) {
-  Computation comps;
-
-  comps.time_ = intersection.GetTime(); // comps.time
-  comps.object_ = intersection.GetObject(); // comps.object
-  comps.point_ = ray.position(intersection.GetTime()); // comps.point
-  comps.eyev_ = -ray.GetDirection(); // comps.eyev
-  comps.normalv_ = intersection.GetObject()->normal_at(comps.point_); // comps.normalv
+  Point comps_point = ray.position(intersection.GetTime());
+  Computation comps = Computation(
+    intersection.GetTime(),                           // comps.time
+    intersection.GetObject(),                         // comps.object
+    comps_point,                                      // comps.point
+    -ray.GetDirection(),                              // comps.eyev
+    intersection.GetObject()->normal_at(comps_point)  // comps.normalv
+  );
   
   if (utils::dot(comps.normalv_, comps.eyev_) < 0) {
     comps.inside_ = true;

@@ -7,8 +7,10 @@
 #include "utils.h"
 #include "intersection.h"
 
+Ray::Ray() : origin_(Point()), direction_(Vector()) {}
+
 Ray::Ray(const Point& origin, const Vector& direction)
-    : origin_(origin), direction_(direction) {}
+  : origin_(origin), direction_(direction) {}
 
 Point Ray::GetOrigin() const {
   return origin_;
@@ -22,9 +24,9 @@ Point Ray::position(float time) const {
   return(origin_ + direction_ * time);
 }
 
+/*
 std::vector<float> Ray::intersect(const Sphere& sphere) const {
-  Matrix4 sphere_inverse = sphere.GetTransform().inverse();
-  Ray ray2 = this->transform(sphere_inverse);
+  Ray ray2 = this->transform(sphere.GetTransform().inverse());
   
   Vector sphere_to_ray = ray2.GetOrigin() - Point(0, 0, 0);
 
@@ -38,14 +40,14 @@ std::vector<float> Ray::intersect(const Sphere& sphere) const {
   
   return { t1, t2 };
 }
+*/
 
 std::vector<Intersection> Ray::intersect(const World& world) const {
   std::vector<Intersection> intersections;
   
-  for (Mesh* m : world.GetMeshes()) {
-    Sphere* s = (Sphere*)m;
-    for (float t : this->intersect((*s))) {
-      Intersection i(t, s);
+  for (Shape* shape : world.GetShapes()) {
+    for (float t : this->intersect(shape)) {
+      Intersection i(t, shape);
       intersections.push_back(i);
     }
   }
@@ -56,4 +58,22 @@ Ray Ray::transform(const Matrix4& matrix) const {
   Point new_origin = matrix * origin_;
   Vector new_direction = matrix * direction_;
   return Ray(new_origin, new_direction);
+}
+
+Ray& Ray::operator=(const Ray& other) {
+  origin_ = other.GetOrigin();
+  direction_ = other.GetDirection();
+  return *this;
+}
+
+std::vector<float> Ray::intersect(Shape* shape) const {
+  Ray local_ray = this->transform(shape->GetTransform().inverse());
+  return shape->local_intersect(local_ray.to_ray_struct());
+}
+
+utils::RayStruct Ray::to_ray_struct() const {
+  utils::RayStruct ray_struct;
+  ray_struct.origin = this->GetOrigin();
+  ray_struct.direction = this->GetDirection();
+  return ray_struct;
 }

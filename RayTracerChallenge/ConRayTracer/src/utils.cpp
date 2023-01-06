@@ -101,4 +101,10 @@ void ClearScreen()
   std::cout << std::string(100, '\n');
 }
 
+template <typename Base, typename T>
+
+bool instance_of(const T* ptr) {
+  return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
 } // namespace utils

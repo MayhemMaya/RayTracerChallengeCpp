@@ -1,0 +1,17 @@
+#pragma once
+
+#include "shape.h"
+
+class MockShape : public Shape {
+ public:
+   MockShape();
+   MockShape(const std::string& name);
+   bool operator==(const Object& object) const override;
+   MockShape& operator=(const Object& other) override;
+   utils::RayStruct GetSavedRay() const;
+   void SetSavedRay(const Point& origin, const Vector& direction);
+   std::vector<float> local_intersect(const utils::RayStruct& local_ray) override;
+   Vector local_normal_at(const Point& local_point) const override;
+ private:
+   utils::RayStruct saved_ray_;
+};

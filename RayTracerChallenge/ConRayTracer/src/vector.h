@@ -5,6 +5,7 @@
 
 class Vector : public Tuple {
  public:
+  Vector();
   Vector(float x, float y, float z);
   friend std::ostream& operator<<(std::ostream& os, const Vector& obj);
   bool operator == (const Tuple& other) const;

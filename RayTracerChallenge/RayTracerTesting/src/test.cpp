@@ -14,7 +14,7 @@
 #include "matrix4.cpp"
 #include "ray.cpp"
 #include "object.cpp"
-#include "mesh.cpp"
+#include "shape.cpp"
 #include "sphere.cpp"
 #include "intersection.cpp"
 #include "hit.cpp"
@@ -24,6 +24,7 @@
 #include "world.cpp"
 #include "engine.cpp"
 #include "camera.cpp"
+#include "mock-shape.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -59,15 +60,15 @@ TEST(UtilsTests, SwapDoubleValues) {
 }
 
 TEST(UtilsTests, SwapIntersectionValues) {
-	Mesh* m1 = new Mesh("mesh1", ObjectType::kMesh);
-	Mesh* m2 = new Mesh("mesh2", ObjectType::kMesh);
-	Intersection i1(1.0f, m1);
-	Intersection i2(2.0f, m2);
+	Sphere* s1 = new Sphere();
+	Shape* s2 = new Sphere();
+	Intersection i1(1.0f, s1);
+	Intersection i2(2.0f, s2);
 	Intersection::swap(i1, i2);
 	EXPECT_EQ(i1.GetTime(), 2.0f);
-	EXPECT_TRUE((*i1.GetObject()) == (*m2));
+	EXPECT_TRUE((*i1.GetObject()) == (*s2));
 	EXPECT_EQ(i2.GetTime(), 1.0f);
-	EXPECT_TRUE((*i2.GetObject()) == (*m1));
+	EXPECT_TRUE((*i2.GetObject()) == (*s1));
 }
 #pragma endregion
 
@@ -713,44 +714,44 @@ TEST(Chapter5_tests, Computing_a_point_from_a_distance) {
 	EXPECT_TRUE(r.position(2.5f) == Point(4.5f, 3, 4));
 }
 
-TEST(Chapter5_tests, A_ray_intersects_a_sphere_at_two_points) {
+TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_two_points) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = r.intersect(s);
+	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_EQ(xs[0], 4.0f);
 	EXPECT_EQ(xs[1], 6.0f);
 }
 
-TEST(Chapter5_tests, A_ray_intersects_a_sphere_at_a_tangent) {
+TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = r.intersect(s);
+	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_EQ(xs[0], 5.0f);
 	EXPECT_EQ(xs[1], 5.0f);
 }
 
-TEST(Chapter5_tests, A_ray_misses_a_sphere) {
+TEST(Chapter9_tests, A_ray_misses_a_sphere) {
 	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = r.intersect(s);
+	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 0);
 }
 
-TEST(Chapter5_tests, A_ray_originates_inside_a_sphere) {
+TEST(Chapter9_tests, A_ray_originates_inside_a_sphere) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = r.intersect(s);
+	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_EQ(xs[0], -1.0f);
 	EXPECT_EQ(xs[1], 1.0f);
 }
 
-TEST(Chapter5_tests, A_sphere_is_behind_a_ray) {
+TEST(Chapter9_tests, A_sphere_is_behind_a_ray) {
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = r.intersect(s);
+	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_EQ(xs[0], -6.0f);
 	EXPECT_EQ(xs[1], -4.0f);
@@ -837,78 +838,76 @@ TEST(Chapter5_tests, Scaling_a_ray) {
 	EXPECT_TRUE(r2.GetDirection() == Vector(0, 3, 0));
 }
 
-TEST(Chapter5_tests, A_spheres_default_transformation) {
-	Sphere s;
-	Matrix4 identity_matrix = Matrix4().identity();
-	EXPECT_TRUE(s.GetTransform() == identity_matrix);
+TEST(Chapter9_tests, The_default_transformation) {
+	MockShape s;
+	EXPECT_TRUE(s.GetTransform() == Matrix4().identity());
 }
 
-TEST(Chapter5_tests, Changing_a_spheres_transformation) {
-	Sphere s;
-	Matrix4 t = Matrix4().translation(2, 3, 4);
-	s.SetTransform(t);
-	EXPECT_TRUE(s.GetTransform() == t);
+TEST(Chapter9_tests, Assigning_a_transformation) {
+	MockShape s;
+	s.SetTransform(Matrix4().translation(2, 3, 4));
+	EXPECT_TRUE(s.GetTransform() == Matrix4().translation(2, 3, 4));
 }
 
-TEST(Chapter5_tests, Intersecting_a_scaled_sphere_with_a_ray) {
+TEST(Chapter9_tests, Intersecting_a_scaled_shape_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere s;
+	MockShape s;
 	s.SetTransform(Matrix4().scaling(2, 2, 2));
-	std::vector<float> xs = r.intersect(s);
-	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0], 3);
-	EXPECT_EQ(xs[1], 7);
+	std::vector<float> xs = r.intersect(&s);
+	EXPECT_TRUE(s.GetSavedRay().origin == Point(0, 0, -2.5));
+	EXPECT_TRUE(s.GetSavedRay().direction == Vector(0, 0, 0.5));
 }
 
-TEST(Chapter5_tests, Intersecting_a_translated_sphere_with_a_ray) {
+TEST(Chapter9_tests, Intersecting_a_translated_shape_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere s;
+	MockShape s;
 	s.SetTransform(Matrix4().translation(5, 0, 0));
-	std::vector<float> xs = r.intersect(s);
-	EXPECT_EQ(xs.size(), 0);
+	std::vector<float> xs = r.intersect(&s);
+	EXPECT_TRUE(s.GetSavedRay().origin == Point(-5, 0, -5));
+	EXPECT_TRUE(s.GetSavedRay().direction == Vector(0, 0, 1));
 }
 #pragma endregion
 
 #pragma region Chapter6Tests
-TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_point_on_the_x_axis) {
+TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_point_on_the_x_axis) {
 	Sphere s;
-	Vector n = s.normal_at(Point(1, 0, 0));
+	Vector n = s.local_normal_at(Point(1, 0, 0));
 	EXPECT_TRUE(n == Vector(1, 0, 0));
 }
 
-TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_point_on_the_y_axis) {
+TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_point_on_the_y_axis) {
 	Sphere s;
-	Vector n = s.normal_at(Point(0, 1, 0));
+	Vector n = s.local_normal_at(Point(0, 1, 0));
 	EXPECT_TRUE(n == Vector(0, 1, 0));
 }
 
-TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
+TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
 	Sphere s;
-	Vector n = s.normal_at(Point(0, 0, 1));
+	Vector n = s.local_normal_at(Point(0, 0, 1));
 	EXPECT_TRUE(n == Vector(0, 0, 1));
 }
 
-TEST(Chapter6_tests, The_normal_on_a_sphere_at_a_nonaxial_point) {
+TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_nonaxial_point) {
 	Sphere s;
-	Vector n = s.normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	Vector n = s.local_normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	EXPECT_TRUE(n == Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
-TEST(Chapter6_tests, The_normal_is_a_normalized_vector) {
+TEST(Chapter9_tests, The_normal_is_a_normalized_vector) {
 	Sphere s;
-	Vector n = s.normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	Vector n = s.local_normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	EXPECT_TRUE(n == n.normalize());
 }
 
-TEST(Chapter6_tests, Computing_the_normal_on_a_translated_sphere) {
-	Sphere s;
+TEST(Chapter9_tests, Computing_the_normal_on_a_translated_shape) {
+	MockShape s;
 	s.SetTransform(Matrix4().translation(0, 1, 0));
 	Vector n = s.normal_at(Point(0, 1.70711f, -0.70711f));
 	EXPECT_TRUE(n == Vector(0, 0.70711f, -0.70711f));
 }
 
-TEST(Chapter6_tests, Computing_the_normal_on_a_transformed_sphere) {
-	Sphere s;
+TEST(Chapter9_tests, Computing_the_normal_on_a_transformed_shape) {
+	MockShape s;
 	Matrix4 m = Matrix4().scaling(1, 0.5f, 1) * Matrix4().rotation_z(utils::kPI / 5.0f);
 	s.SetTransform(m);
 	Vector n = s.normal_at(Point(0, sqrt(2) / 2, -sqrt(2) / 2));
@@ -946,14 +945,14 @@ TEST(Chapter6_tests, The_default_material) {
 	EXPECT_EQ(m.GetShininess(), 200.0f);
 }
 
-TEST(Chapter6_tests, A_sphere_has_a_default_material) {
-	Sphere s;
+TEST(Chapter9_tests, The_default_material) {
+	MockShape s;
 	Material m = s.GetMaterial();
 	EXPECT_TRUE(m == Material());
 }
 
-TEST(Chapter6_tests, A_sphere_may_be_assigned_a_material) {
-	Sphere s;
+TEST(Chapter9_tests, Assigning_a_material) {
+	MockShape s;
 	Material m;
 	m.SetAmbient(1);
 	s.SetMaterial(m);
@@ -1085,7 +1084,7 @@ TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
 TEST(Chapter7_tests, Shading_an_intersection) {
 	World w(WorldType::DEFAULT);
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Mesh* shape = w.GetMeshes()[0];
+	Shape* shape = w.GetShapes()[0];
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	Color c = Engine::shade_hit(w, comps);
@@ -1098,7 +1097,7 @@ TEST(Chapter7_tests, Shading_an_intersection_from_the_inside) {
 	w.DeleteObject("pointlight1");
 	w.AddObject(new PointLight("pointlight1", Point(0, 0.25f, 0), Color(1, 1, 1)));
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
-	Mesh* shape = w.GetMeshes()[1];
+	Shape* shape = w.GetShapes()[1];
 	Intersection i(0.5f, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	Color c = Engine::shade_hit(w, comps);
@@ -1121,11 +1120,11 @@ TEST(Chapter7_tests, The_color_when_a_ray_hits) {
 
 TEST(Chapter7_tests, The_color_with_an_intersection_behind_the_ray) {
 	World w(WorldType::DEFAULT);
-	Mesh* outer = w.GetMeshes()[0];
+	Shape* outer = w.GetShapes()[0];
 	Material outer_mat = outer->GetMaterial();
 	outer_mat.SetAmbient(1);
 	outer->SetMaterial(outer_mat);
-	Mesh* inner = w.GetMeshes()[1];
+	Shape* inner = w.GetShapes()[1];
 	Material inner_mat = inner->GetMaterial();
 	inner_mat.SetAmbient(1);
 	inner->SetMaterial(inner_mat);
@@ -1285,4 +1284,12 @@ TEST(Chapter8_tests, The_hit_should_offset_the_point) {
 	EXPECT_TRUE(comps.over_point_[2] < -utils::kEPSILON / 2);
 	EXPECT_TRUE(comps.point_[2] > comps.over_point_[2]);
 }
+#pragma endregion
+
+#pragma region Chapter9Tests
+TEST(Chapter9_tests, A_sphere_is_a_shape) {
+	Sphere s;
+	EXPECT_TRUE(utils::instance_of<Shape>(&s));
+}
+
 #pragma endregion

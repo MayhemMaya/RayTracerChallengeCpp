@@ -3,6 +3,7 @@
 #include "point.h"
 #include "utils.h"
 
+Point::Point() : Tuple(0, 0, 0, 1) {}
 Point::Point(float x, float y, float z) : Tuple(x, y, z, 1) {}
 
 std::ostream& operator<<(std::ostream& os, const Point& obj) {

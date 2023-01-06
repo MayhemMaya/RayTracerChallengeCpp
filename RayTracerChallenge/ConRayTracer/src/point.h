@@ -6,6 +6,7 @@
 
 class Point : public Tuple {
  public:
+  Point();
   Point(float x, float y, float z);
   friend std::ostream& operator<<(std::ostream& os, const Point& obj);
   bool operator == (const Tuple& other) const;

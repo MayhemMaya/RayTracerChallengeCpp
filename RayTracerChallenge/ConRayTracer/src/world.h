@@ -3,7 +3,7 @@
 #include <vector>
 #include "object.h"
 #include "light-source.h"
-#include "mesh.h"
+#include "shape.h"
 #include "point-light.h"
 #include "sphere.h"
 #include "Camera.h"
@@ -20,7 +20,7 @@ class World {
    ~World();
    std::vector<Object*> GetObjects() const;
    std::vector<LightSource*> GetLights() const;
-   std::vector<Mesh*> GetMeshes() const;
+   std::vector<Shape*> GetShapes() const;
    std::vector<Camera*> GetCameras() const;
    int GetObjectCount() const;
    void ListObjects() const;

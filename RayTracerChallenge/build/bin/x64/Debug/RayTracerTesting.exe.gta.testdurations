@@ -218,7 +218,7 @@
     <TestDuration Test="Chapter3_tests.Testing_an_invertible_matrix_for_invertibility" Duration="1" />
     <TestDuration Test="Chapter3_tests.Testing_an_noninvertible_matrix_for_invertibility" Duration="1" />
     <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_a_matrix" Duration="1" />
-    <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_another_matrix" Duration="2" />
+    <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_another_matrix" Duration="1" />
     <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_a_third_matrix" Duration="1" />
     <TestDuration Test="Chapter3_tests.Multiplying_a_product_by_its_inverse" Duration="1" />
     <TestDuration Test="Chapter4_tests.Multiplying_by_a_translation_matrix" Duration="1" />
@@ -226,7 +226,7 @@
     <TestDuration Test="Chapter4_tests.Translation_does_not_affect_vectors" Duration="1" />
     <TestDuration Test="Chapter4_tests.A_scaling_matrix_applied_to_a_point" Duration="1" />
     <TestDuration Test="Chapter4_tests.A_scaling_matrix_applied_to_a_vector" Duration="1" />
-    <TestDuration Test="Chapter4_tests.Multiplying_by_the_inverse_of_a_scaling_matrix" Duration="2" />
+    <TestDuration Test="Chapter4_tests.Multiplying_by_the_inverse_of_a_scaling_matrix" Duration="1" />
     <TestDuration Test="Chapter4_tests.Reflection_is_scaling_by_a_negative_value" Duration="1" />
     <TestDuration Test="Chapter4_tests.Rotating_a_point_around_the_x_axis" Duration="1" />
     <TestDuration Test="Chapter4_tests.The_inverse_of_an_x_rotation_rotates_in_the_opposite_direction" Duration="1" />
@@ -260,13 +260,13 @@
     <TestDuration Test="Chapter5_tests.Changing_a_spheres_transformation" Duration="1" />
     <TestDuration Test="Chapter5_tests.Intersecting_a_scaled_sphere_with_a_ray" Duration="1" />
     <TestDuration Test="Chapter5_tests.Intersecting_a_translated_sphere_with_a_ray" Duration="1" />
-    <TestDuration Test="Chapter6_tests.The_normal_on_a_sphere_at_a_point_on_the_x_axis" Duration="2" />
+    <TestDuration Test="Chapter6_tests.The_normal_on_a_sphere_at_a_point_on_the_x_axis" Duration="1" />
     <TestDuration Test="Chapter6_tests.The_normal_on_a_sphere_at_a_point_on_the_y_axis" Duration="1" />
     <TestDuration Test="Chapter6_tests.The_normal_on_a_sphere_at_a_point_on_the_z_axis" Duration="1" />
-    <TestDuration Test="Chapter6_tests.The_normal_on_a_sphere_at_a_nonaxial_point" Duration="2" />
+    <TestDuration Test="Chapter6_tests.The_normal_on_a_sphere_at_a_nonaxial_point" Duration="1" />
     <TestDuration Test="Chapter6_tests.The_normal_is_a_normalized_vector" Duration="1" />
     <TestDuration Test="Chapter6_tests.Computing_the_normal_on_a_translated_sphere" Duration="1" />
-    <TestDuration Test="Chapter6_tests.Computing_the_normal_on_a_transformed_sphere" Duration="2" />
+    <TestDuration Test="Chapter6_tests.Computing_the_normal_on_a_transformed_sphere" Duration="1" />
     <TestDuration Test="Chapter6_tests.Reflecting_a_vector_approaching_at_45_degrees" Duration="1" />
     <TestDuration Test="Chapter6_tests.Reflecting_a_vector_off_a_slanted_surface" Duration="1" />
     <TestDuration Test="Chapter6_tests.A_point_light_has_a_position_and_intensity" Duration="1" />
@@ -280,15 +280,15 @@
     <TestDuration Test="Chapter6_tests.Lighting_with_the_light_behind_the_surface" Duration="1" />
     <TestDuration Test="Chapter7_tests.Creating_a_world" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_default_world" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Intersect_a_world_with_a_ray" Duration="2" />
-    <TestDuration Test="Chapter7_tests.Precomputing_the_state_of_an_intersection" Duration="2" />
+    <TestDuration Test="Chapter7_tests.Intersect_a_world_with_a_ray" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Precomputing_the_state_of_an_intersection" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_outside" Duration="1" />
-    <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_inside" Duration="2" />
-    <TestDuration Test="Chapter7_tests.Shading_an_intersection" Duration="3" />
+    <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_inside" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Shading_an_intersection" Duration="2" />
     <TestDuration Test="Chapter7_tests.Shading_an_intersection_from_the_inside" Duration="3" />
-    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_misses" Duration="2" />
+    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_misses" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_color_when_a_ray_hits" Duration="4" />
-    <TestDuration Test="Chapter7_tests.The_color_with_an_intersection_behind_the_ray" Duration="4" />
+    <TestDuration Test="Chapter7_tests.The_color_with_an_intersection_behind_the_ray" Duration="3" />
     <TestDuration Test="Chapter7_tests.The_transformation_matrix_for_the_default_orientation" Duration="1" />
     <TestDuration Test="Chapter7_tests.A_view_transformation_matrix_looking_in_positive_z_direction" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_view_transformation_moves_the_world" Duration="1" />
@@ -296,16 +296,36 @@
     <TestDuration Test="Chapter7_tests.Constructing_a_camera" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_horizontal_canvas" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_vertical_canvas" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="2" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="337" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="2" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="2" />
+    <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="334" />
     <TestDuration Test="Chapter8_tests.Lighting_with_the_surface_in_shadow" Duration="1" />
-    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="3" />
-    <TestDuration Test="Chapter8_tests.The_shadow_when_an_object_is_between_the_point_and_the_light" Duration="2" />
-    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_light" Duration="1" />
+    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="2" />
+    <TestDuration Test="Chapter8_tests.The_shadow_when_an_object_is_between_the_point_and_the_light" Duration="1" />
+    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_light" Duration="2" />
     <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_point" Duration="1" />
-    <TestDuration Test="Chapter8_tests.shade_hit_is_given_an_intersection_in_shadow" Duration="3" />
-    <TestDuration Test="Chapter8_tests.The_hit_should_offset_the_point" Duration="2" />
+    <TestDuration Test="Chapter8_tests.shade_hit_is_given_an_intersection_in_shadow" Duration="2" />
+    <TestDuration Test="Chapter8_tests.The_hit_should_offset_the_point" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_default_transformation" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Assigning_a_transformation" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_default_material" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Assigning_a_material" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Intersecting_a_scaled_shape_with_a_ray" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Intersecting_a_translated_shape_with_a_ray" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_translated_shape" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_transformed_shape" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_sphere_is_a_shape" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_sphere_is_not_a_tuple" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_ray_intersects_a_sphere_at_two_points" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_ray_intersects_a_sphere_at_a_tangent" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_ray_misses_a_sphere" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_ray_originates_inside_a_sphere" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_sphere_is_behind_a_ray" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_normal_on_a_sphere_at_a_point_on_the_x_axis" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_normal_on_a_sphere_at_a_nonaxial_point" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_normal_is_a_normalized_vector" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_normal_on_a_sphere_at_a_point_on_the_y_axis" Duration="1" />
+    <TestDuration Test="Chapter9_tests.The_normal_on_a_sphere_at_a_point_on_the_z_axis" Duration="1" />
   </TestDurations>
 </GtaTestDurations>

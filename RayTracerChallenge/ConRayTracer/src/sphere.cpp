@@ -2,27 +2,27 @@
 #include "vector.h"
 #include "point.h"
 
-Sphere::Sphere() : Mesh("sphere", ObjectType::kSphere) {}
+Sphere::Sphere() : Shape("sphere", ObjectType::kSphere) {}
 
-Sphere::Sphere(const std::string& name) : Mesh(name, ObjectType::kSphere) {}
+Sphere::Sphere(const std::string& name) : Shape(name, ObjectType::kSphere) {}
 
 Sphere::Sphere(const Material& material)
-    : Mesh("sphere", ObjectType::kSphere, material) {}
+    : Shape("sphere", ObjectType::kSphere, material) {}
 
 Sphere::Sphere(const Matrix4& transform)
-    : Mesh("sphere", ObjectType::kSphere, transform) {}
+    : Shape("sphere", ObjectType::kSphere, transform) {}
 
 Sphere::Sphere(const std::string& name, const Material& material)
-    : Mesh(name, ObjectType::kSphere, material) {}
+    : Shape(name, ObjectType::kSphere, material) {}
 
 Sphere::Sphere(const std::string& name, const Matrix4& transform)
-    : Mesh(name, ObjectType::kSphere, transform) {}
+    : Shape(name, ObjectType::kSphere, transform) {}
 
 Sphere::Sphere(const Material& material, const Matrix4& transform)
-    : Mesh("sphere", ObjectType::kSphere, material, transform) {}
+    : Shape("sphere", ObjectType::kSphere, material, transform) {}
 
 Sphere::Sphere(const std::string& name, const Material& material, const Matrix4& transform)
-    : Mesh(name, ObjectType::kSphere, material, transform) {}
+    : Shape(name, ObjectType::kSphere, material, transform) {}
 
 bool Sphere::operator==(const Object& object) const {
   Sphere* other = (Sphere*)&object;
@@ -39,4 +39,23 @@ Sphere& Sphere::operator=(const Object& object) {
   this->SetTransform(other->GetTransform());
   this->SetMaterial(other->GetMaterial());
   return *this;
+}
+
+std::vector<float> Sphere::local_intersect(const utils::RayStruct& local_ray) {
+  Vector sphere_to_ray = local_ray.origin - Point(0, 0, 0);
+
+  float a = utils::dot(local_ray.direction, local_ray.direction);
+  float b = 2.0f * utils::dot(local_ray.direction, sphere_to_ray);
+  float c = utils::dot(sphere_to_ray, sphere_to_ray) - 1;
+  float discriminant = pow(b, 2) - 4 * a * c;
+  if (discriminant < 0) return {};
+  float t1 = (-b - sqrt(discriminant)) / (2 * a);
+  float t2 = (-b + sqrt(discriminant)) / (2 * a);
+
+  return { t1, t2 };
+}
+
+Vector Sphere::local_normal_at(const Point& local_point) const {
+  Vector local_normal = local_point - Point(0, 0, 0);
+  return local_normal.normalize();
 }

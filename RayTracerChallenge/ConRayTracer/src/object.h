@@ -7,7 +7,7 @@
 
 enum class ObjectType {
   kUnknown,
-  kMesh,
+  kShape,
   kSphere,
   kPointLight,
   kCamera
@@ -15,7 +15,7 @@ enum class ObjectType {
 
 static std::string type_enum_names[] = {
   "kUnknown",
-  "kMesh",
+  "kShape",
   "kSphere",
   "kPointLight",
   "kCamera"

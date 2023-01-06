@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include "vector.h"
+#include "point.h"
 #include "color.h"
 
 namespace utils {
@@ -30,5 +31,10 @@ float radians(float degrees);
 float roundoff(float value, int precision);
 float map(int value, int in_min, int in_max, float out_min, float out_max);
 void ClearScreen();
+
+struct RayStruct {
+  Point origin;
+  Vector direction;
+};
 
 } // namespace utils

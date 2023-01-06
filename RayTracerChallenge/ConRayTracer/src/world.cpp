@@ -36,14 +36,14 @@ std::vector<LightSource*> World::GetLights() const {
   return lights;
 }
 
-std::vector<Mesh*> World::GetMeshes() const {
-  std::vector<Mesh*> meshes;
+std::vector<Shape*> World::GetShapes() const {
+  std::vector<Shape*> shapes;
   for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == ObjectType::kMesh ||
+    if (objects_[i]->GetObjectType() == ObjectType::kShape ||
         objects_[i]->GetObjectType() == ObjectType::kSphere)
-      meshes.push_back((Mesh*)(objects_[i]));
+      shapes.push_back((Shape*)(objects_[i]));
   }
-  return meshes;
+  return shapes;
 }
 
 std::vector<Camera*> World::GetCameras() const {

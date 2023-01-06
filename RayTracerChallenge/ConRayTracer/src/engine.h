@@ -6,7 +6,7 @@
 #include "light-source.h"
 #include "point.h"
 #include "vector.h"
-#include "mesh.h"
+#include "shape.h"
 #include "intersection.h"
 #include "ray.h"
 #include "world.h"
@@ -19,18 +19,20 @@ namespace Engine {
 
 struct Computation {
   float time_;
-  Mesh* object_;
+  Shape* object_;
   Point point_;
   Vector eyev_;
   Vector normalv_;
   bool inside_;
   Point over_point_;
-  Computation() : Computation(0, new Mesh("mesh", ObjectType::kUnknown), Point(0, 0, 0),
-    Vector(0, 0, 0), Vector(0, 0, 0), false, Point(0, 0, 0)) {}
-  Computation(float time, Mesh* object, const Point& point, const Vector& eyev,
-                                        const Vector& normalv, bool inside, const Point& over_point)
+  Computation(float time, Shape* object, const Point& point, const Vector& eyev,
+                                        const Vector& normalv)
       : time_(time), object_(object), point_(point), eyev_(eyev),
-        normalv_(normalv), inside_(inside), over_point_(over_point) {}
+        normalv_(normalv), inside_(false) {}
+  Computation(float time, Shape* object, const Point& point, const Vector& eyev,
+    const Vector& normalv, bool inside, const Point& over_point)
+    : time_(time), object_(object), point_(point), eyev_(eyev),
+    normalv_(normalv), inside_(inside), over_point_(over_point) {}
   ~Computation() {
     object_ = nullptr;
     delete object_;
