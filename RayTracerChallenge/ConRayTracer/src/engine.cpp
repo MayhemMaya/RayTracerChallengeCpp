@@ -125,7 +125,6 @@ Ray ray_for_pixel(const Camera& camera, int px, int py) {
 Canvas render(const Camera& camera, const World& world) {
   int pixel_count = camera.GetHorizontalSize() * camera.GetVerticalSize();
   int pixel_position = 0;
-  bool printed = false;
 
   Canvas image(camera.GetHorizontalSize(), camera.GetVerticalSize());
 
@@ -134,15 +133,11 @@ Canvas render(const Camera& camera, const World& world) {
       Ray ray = ray_for_pixel(camera, x, y);
       Color color = color_at(world, ray);
       image.WritePixel(x, y, color);
-      if (!printed) {
-        utils::ClearScreen();
-        float progress = utils::roundoff(utils::map(pixel_position, 0, pixel_count, 0.0f, 1.0f), 2);
-        std::cout << "Rendering in progress... " << int(progress * 100.0) << "% complete." << std::endl;
-        printed = true;
-      }
+      float progress = utils::roundoff(utils::map(pixel_position, 0, pixel_count, 0.0f, 1.0f), 2);
+      int progress_int = int(progress * 100.0);
+      std::cout << "Rendering in progress... " << progress_int << "% complete." << std::endl;
       pixel_position++;
     }
-    printed = false;
   }
   std::cout << std::endl;
 

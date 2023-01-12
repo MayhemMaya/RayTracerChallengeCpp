@@ -193,7 +193,7 @@
     <TestDuration Test="Chapter2_tests.Writing_pixels_to_a_canvas" Duration="1" />
     <TestDuration Test="Chapter2_tests.Constructing_the_PPM_header" Duration="1" />
     <TestDuration Test="Chapter2_tests.Constructing_the_PPM_pixel_data" Duration="1" />
-    <TestDuration Test="Chapter2_tests.Splitting_long_lines_in_PPM_files" Duration="14" />
+    <TestDuration Test="Chapter2_tests.Splitting_long_lines_in_PPM_files" Duration="13" />
     <TestDuration Test="Chapter2_tests.PPM_files_are_terminated_by_a_newline_character" Duration="1" />
     <TestDuration Test="Chapter1_tests.A_tuple_with_w_as_1_is_a_point" Duration="1" />
     <TestDuration Test="Chapter1_tests.A_tuple_with_w_as_0_is_a_vector" Duration="1" />
@@ -286,9 +286,9 @@
     <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_inside" Duration="1" />
     <TestDuration Test="Chapter7_tests.Shading_an_intersection" Duration="2" />
     <TestDuration Test="Chapter7_tests.Shading_an_intersection_from_the_inside" Duration="2" />
-    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_misses" Duration="2" />
+    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_misses" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_color_when_a_ray_hits" Duration="3" />
-    <TestDuration Test="Chapter7_tests.The_color_with_an_intersection_behind_the_ray" Duration="4" />
+    <TestDuration Test="Chapter7_tests.The_color_with_an_intersection_behind_the_ray" Duration="3" />
     <TestDuration Test="Chapter7_tests.The_transformation_matrix_for_the_default_orientation" Duration="1" />
     <TestDuration Test="Chapter7_tests.A_view_transformation_matrix_looking_in_positive_z_direction" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_view_transformation_moves_the_world" Duration="1" />
@@ -296,15 +296,15 @@
     <TestDuration Test="Chapter7_tests.Constructing_a_camera" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_horizontal_canvas" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_vertical_canvas" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="2" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="2" />
     <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="350" />
+    <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="418" />
     <TestDuration Test="Chapter8_tests.Lighting_with_the_surface_in_shadow" Duration="1" />
-    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="2" />
+    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="1" />
     <TestDuration Test="Chapter8_tests.The_shadow_when_an_object_is_between_the_point_and_the_light" Duration="1" />
     <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_light" Duration="2" />
-    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_point" Duration="1" />
+    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_point" Duration="2" />
     <TestDuration Test="Chapter8_tests.shade_hit_is_given_an_intersection_in_shadow" Duration="2" />
     <TestDuration Test="Chapter8_tests.The_hit_should_offset_the_point" Duration="1" />
     <TestDuration Test="Chapter9_tests.The_default_transformation" Duration="1" />
@@ -312,7 +312,7 @@
     <TestDuration Test="Chapter9_tests.The_default_material" Duration="1" />
     <TestDuration Test="Chapter9_tests.Assigning_a_material" Duration="1" />
     <TestDuration Test="Chapter9_tests.Intersecting_a_scaled_shape_with_a_ray" Duration="1" />
-    <TestDuration Test="Chapter9_tests.Intersecting_a_translated_shape_with_a_ray" Duration="2" />
+    <TestDuration Test="Chapter9_tests.Intersecting_a_translated_shape_with_a_ray" Duration="1" />
     <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_translated_shape" Duration="1" />
     <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_transformed_shape" Duration="1" />
     <TestDuration Test="Chapter9_tests.A_sphere_is_a_shape" Duration="1" />
