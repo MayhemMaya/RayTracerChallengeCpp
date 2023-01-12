@@ -29,15 +29,14 @@ CanvasData CalculateCanvasData(int hsize, int vsize, float field_of_view) {
 }
 
 Camera::Camera(int hsize, int vsize, float field_of_view)
-    : hsize_(hsize), vsize_(vsize),
-      field_of_view_(field_of_view),
-      Object("camera", ObjectType::kCamera) {
+  : hsize_(hsize), vsize_(vsize),
+    field_of_view_(field_of_view),
+    Object("camera", ObjectType::kCamera) {
   camera_count_++;
-  if (this->GetName() == "camera") {
-    std::stringstream ss;
-    ss << camera_count_;
-    this->SetName(this->GetName() + ss.str());
-  }
+  std::stringstream ss;
+  ss << camera_count_;
+  this->SetName(this->GetName() + ss.str());
+  
   CanvasData data = CalculateCanvasData(hsize_, vsize_, field_of_view_);
   pixel_size_ = data.pixel_size;
   half_width_ = data.half_width;
@@ -46,15 +45,14 @@ Camera::Camera(int hsize, int vsize, float field_of_view)
 
 Camera::Camera(int hsize, int vsize, float field_of_view,
                                      const Matrix4& transform)
-    : hsize_(hsize), vsize_(vsize),
+  : hsize_(hsize), vsize_(vsize),
     field_of_view_(field_of_view),
     Object("camera", ObjectType::kCamera, transform) {
   camera_count_++;
-  if (this->GetName() == "camera") {
-    std::stringstream ss;
-    ss << camera_count_;
-    this->SetName(this->GetName() + ss.str());
-  }
+  std::stringstream ss;
+  ss << camera_count_;
+  this->SetName(this->GetName() + ss.str());
+  
   CanvasData data = CalculateCanvasData(hsize_, vsize_, field_of_view_);
   pixel_size_ = data.pixel_size;
   half_width_ = data.half_width;
@@ -62,11 +60,11 @@ Camera::Camera(int hsize, int vsize, float field_of_view,
 }
 
 Camera::Camera(const std::string& name, int hsize, int vsize, float field_of_view)
-    : hsize_(hsize), vsize_(vsize),
-      field_of_view_(field_of_view),
-      Object(name, ObjectType::kCamera) {
+  : hsize_(hsize), vsize_(vsize),
+    field_of_view_(field_of_view),
+    Object(name, ObjectType::kCamera) {
   camera_count_++;
-  if (this->GetName() == "camera") {
+  if (utils::contains(type_names, name)) {
     std::stringstream ss;
     ss << camera_count_;
     this->SetName(this->GetName() + ss.str());
@@ -79,11 +77,11 @@ Camera::Camera(const std::string& name, int hsize, int vsize, float field_of_vie
 
 Camera::Camera(const std::string& name, int hsize, int vsize, float field_of_view,
                                                        const Matrix4& transform)
-    : hsize_(hsize), vsize_(vsize),
-      field_of_view_(field_of_view),
-      Object(name, ObjectType::kCamera, transform) {
+  : hsize_(hsize), vsize_(vsize),
+    field_of_view_(field_of_view),
+    Object(name, ObjectType::kCamera, transform) {
   camera_count_++;
-  if (this->GetName() == "camera") {
+  if (utils::contains(type_names, name)) {
     std::stringstream ss;
     ss << camera_count_;
     this->SetName(this->GetName() + ss.str());

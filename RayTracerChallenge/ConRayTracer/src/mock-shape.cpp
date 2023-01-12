@@ -30,8 +30,8 @@ void MockShape::SetSavedRay(const Point& origin, const Vector& direction) {
   saved_ray_.direction = direction;
 }
 
-std::vector<float> MockShape::local_intersect(const utils::RayStruct& local_ray) {
-  std::vector<float> intersections;
+std::vector<Intersection> MockShape::local_intersect(const utils::RayStruct& local_ray) {
+  std::vector<Intersection> intersections;
   this->SetSavedRay(local_ray.origin, local_ray.direction);
   return intersections;
 }

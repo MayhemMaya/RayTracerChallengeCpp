@@ -7,7 +7,7 @@ int Shape::shape_count_ = 0;
 Shape::Shape(const std::string& name, const ObjectType& type)
     : Object(name, type) {
   shape_count_++;
-  if (name == "sphere" || name == "shape") {
+  if (utils::contains(type_names, name)) {
     std::stringstream ss;
     ss << shape_count_;
     this->SetName(this->GetName() + ss.str());
@@ -17,7 +17,7 @@ Shape::Shape(const std::string& name, const ObjectType& type)
 Shape::Shape(const std::string& name, const ObjectType& type, const Matrix4& transform)
     : Object(name, type, transform) {
   shape_count_++;
-  if (name == "sphere" || name == "shape") {
+  if (utils::contains(type_names, name)) {
     std::stringstream ss;
     ss << shape_count_;
     this->SetName(this->GetName() + ss.str());
@@ -27,7 +27,7 @@ Shape::Shape(const std::string& name, const ObjectType& type, const Matrix4& tra
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material)
     : Object(name, type) {
   shape_count_++;
-  if (name == "sphere" || name == "shape") {
+  if (utils::contains(type_names, name)) {
     std::stringstream ss;
     ss << shape_count_;
     this->SetName(this->GetName() + ss.str());
@@ -39,7 +39,7 @@ Shape::Shape(const std::string& name, const ObjectType& type, const Material& ma
                                                    const Matrix4& transform)
     : Object(name, type, transform) {
   shape_count_++;
-  if (name == "sphere" || name == "shape") {
+  if (utils::contains(type_names, name)) {
     std::stringstream ss;
     ss << shape_count_;
     this->SetName(this->GetName() + ss.str());

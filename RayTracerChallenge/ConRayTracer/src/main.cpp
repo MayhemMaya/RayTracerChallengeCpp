@@ -24,33 +24,20 @@
 #include "world.h"
 #include "engine.h"
 #include "camera.h"
+#include "plane.h"
 
 int main() {
+
+	int res_x = 100;
+	int res_y = 50;
+
 	World world = World(WorldType::EMPTY);
 
-	Sphere floor("floor", Matrix4().scaling(10.0f, 0.01f, 10.0f));
+	Plane floor("floor", Matrix4().scaling(10.0f, 0.01f, 10.0f));
 	Material floor_mat;
 	floor_mat.SetColor(Color(1.0f, 0.9f, 0.9f));
 	floor_mat.SetSpecular(0.0f);
 	floor.SetMaterial(floor_mat);
-
-	Material left_wall_mat;
-	left_wall_mat.SetColor(Color(1.0f, 0.0f, 0.0f));
-	left_wall_mat.SetSpecular(0.0f);
-
-	Sphere left_wall("left_wall", Matrix4().translation(0.0f, 0.0f, 5.0f) *
-																Matrix4().rotation_y(-utils::kPI / 4) *
-																Matrix4().rotation_x(utils::kPI / 2) *
-																Matrix4().scaling(10.0f, 0.01f, 10.0f)
-	);
-	left_wall.SetMaterial(floor_mat);
-
-	Sphere right_wall("right_wall", Matrix4().translation(0.0f, 0.0f, 5.0f) *
-																	Matrix4().rotation_y(utils::kPI / 4) *
-																	Matrix4().rotation_x(utils::kPI / 2) *
-																	Matrix4().scaling(10.0f, 0.01f, 10.0f)
-	);
-	right_wall.SetMaterial(floor_mat);
 
 	Sphere middle("middle", Matrix4().translation(-0.5f, 1.0f, 0.5f));
 	Material middle_mat;
@@ -75,14 +62,12 @@ int main() {
 	
 	PointLight light(Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
 
-	Camera camera(100, 50, utils::kPI / 3.0f);
+	Camera camera(res_x, res_y, utils::kPI / 3.0f);
 	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 1.5f, -5.0f),
 																							 Point(0.0f, 1.0f, 0.0f),
 																							 Vector(0.0f, 1.0f, 0.0f)));
 
 	world.AddObject(&floor);
-	world.AddObject(&left_wall);
-	world.AddObject(&right_wall);
 	world.AddObject(&middle);
 	world.AddObject(&right);
 	world.AddObject(&left);

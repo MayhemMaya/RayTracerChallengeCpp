@@ -41,7 +41,7 @@ Sphere& Sphere::operator=(const Object& object) {
   return *this;
 }
 
-std::vector<float> Sphere::local_intersect(const utils::RayStruct& local_ray) {
+std::vector<Intersection> Sphere::local_intersect(const utils::RayStruct& local_ray) {
   Vector sphere_to_ray = local_ray.origin - Point(0, 0, 0);
 
   float a = utils::dot(local_ray.direction, local_ray.direction);
@@ -52,7 +52,7 @@ std::vector<float> Sphere::local_intersect(const utils::RayStruct& local_ray) {
   float t1 = (-b - sqrt(discriminant)) / (2 * a);
   float t2 = (-b + sqrt(discriminant)) / (2 * a);
 
-  return { t1, t2 };
+  return { Intersection(t1, this), Intersection(t2, this) };
 }
 
 Vector Sphere::local_normal_at(const Point& local_point) const {

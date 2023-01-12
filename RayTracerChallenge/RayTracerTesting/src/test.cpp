@@ -25,6 +25,7 @@
 #include "engine.cpp"
 #include "camera.cpp"
 #include "mock-shape.cpp"
+#include "plane.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -69,6 +70,16 @@ TEST(UtilsTests, SwapIntersectionValues) {
 	EXPECT_TRUE((*i1.GetObject()) == (*s2));
 	EXPECT_EQ(i2.GetTime(), 1.0f);
 	EXPECT_TRUE((*i2.GetObject()) == (*s1));
+}
+
+TEST(UtilsTests, ArrayContainsAValue) {
+	std::string arr[] = { "apple", "banana", "pear" };
+	EXPECT_TRUE(utils::contains(arr, "pear"));
+}
+
+TEST(UtilsTests, ArrayDoesNotContainAValue) {
+	std::string arr[] = { "apple", "banana", "pear" };
+	EXPECT_FALSE(utils::contains(arr, "orange"));
 }
 #pragma endregion
 
@@ -717,44 +728,44 @@ TEST(Chapter5_tests, Computing_a_point_from_a_distance) {
 TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_two_points) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
+	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0], 4.0f);
-	EXPECT_EQ(xs[1], 6.0f);
+	EXPECT_EQ(xs[0].GetTime(), 4.0f);
+	EXPECT_EQ(xs[1].GetTime(), 6.0f);
 }
 
 TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
+	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0], 5.0f);
-	EXPECT_EQ(xs[1], 5.0f);
+	EXPECT_EQ(xs[0].GetTime(), 5.0f);
+	EXPECT_EQ(xs[1].GetTime(), 5.0f);
 }
 
 TEST(Chapter9_tests, A_ray_misses_a_sphere) {
 	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
+	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Chapter9_tests, A_ray_originates_inside_a_sphere) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
+	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0], -1.0f);
-	EXPECT_EQ(xs[1], 1.0f);
+	EXPECT_EQ(xs[0].GetTime(), -1.0f);
+	EXPECT_EQ(xs[1].GetTime(), 1.0f);
 }
 
 TEST(Chapter9_tests, A_sphere_is_behind_a_ray) {
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Sphere s;
-	std::vector<float> xs = s.local_intersect(r.to_ray_struct());
+	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0], -6.0f);
-	EXPECT_EQ(xs[1], -4.0f);
+	EXPECT_EQ(xs[0].GetTime(), -6.0f);
+	EXPECT_EQ(xs[1].GetTime(), -4.0f);
 }
 
 TEST(Chapter5_tests, An_intersection_encapsulates_time_and_object) {
@@ -853,7 +864,7 @@ TEST(Chapter9_tests, Intersecting_a_scaled_shape_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	MockShape s;
 	s.SetTransform(Matrix4().scaling(2, 2, 2));
-	std::vector<float> xs = r.intersect(&s);
+	std::vector<Intersection> xs = r.intersect(&s);
 	EXPECT_TRUE(s.GetSavedRay().origin == Point(0, 0, -2.5));
 	EXPECT_TRUE(s.GetSavedRay().direction == Vector(0, 0, 0.5));
 }
@@ -862,7 +873,7 @@ TEST(Chapter9_tests, Intersecting_a_translated_shape_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	MockShape s;
 	s.SetTransform(Matrix4().translation(5, 0, 0));
-	std::vector<float> xs = r.intersect(&s);
+	std::vector<Intersection> xs = r.intersect(&s);
 	EXPECT_TRUE(s.GetSavedRay().origin == Point(-5, 0, -5));
 	EXPECT_TRUE(s.GetSavedRay().direction == Vector(0, 0, 1));
 }
@@ -1290,6 +1301,47 @@ TEST(Chapter8_tests, The_hit_should_offset_the_point) {
 TEST(Chapter9_tests, A_sphere_is_a_shape) {
 	Sphere s;
 	EXPECT_TRUE(utils::instance_of<Shape>(&s));
+}
+TEST(Chapter9_tests, The_normal_of_a_plane_is_constant_everywhere) {
+	Plane p;
+	Vector n1 = p.local_normal_at(Point(0, 0, 0));
+	Vector n2 = p.local_normal_at(Point(10, 0, -10));
+	Vector n3 = p.local_normal_at(Point(-5, 0, 150));
+	EXPECT_TRUE(n1 == Vector(0, 1, 0));
+	EXPECT_TRUE(n2 == Vector(0, 1, 0));
+	EXPECT_TRUE(n3 == Vector(0, 1, 0));
+}
+
+TEST(Chapter9_tests, Intersect_with_a_ray_parallel_to_the_plane) {
+	Plane p;
+	Ray r(Point(0, 10, 0), Vector(0, 0, 1));
+	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter9_tests, Intersect_a_plane_with_a_coplanar_ray) {
+	Plane p;
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_above) {
+	Plane p;
+	Ray r(Point(0, 1, 0), Vector(0, -1, 0));
+	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 1);
+	EXPECT_EQ(xs[0].GetTime(), 1);
+	EXPECT_TRUE((*xs[0].GetObject()) == p);
+}
+
+TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_below) {
+	Plane p;
+	Ray r(Point(0, -1, 0), Vector(0, 1, 0));
+	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 1);
+	EXPECT_EQ(xs[0].GetTime(), 1);
+	EXPECT_TRUE((*xs[0].GetObject()) == p);
 }
 
 #pragma endregion

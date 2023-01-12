@@ -52,7 +52,10 @@ Point Object::GetPosition() const {
 ObjectType Object::GetObjectType() const { return type_; }
 
 std::string Object::GetObjectTypeName() const {
-  return type_enum_names[static_cast<int>(type_)];
+  std::string type_name = type_names[static_cast<int>(type_)];
+  std::string first_letter = type_name.substr(0, 1);
+  std::transform(first_letter.begin(), first_letter.end(), first_letter.begin(), ::toupper);
+  return "k" + first_letter + type_name.substr(1);
 }
 
 bool Object::operator==(const Object& other) const {

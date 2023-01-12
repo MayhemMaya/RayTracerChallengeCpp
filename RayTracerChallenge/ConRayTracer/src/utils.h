@@ -9,6 +9,7 @@
 #include "vector.h"
 #include "point.h"
 #include "color.h"
+#include <algorithm>
 
 namespace utils {
 
@@ -35,6 +36,17 @@ void ClearScreen();
 struct RayStruct {
   Point origin;
   Vector direction;
+};
+
+template <typename Base, typename T>
+
+inline bool instance_of(const T* ptr) {
+  return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
+template<class C, typename T>
+inline bool contains(C&& c, T t) {
+  return std::find(std::begin(c), std::end(c), t) != std::end(c);
 };
 
 } // namespace utils

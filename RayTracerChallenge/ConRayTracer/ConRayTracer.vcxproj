@@ -199,6 +199,7 @@
     <ClCompile Include="src\matrix3.cpp" />
     <ClCompile Include="src\matrix4.cpp" />
     <ClCompile Include="src\mock-shape.cpp" />
+    <ClCompile Include="src\plane.cpp" />
     <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\mock-tuple.cpp" />
     <ClCompile Include="src\object.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="src\matrix2.h" />
     <ClInclude Include="src\matrix3.h" />
     <ClInclude Include="src\matrix4.h" />
+    <ClInclude Include="src\plane.h" />
     <ClInclude Include="src\shape.h" />
     <ClInclude Include="src\mock-tuple.h" />
     <ClInclude Include="src\object.h" />

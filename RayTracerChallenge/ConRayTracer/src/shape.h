@@ -4,6 +4,7 @@
 #include "material.h"
 #include "vector.h"
 #include "point.h"
+#include "intersection.h"
 
 // Previously known as Mesh
 class Shape : public Object {
@@ -21,7 +22,7 @@ class Shape : public Object {
   static int GetCount();
   bool operator==(const Object& object) const override;
   Shape& operator=(const Object& other) override;
-  virtual std::vector<float> local_intersect(const utils::RayStruct& local_ray) = 0;
+  virtual std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) = 0;
   virtual Vector local_normal_at(const Point& local_point) const = 0;
 
  private:

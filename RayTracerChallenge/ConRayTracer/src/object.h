@@ -4,21 +4,24 @@
 #include "matrix4.h"
 #include "point.h"
 #include "utils.h"
+#include <string>
 
 enum class ObjectType {
   kUnknown,
   kShape,
   kSphere,
   kPointLight,
-  kCamera
+  kCamera,
+  kPlane
 };
 
-static std::string type_enum_names[] = {
-  "kUnknown",
-  "kShape",
-  "kSphere",
-  "kPointLight",
-  "kCamera"
+static std::string type_names[] = {
+  "unknown",
+  "shape",
+  "sphere",
+  "pointLight",
+  "camera",
+  "plane"
 };
 
 class Object {

@@ -20,7 +20,7 @@ class Ray {
   std::vector<Intersection> intersect(const World& world) const;
   Ray transform(const Matrix4& matrix) const;
   Ray& operator=(const Ray& other);
-  std::vector<float> intersect(Shape* shape) const;
+  std::vector<Intersection> intersect(Shape* shape) const;
   utils::RayStruct to_ray_struct() const;
  private:
   Point origin_;

@@ -30,7 +30,7 @@ std::vector<Object*> World::GetObjects() const {
 std::vector<LightSource*> World::GetLights() const {
   std::vector<LightSource*> lights;
   for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == ObjectType::kPointLight)
+    if (utils::instance_of<LightSource>(objects_[i]))
       lights.push_back((LightSource*)(objects_[i]));
   }
   return lights;
@@ -39,8 +39,7 @@ std::vector<LightSource*> World::GetLights() const {
 std::vector<Shape*> World::GetShapes() const {
   std::vector<Shape*> shapes;
   for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == ObjectType::kShape ||
-        objects_[i]->GetObjectType() == ObjectType::kSphere)
+    if (utils::instance_of<Shape>(objects_[i]))
       shapes.push_back((Shape*)(objects_[i]));
   }
   return shapes;
@@ -49,7 +48,7 @@ std::vector<Shape*> World::GetShapes() const {
 std::vector<Camera*> World::GetCameras() const {
   std::vector<Camera*> cameras;
   for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == ObjectType::kCamera)
+    if (utils::instance_of<Camera>(objects_[i]))
       cameras.push_back((Camera*)(objects_[i]));
   }
   return cameras;
@@ -92,7 +91,7 @@ void World::DeleteObject(const std::string& name) {
 
 bool World::ContainsLightSource() const {
   for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == ObjectType::kPointLight)
+    if (utils::instance_of<LightSource>(objects_[i]))
       return true;
   }
   return false;
@@ -100,7 +99,7 @@ bool World::ContainsLightSource() const {
 
 bool World::ContainsCamera() const {
   for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == ObjectType::kCamera)
+    if (utils::instance_of<Camera>(objects_[i]))
       return true;
   }
   return false;

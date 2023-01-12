@@ -46,8 +46,8 @@ std::vector<Intersection> Ray::intersect(const World& world) const {
   std::vector<Intersection> intersections;
   
   for (Shape* shape : world.GetShapes()) {
-    for (float t : this->intersect(shape)) {
-      Intersection i(t, shape);
+    for (Intersection i : this->intersect(shape)) {
+      //Intersection i(i.GetTime(), shape);
       intersections.push_back(i);
     }
   }
@@ -66,7 +66,7 @@ Ray& Ray::operator=(const Ray& other) {
   return *this;
 }
 
-std::vector<float> Ray::intersect(Shape* shape) const {
+std::vector<Intersection> Ray::intersect(Shape* shape) const {
   Ray local_ray = this->transform(shape->GetTransform().inverse());
   return shape->local_intersect(local_ray.to_ray_struct());
 }
