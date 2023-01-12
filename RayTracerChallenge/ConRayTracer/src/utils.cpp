@@ -98,7 +98,7 @@ float map(int value, int in_min, int in_max, float out_min, float out_max)
 
 void ClearScreen()
 {
-  std::cout << std::string(100, '\n');
+  system("cls");
 }
 
 } // namespace utils

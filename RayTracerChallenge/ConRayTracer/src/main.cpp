@@ -28,8 +28,8 @@
 
 int main() {
 
-	int res_x = 100;
-	int res_y = 50;
+	int res_x = 1280;
+	int res_y = 720;
 
 	World world = World(WorldType::EMPTY);
 
