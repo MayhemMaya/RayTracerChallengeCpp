@@ -3,18 +3,18 @@
 int Object::object_count_ = 0;
 
 Object::Object(const std::string& name, const ObjectType& type)
-    : transform_(Matrix4()), name_(name), type_(type) {
+    : transform_(Matrix4()), name_(name), type_(type), saved_transform_inverse_(transform_.inverse()) {
       object_count_++;
 }
 
 Object::Object(const std::string& name, const ObjectType& type, const Matrix4& transform)
-  : transform_(transform), name_(name), type_(type) {
+  : transform_(transform), name_(name), type_(type), saved_transform_inverse_(transform_.inverse()) {
   object_count_++;
 }
 
 Object::Object(const std::string& name, const ObjectType& type, const Point& position)
     : transform_(Matrix4().translation(position[0], position[1], position[2])), 
-      name_(name), type_(type) {
+      name_(name), type_(type), saved_transform_inverse_(transform_.inverse()) {
   object_count_++;
 }
 
@@ -36,10 +36,15 @@ Matrix4 Object::GetTransform() const { return transform_; }
 
 void Object::SetTransform(const Matrix4& transform) {
   transform_ = transform_ * transform;
+  saved_transform_inverse_ = transform_.inverse();
 }
 
 void Object::SetObjectType(const ObjectType& type) {
   type_ = type;
+}
+
+Matrix4 Object::GetSavedTransformInverse() const {
+  return saved_transform_inverse_;
 }
 
 Point Object::GetPosition() const {

@@ -315,8 +315,8 @@ Matrix4 Matrix4::shearing(float x_y, float x_z, float y_x,
 
 Matrix4 Matrix4::view_transform(const Point& from, const Point& to, const Vector& up) const {
   Vector forward = (to - from).normalize();
-  Vector left = utils::cross(forward, up.normalize());
-  Vector true_up = utils::cross(left, forward);
+  Vector left = forward.cross(up.normalize());
+  Vector true_up = left.cross(forward);
   Matrix4 orientation = Matrix4(left[0], left[1], left[2], 0,
                                 true_up[0], true_up[1], true_up[2], 0,
                                 -forward[0], -forward[1], -forward[2], 0,

@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include "point.h"
 #include "utils.h"
 

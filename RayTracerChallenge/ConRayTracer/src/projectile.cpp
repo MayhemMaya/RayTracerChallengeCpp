@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include "projectile.h"
 
 Projectile::Projectile(const Point& position, const Vector& velocity) 

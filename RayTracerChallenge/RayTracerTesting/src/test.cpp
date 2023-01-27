@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <cmath>
 #include <vector>
 #include <memory>
@@ -26,6 +26,13 @@
 #include "camera.cpp"
 #include "mock-shape.cpp"
 #include "plane.cpp"
+#include "colors.cpp"
+#include "pattern.cpp"
+#include "mock-pattern.cpp"
+#include "stripe-pattern.cpp"
+#include "gradient-pattern.cpp"
+#include "ring-pattern.cpp"
+#include "checker-pattern.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -208,14 +215,14 @@ TEST(Chapter1_tests, The_magnitude_of_a_normalized_vector) {
 TEST(Chapter1_tests, The_dot_product_of_two_vectors) {
 	Vector a(1, 2, 3);
 	Vector b(2, 3, 4);
-	EXPECT_EQ(utils::dot(a, b), 20);
+	EXPECT_EQ(a.dot(b), 20);
 }
 
 TEST(Chapter1_tests, The_cross_product_of_two_vectors) {
 	Vector a(1, 2, 3);
 	Vector b(2, 3, 4);
-	EXPECT_TRUE(utils::cross(a, b) == Vector(-1, 2, -1));
-	EXPECT_TRUE(utils::cross(b, a) == Vector(1, -2, 1));
+	EXPECT_TRUE(a.cross(b) == Vector(-1, 2, -1));
+	EXPECT_TRUE(b.cross(a) == Vector(1, -2, 1));
 }
 #pragma endregion
 
@@ -971,57 +978,62 @@ TEST(Chapter9_tests, Assigning_a_material) {
 }
 
 TEST(Chapter6_tests, Lighting_with_the_eye_between_the_light_and_the_surface) {
+	Sphere object;
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
 	bool in_shadow = false;
-	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(1.9f, 1.9f, 1.9f));
 }
 
 TEST(Chapter6_tests, Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees) {
+	Sphere object;
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
 	bool in_shadow = false;
-	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(1.0f, 1.0f, 1.0f));
 }
 
 TEST(Chapter6_tests, Lighting_with_eye_opposite_surface_light_offset_45_degrees) {
+	Sphere object;
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
 	bool in_shadow = false;
-	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.7364f, 0.7364f, 0.7364f));
 }
 
 TEST(Chapter6_tests, Lighting_with_eye_in_the_path_of_the_reflection_vector) {
+	Sphere object;
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
 	bool in_shadow = false;
-	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result.round(4) == Color(1.6364f, 1.6364f, 1.6364f));
 }
 
 TEST(Chapter6_tests, Lighting_with_the_light_behind_the_surface) {
+	Sphere object;
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, 10), Color(1, 1, 1));
 	bool in_shadow = true;
-	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
 }
 #pragma endregion
@@ -1238,13 +1250,14 @@ TEST(Chapter7_tests, Rendering_a_world_with_a_camera) {
 
 #pragma region Chapter8Tests
 TEST(Chapter8_tests, Lighting_with_the_surface_in_shadow) {
+	Sphere object;
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
 	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
 	bool in_shadow = true;
-	Color result = Engine::lighting(m, light, position, evev, normalv, in_shadow);
+	Color result = Engine::lighting(m, &object,  light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
 }
 
@@ -1302,6 +1315,7 @@ TEST(Chapter9_tests, A_sphere_is_a_shape) {
 	Sphere s;
 	EXPECT_TRUE(utils::instance_of<Shape>(&s));
 }
+
 TEST(Chapter9_tests, The_normal_of_a_plane_is_constant_everywhere) {
 	Plane p;
 	Vector n1 = p.local_normal_at(Point(0, 0, 0));
@@ -1343,5 +1357,158 @@ TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_below) {
 	EXPECT_EQ(xs[0].GetTime(), 1);
 	EXPECT_TRUE((*xs[0].GetObject()) == p);
 }
+#pragma endregion
+
+#pragma region Chapter10Tests
+TEST(Chapter10_tests, Color_constants_black_and_white_exist) {
+	EXPECT_TRUE(Colors::Black == Color(0, 0, 0));
+	EXPECT_TRUE(Colors::White == Color(1, 1, 1));
+}
+
+TEST(Chapter10_tests, Creating_a_stripe_pattern) {
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	auto a_variant = pattern.GetA();
+	auto b_variant = pattern.GetB();
+	Color colorA = (*(std::get_if<Color>(&a_variant)));
+	Color colorB = (*(std::get_if<Color>(&b_variant)));
+	EXPECT_TRUE(colorA == Colors::White);
+	EXPECT_TRUE(colorB == Colors::Black);
+}
+
+TEST(Chapter10_tests, A_stripe_pattern_is_constant_in_y) {
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 1, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 2, 0)) == Colors::White);
+}
+
+TEST(Chapter10_tests, A_stripe_pattern_is_constant_in_z) {
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 1)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 2)) == Colors::White);
+}
+
+TEST(Chapter10_tests, A_stripe_pattern_alternates_in_x) {
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0.9, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(1, 0, 0)) == Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(-0.1, 0, 0)) == Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(-1, 0, 0)) == Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(-1.1, 0, 0)) == Colors::White);
+}
+
+TEST(Chapter10_tests, Lighting_with_a_pattern_applied) {
+	Sphere object;
+	Material m;
+	StripePattern p = StripePattern(Color(1, 1, 1), Color(0, 0, 0));
+	m.SetPattern(&p);
+	m.SetAmbient(1);
+	m.SetDiffuse(0);
+	m.SetSpecular(0);
+	Vector eyev = Vector(0, 0, -1);
+	Vector normalv = Vector(0, 0, -1);
+	PointLight light = PointLight(Point(0, 0, -10), Color(1, 1, 1));
+	Color c1 = Engine::lighting(m, &object, light, Point(0.9, 0, 0), eyev, normalv, false);
+	Color c2 = Engine::lighting(m, &object, light, Point(1.1, 0, 0), eyev, normalv, false);
+	EXPECT_TRUE(c1 == Color(1, 1, 1));
+	EXPECT_TRUE(c2 == Color(0, 0, 0));
+}
+
+TEST(Chapter10_tests, A_pattern_on_a_material_is_optional) {
+	Material m;
+	EXPECT_TRUE(m.GetPattern() == nullptr);
+}
+
+TEST(Chapter10_tests, A_material_can_be_given_a_pattern) {
+	Material m;
+	StripePattern pattern = StripePattern(Color(1, 1, 1), Color(0, 0, 0));
+	m.SetPattern(&pattern);
+	EXPECT_TRUE((*m.GetPattern()) == pattern);
+}
+
+TEST(Chapter10_tests, Stripes_with_an_object_transformation) {
+	Sphere object;
+	object.SetTransform(Matrix4().scaling(2, 2, 2));
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	Color c = pattern.pattern_at_object(&object, Point(1.5, 0, 0));
+	EXPECT_TRUE(c == Colors::White);
+}
+
+TEST(Chapter10_tests, Stripes_with_a_pattern_transformation) {
+	Sphere object;
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	pattern.SetTransform(Matrix4().scaling(2, 2, 2));
+	Color c = pattern.pattern_at_object(&object, Point(1.5, 0, 0));
+	EXPECT_TRUE(c == Colors::White);
+}
+
+TEST(Chapter10_tests, Stripes_with_both_an_object_and_a_pattern_transformation) {
+	Sphere object;
+	object.SetTransform(Matrix4().scaling(2, 2, 2));
+	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
+	pattern.SetTransform(Matrix4().translation(0.5, 0, 0));
+	Color c = pattern.pattern_at_object(&object, Point(2.5, 0, 0));
+	EXPECT_TRUE(c == Colors::White);
+}
+
+TEST(Chapter10_tests, The_default_pattern_transformation) {
+	MockPattern pattern;
+	EXPECT_TRUE(pattern.GetTransform() == Matrix4().identity());
+}
+
+TEST(Chapter10_tests, Assigning_a_pattern_transformation) {
+	MockPattern pattern;
+	pattern.SetTransform(Matrix4().translation(1, 2, 3));
+	EXPECT_TRUE(pattern.GetTransform() == Matrix4().translation(1, 2, 3));
+}
+
+TEST(Chapter10_tests, A_gradient_linearly_interpolates_between_colors) {
+	GradientPattern pattern = GradientPattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0.25, 0, 0)) == Color(0.75, 0.75, 0.75));
+	EXPECT_TRUE(pattern.pattern_at(Point(0.5, 0, 0)) == Color(0.5, 0.5, 0.5));
+	EXPECT_TRUE(pattern.pattern_at(Point(0.75, 0, 0)) == Color(0.25, 0.25, 0.25));
+}
+
+TEST(Chapter10_tests, A_ring_should_extend_in_both_x_and_z) {
+	RingPattern pattern = RingPattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(1, 0, 0)) == Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 1)) == Colors::Black);
+	// 0.708 = just slightly more than √2/2
+	EXPECT_TRUE(pattern.pattern_at(Point(0.708, 0, 0.708)) == Colors::Black);
+}
+
+TEST(Chapter10_tests, A_checker_should_repeat_in_x) {
+	CheckerPattern pattern = CheckerPattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0.99, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(1.01, 0, 0)) == Colors::Black);
+}
+
+TEST(Chapter10_tests, A_checker_should_repeat_in_y) {
+	CheckerPattern pattern = CheckerPattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0.99, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 1.01, 0)) == Colors::Black);
+}
+
+TEST(Chapter10_tests, A_checker_should_repeat_in_z) {
+	CheckerPattern pattern = CheckerPattern(Colors::White, Colors::Black);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 0.99)) == Colors::White);
+	EXPECT_TRUE(pattern.pattern_at(Point(0, 0, 1.01)) == Colors::Black);
+}
+
+TEST(Chapter10_tests, Dividing_a_color_by_a_value) {
+	Color c = Color(1, 2, 3);
+	c = c / 2;
+	EXPECT_TRUE(c == Color(0.5, 1, 1.5));
+}
+#pragma endregion
+
+#pragma region Chapter11Tests
 
 #pragma endregion

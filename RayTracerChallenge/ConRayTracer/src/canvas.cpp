@@ -1,9 +1,5 @@
 
-#include <iostream>
-#include <string>
-#include <sstream>
 #include "canvas.h"
-#include "utils.h"
 
 Canvas::Canvas(int width, int height)
   : width_(width), height_(height) {

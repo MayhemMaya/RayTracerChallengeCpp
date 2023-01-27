@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <cstdlib>
 #include <vector>
 #include <sstream>
@@ -8,7 +7,7 @@
 #include <string>
 #include "vector.h"
 #include "point.h"
-#include "color.h"
+#include <cmath>
 #include <algorithm>
 
 namespace utils {
@@ -18,9 +17,6 @@ namespace utils {
 static float kEPSILON = 0.001f;
 static double kPI = 3.141592653589793;
 bool equal(float a, float b);
-float dot(const Vector& a, const Vector& b);
-Vector cross(const Vector& a, const Vector& b);
-Color hadamard_product(const Color& c1, const Color& c2);
 float clamp(float value, float min, float max);
 std::vector<std::string> split_lines(const std::string& str);
 std::string ToString(float value);

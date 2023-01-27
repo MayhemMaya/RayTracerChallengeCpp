@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "tuple.h"
 
 class Vector : public Tuple {
@@ -17,4 +16,6 @@ class Vector : public Tuple {
   float magnitude() const;
   Vector normalize() const;
   Vector reflect(const Vector& normal) const;
+  float dot(const Vector& other) const;
+  Vector cross(const Vector& other) const;
 };

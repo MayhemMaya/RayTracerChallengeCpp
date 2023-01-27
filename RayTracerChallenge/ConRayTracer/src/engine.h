@@ -39,11 +39,12 @@ struct Computation {
   }
 };
 
-Color lighting(const Material& material, const LightSource& light,
+Color lighting(const Material& material, Shape* object,
+                                         const LightSource& light,
                                          const Point& point,
                                          const Vector& eyev,
                                          const Vector& normalv,
-                                         const bool& in_shadow);
+                                         bool in_shadow);
 Computation prepare_computations(const Intersection& itersection, const Ray& ray);
 Color shade_hit(const World& world, const Computation& comp);
 Color color_at(const World& world, const Ray& ray);

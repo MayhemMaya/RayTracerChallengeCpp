@@ -274,21 +274,21 @@
     <TestDuration Test="Chapter6_tests.A_sphere_has_a_default_material" Duration="1" />
     <TestDuration Test="Chapter6_tests.A_sphere_may_be_assigned_a_material" Duration="1" />
     <TestDuration Test="Chapter6_tests.Lighting_with_the_eye_between_the_light_and_the_surface" Duration="1" />
-    <TestDuration Test="Chapter6_tests.Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees" Duration="1" />
+    <TestDuration Test="Chapter6_tests.Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees" Duration="2" />
     <TestDuration Test="Chapter6_tests.Lighting_with_eye_opposite_surface_light_offset_45_degrees" Duration="1" />
     <TestDuration Test="Chapter6_tests.Lighting_with_eye_in_the_path_of_the_reflection_vector" Duration="1" />
-    <TestDuration Test="Chapter6_tests.Lighting_with_the_light_behind_the_surface" Duration="1" />
+    <TestDuration Test="Chapter6_tests.Lighting_with_the_light_behind_the_surface" Duration="2" />
     <TestDuration Test="Chapter7_tests.Creating_a_world" Duration="1" />
-    <TestDuration Test="Chapter7_tests.The_default_world" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Intersect_a_world_with_a_ray" Duration="2" />
+    <TestDuration Test="Chapter7_tests.The_default_world" Duration="5" />
+    <TestDuration Test="Chapter7_tests.Intersect_a_world_with_a_ray" Duration="3" />
     <TestDuration Test="Chapter7_tests.Precomputing_the_state_of_an_intersection" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_outside" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_inside" Duration="1" />
     <TestDuration Test="Chapter7_tests.Shading_an_intersection" Duration="2" />
-    <TestDuration Test="Chapter7_tests.Shading_an_intersection_from_the_inside" Duration="2" />
-    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_misses" Duration="1" />
-    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_hits" Duration="3" />
-    <TestDuration Test="Chapter7_tests.The_color_with_an_intersection_behind_the_ray" Duration="3" />
+    <TestDuration Test="Chapter7_tests.Shading_an_intersection_from_the_inside" Duration="3" />
+    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_misses" Duration="2" />
+    <TestDuration Test="Chapter7_tests.The_color_when_a_ray_hits" Duration="2" />
+    <TestDuration Test="Chapter7_tests.The_color_with_an_intersection_behind_the_ray" Duration="2" />
     <TestDuration Test="Chapter7_tests.The_transformation_matrix_for_the_default_orientation" Duration="1" />
     <TestDuration Test="Chapter7_tests.A_view_transformation_matrix_looking_in_positive_z_direction" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_view_transformation_moves_the_world" Duration="1" />
@@ -297,23 +297,23 @@
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_horizontal_canvas" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_vertical_canvas" Duration="1" />
     <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="2" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="418" />
-    <TestDuration Test="Chapter8_tests.Lighting_with_the_surface_in_shadow" Duration="1" />
-    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="1" />
-    <TestDuration Test="Chapter8_tests.The_shadow_when_an_object_is_between_the_point_and_the_light" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="1" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="2" />
+    <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="7" />
+    <TestDuration Test="Chapter8_tests.Lighting_with_the_surface_in_shadow" Duration="3" />
+    <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="3" />
+    <TestDuration Test="Chapter8_tests.The_shadow_when_an_object_is_between_the_point_and_the_light" Duration="2" />
     <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_light" Duration="2" />
     <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_an_object_is_behind_the_point" Duration="2" />
     <TestDuration Test="Chapter8_tests.shade_hit_is_given_an_intersection_in_shadow" Duration="2" />
     <TestDuration Test="Chapter8_tests.The_hit_should_offset_the_point" Duration="1" />
     <TestDuration Test="Chapter9_tests.The_default_transformation" Duration="1" />
-    <TestDuration Test="Chapter9_tests.Assigning_a_transformation" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Assigning_a_transformation" Duration="2" />
     <TestDuration Test="Chapter9_tests.The_default_material" Duration="1" />
     <TestDuration Test="Chapter9_tests.Assigning_a_material" Duration="1" />
     <TestDuration Test="Chapter9_tests.Intersecting_a_scaled_shape_with_a_ray" Duration="1" />
-    <TestDuration Test="Chapter9_tests.Intersecting_a_translated_shape_with_a_ray" Duration="1" />
-    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_translated_shape" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Intersecting_a_translated_shape_with_a_ray" Duration="2" />
+    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_translated_shape" Duration="2" />
     <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_transformed_shape" Duration="1" />
     <TestDuration Test="Chapter9_tests.A_sphere_is_a_shape" Duration="1" />
     <TestDuration Test="Chapter9_tests.A_sphere_is_not_a_tuple" Duration="1" />
@@ -334,5 +334,42 @@
     <TestDuration Test="Chapter9_tests.A_ray_intersecting_a_plane_from_below" Duration="1" />
     <TestDuration Test="UtilsTests.ArrayContainsAValue" Duration="1" />
     <TestDuration Test="UtilsTests.ArrayDoesNotContainAValue" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Color_constants_black_and_white_exist" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Creating_a_stripe_pattern" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_stripe_pattern_is_constant_in_y" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_stripe_pattern_is_constant_in_z" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_stripe_pattern_alternates_in_x" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Lighting_with_a_pattern_applied" Duration="4" />
+    <TestDuration Test="Chapter9_tests.A_material_has_a_pattern" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_pattern_on_a_material_is_optional" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Stripes_with_an_object_transformation" Duration="3" />
+    <TestDuration Test="Chapter9_tests.Stripes_with_a_pattern_transformation" Duration="3" />
+    <TestDuration Test="Chapter9_tests.Stripes_with_both_an_object_and_a_pattern_transformation" Duration="3" />
+    <TestDuration Test="Chapter9_tests.The_defualt_pattern_transformation" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Assigning_a_pattern_transformation" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_gradient_linearly_interpolates_between_colors" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_ring_should_extend_in_both_x_and_z" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_checker_should_repeat_in_x" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_checker_should_repeat_in_y" Duration="1" />
+    <TestDuration Test="Chapter9_tests.A_checker_should_repeat_in_z" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Color_constants_black_and_white_exist" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Creating_a_stripe_pattern" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_stripe_pattern_is_constant_in_y" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_stripe_pattern_is_constant_in_z" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_stripe_pattern_alternates_in_x" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Lighting_with_a_pattern_applied" Duration="4" />
+    <TestDuration Test="Chapter10_tests.A_pattern_on_a_material_is_optional" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_material_can_be_given_a_pattern" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Stripes_with_an_object_transformation" Duration="2" />
+    <TestDuration Test="Chapter10_tests.Stripes_with_a_pattern_transformation" Duration="3" />
+    <TestDuration Test="Chapter10_tests.Stripes_with_both_an_object_and_a_pattern_transformation" Duration="3" />
+    <TestDuration Test="Chapter10_tests.The_default_pattern_transformation" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Assigning_a_pattern_transformation" Duration="2" />
+    <TestDuration Test="Chapter10_tests.A_gradient_linearly_interpolates_between_colors" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_ring_should_extend_in_both_x_and_z" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_checker_should_repeat_in_x" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_checker_should_repeat_in_y" Duration="1" />
+    <TestDuration Test="Chapter10_tests.A_checker_should_repeat_in_z" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Dividing_a_color_by_a_value" Duration="1" />
   </TestDurations>
 </GtaTestDurations>

@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include <cmath>
 #include "vector.h"
 #include "utils.h"
@@ -57,5 +56,18 @@ Vector Vector::normalize() const {
 }
 
 Vector Vector::reflect(const Vector& normal) const {
-  return (*this - normal * 2 * utils::dot(*this, normal));
+  return (*this - normal * 2 * this->dot(normal));
+}
+
+float Vector::dot(const Vector& other) const {
+  return((*this)[0] * other[0] +
+         (*this)[1] * other[1] +
+         (*this)[2] * other[2] +
+         (*this)[3] * other[3]);
+}
+
+Vector Vector::cross(const Vector& other) const {
+  return Vector((*this)[1] * other[2] - (*this)[2] * other[1],
+                (*this)[2] * other[0] - (*this)[0] * other[2],
+                (*this)[0] * other[1] - (*this)[1] * other[0]);
 }

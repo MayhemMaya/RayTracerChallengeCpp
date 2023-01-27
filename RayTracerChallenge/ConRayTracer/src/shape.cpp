@@ -59,7 +59,7 @@ void Shape::ListDetails() const {
 }
 
 Vector Shape::normal_at(const Point& point) const {
-  Matrix4 shape_inverse = this->GetTransform().inverse();
+  Matrix4 shape_inverse = this->GetSavedTransformInverse();
   Point local_point = shape_inverse * point;
   Vector local_normal = this->local_normal_at(local_point);
   Vector world_normal = shape_inverse.transpose() * local_normal;

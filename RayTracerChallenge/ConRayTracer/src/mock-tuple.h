@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "tuple.h"
 
 class MockTuple : public Tuple {

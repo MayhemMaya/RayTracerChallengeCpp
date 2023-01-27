@@ -2,29 +2,43 @@
 
 namespace Engine {
 
-Color lighting(const Material& material, const LightSource& light,
+Color lighting(const Material& material, Shape* object,
+                                         const LightSource& light,
                                          const Point& point,
                                          const Vector& eyev,
                                          const Vector& normalv,
-                                         const bool& in_shadow) {
+                                         bool in_shadow) {
+  Color color;
+  
+  // check if the material has a pattern, if it does set the color to the pattern's color at the given point
+  if (material.GetPattern() != nullptr) {
+    Pattern* pattern = material.GetPattern();
+    color = pattern->pattern_at_object(object, point);
+  }
+  else {
+    // otherwise set it to the color of the material
+    color = material.GetColor();
+  }
+
+  // Now compute the light as usual
   // set diffuse and specular to black to start
   Color diffuse(0, 0, 0);
   Color specular(0, 0, 0);
 
   // combine the surface color with the light's color/intensity
-  Color effective_color = material.GetColor() * light.GetIntensity();
+  Color effective_color = color * light.GetIntensity();
 
   // find the direction to the light source
   Vector lightv = (light.GetPosition() - point).normalize();
 
   // compute the ambient contribution
   Color ambient = effective_color * material.GetAmbient();
-  if (in_shadow) return(ambient + diffuse + specular);
+  if (in_shadow) return ambient + diffuse + specular;
 
   // light_dot_normal represents the cosine of the angle between the
   // light vector and the normal vector. A negative number means the
   // light is on the other side of the surface.
-  float light_dot_normal = utils::dot(lightv, normalv);
+  float light_dot_normal = lightv.dot(normalv);
   if (light_dot_normal < 0) {
     diffuse = Color(0, 0, 0); // black
     specular = Color(0, 0, 0); // black
@@ -34,10 +48,10 @@ Color lighting(const Material& material, const LightSource& light,
     diffuse = effective_color * material.GetDiffuse() * light_dot_normal;
 
     // reflect_dot_eye represents the cosine of the angle between the
-    // reflection vectorand the eye vector.A negative number means the
+    // reflection vector and the eye vector. A negative number means the
     // light reflects away from the eye.
     Vector reflectv = -lightv.reflect(normalv);
-    float reflect_dot_eye = utils::dot(reflectv, eyev);
+    float reflect_dot_eye = reflectv.dot(eyev);
 
     if (reflect_dot_eye <= 0) {
       specular = Color(0, 0, 0); // black
@@ -48,7 +62,7 @@ Color lighting(const Material& material, const LightSource& light,
       specular = light.GetIntensity() * material.GetSpecular() * factor;
     }
   }
-  return(ambient + diffuse + specular);
+  return ambient + diffuse + specular;
 }
 
 Computation prepare_computations(const Intersection& intersection, const Ray& ray) {
@@ -62,7 +76,7 @@ Computation prepare_computations(const Intersection& intersection, const Ray& ra
     intersection_object->normal_at(comps_point)  // comps.normalv
   );
   
-  if (utils::dot(comps.normalv_, comps.eyev_) < 0) {
+  if (comps.normalv_.dot(comps.eyev_) < 0) {
     comps.inside_ = true;
     comps.normalv_ = -comps.normalv_;
   }
@@ -75,7 +89,7 @@ Computation prepare_computations(const Intersection& intersection, const Ray& ra
 
 Color shade_hit(const World& world, const Computation& comps) {
   bool shadowed = is_shadowed(world, comps.over_point_);
-  return lighting(comps.object_->GetMaterial(), (*world.GetLights()[0]),
+  return lighting(comps.object_->GetMaterial(), comps.object_, (*world.GetLights()[0]),
     comps.over_point_, comps.eyev_, comps.normalv_, shadowed);
   /*
   Color hit_color;
@@ -116,8 +130,8 @@ Ray ray_for_pixel(const Camera& camera, int px, int py) {
   // using the camera matrix, transform the canvas point and the origin,
   // and then compute the ray's direction vector.
   // (remember that the canvas is at z=-1)
-  Point pixel = camera.GetTransform().inverse() * Point(world_x, world_y, -1.0f);
-  Point origin = camera.GetTransform().inverse() * Point(0, 0, 0);
+  Point pixel = camera.GetSavedTransformInverse() * Point(world_x, world_y, -1.0f);
+  Point origin = camera.GetSavedTransformInverse() * Point(0, 0, 0);
   Vector direction = (pixel - origin).normalize();
   return Ray(origin, direction);
 }

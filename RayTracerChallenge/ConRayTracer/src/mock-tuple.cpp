@@ -1,4 +1,3 @@
-#include <iostream>
 #include "mock-tuple.h"
 
 MockTuple::MockTuple() : Tuple() {}

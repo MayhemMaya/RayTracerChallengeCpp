@@ -38,6 +38,7 @@ class Object {
    ObjectType GetObjectType() const;
    std::string GetObjectTypeName() const;
    void SetObjectType(const ObjectType& type);
+   Matrix4 GetSavedTransformInverse() const;
    virtual Point GetPosition() const;
    virtual bool operator==(const Object& other) const;
    virtual Object& operator=(const Object& other);
@@ -47,4 +48,5 @@ class Object {
    std::string name_;
    ObjectType type_;
    Matrix4 transform_;
+   Matrix4 saved_transform_inverse_;
 };

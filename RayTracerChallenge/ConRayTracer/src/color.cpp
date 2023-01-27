@@ -1,8 +1,4 @@
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <cmath>
 #include "color.h"
 #include "utils.h"
 
@@ -49,7 +45,11 @@ Color Color::operator*(float scalar) const {
 }
 
 Color Color::operator*(const Color& other) const {
-  return Color(utils::hadamard_product(*this, other));
+  return Color(this->hadamard_product(other));
+}
+
+Color Color::operator/(float value) const {
+  return Color(r_ / value, g_ / value, b_ / value);
 }
 
 Color& Color::operator+=(const Color& other) {
@@ -68,4 +68,8 @@ Color Color::round(int roundoff_amount) const {
   return Color(utils::roundoff(r_, roundoff_amount),
                utils::roundoff(g_, roundoff_amount),
                utils::roundoff(b_, roundoff_amount));
+}
+
+Color Color::hadamard_product(const Color& other) const {
+  return Color((*this)[0] * other[0], (*this)[1] * other[1], (*this)[2] * other[2]);
 }

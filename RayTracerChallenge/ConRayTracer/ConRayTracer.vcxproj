@@ -185,11 +185,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\blended-pattern.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\canvas.cpp" />
+    <ClCompile Include="src\checker-pattern.cpp" />
     <ClCompile Include="src\color.cpp" />
+    <ClCompile Include="src\colors.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\environment.cpp" />
+    <ClCompile Include="src\gradient-pattern.cpp" />
     <ClCompile Include="src\hit.cpp" />
     <ClCompile Include="src\intersection.cpp" />
     <ClCompile Include="src\light-source.cpp" />
@@ -198,8 +202,14 @@
     <ClCompile Include="src\matrix2.cpp" />
     <ClCompile Include="src\matrix3.cpp" />
     <ClCompile Include="src\matrix4.cpp" />
+    <ClCompile Include="src\mock-pattern.cpp" />
     <ClCompile Include="src\mock-shape.cpp" />
+    <ClCompile Include="src\pattern.cpp" />
     <ClCompile Include="src\plane.cpp" />
+    <ClCompile Include="src\radial-gradient-pattern.cpp" />
+    <ClCompile Include="src\radial-ring-gradient-pattern.cpp" />
+    <ClCompile Include="src\raindrops-pattern.cpp" />
+    <ClCompile Include="src\ring-pattern.cpp" />
     <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\mock-tuple.cpp" />
     <ClCompile Include="src\object.cpp" />
@@ -208,12 +218,18 @@
     <ClCompile Include="src\projectile.cpp" />
     <ClCompile Include="src\ray.cpp" />
     <ClCompile Include="src\sphere.cpp" />
+    <ClCompile Include="src\stripe-pattern.cpp" />
     <ClCompile Include="src\tuple.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\vector.cpp" />
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\blended-pattern.h" />
+    <ClInclude Include="src\checker-pattern.h" />
+    <ClInclude Include="src\colors.h" />
+    <ClInclude Include="src\gradient-pattern.h" />
+    <ClInclude Include="src\mock-pattern.h" />
     <ClInclude Include="src\mock-shape.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\canvas.h" />
@@ -227,7 +243,13 @@
     <ClInclude Include="src\matrix2.h" />
     <ClInclude Include="src\matrix3.h" />
     <ClInclude Include="src\matrix4.h" />
+    <ClInclude Include="src\pattern.h" />
     <ClInclude Include="src\plane.h" />
+    <ClInclude Include="src\radial-gradient-pattern.h" />
+    <ClInclude Include="src\radial-ring-gradient-pattern.h" />
+    <ClInclude Include="src\raindrops-pattern.h" />
+    <ClInclude Include="src\ray-tracer.h" />
+    <ClInclude Include="src\ring-pattern.h" />
     <ClInclude Include="src\shape.h" />
     <ClInclude Include="src\mock-tuple.h" />
     <ClInclude Include="src\object.h" />
@@ -236,6 +258,7 @@
     <ClInclude Include="src\projectile.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\sphere.h" />
+    <ClInclude Include="src\stripe-pattern.h" />
     <ClInclude Include="src\tuple.h" />
     <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\vector.h" />

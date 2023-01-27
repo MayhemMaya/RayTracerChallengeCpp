@@ -7,8 +7,6 @@
 #include "mock-tuple.h"
 #include "point.h"
 
-class Matrix3;
-
 class Matrix4 {
  public:
   Matrix4();

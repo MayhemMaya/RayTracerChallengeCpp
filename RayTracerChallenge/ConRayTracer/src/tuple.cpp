@@ -1,4 +1,3 @@
-#include <iostream>
 #include "tuple.h"
 
 Tuple::Tuple() : x_(0), y_(0), z_(0), w_(0) {}

@@ -1,12 +1,5 @@
 
-#include <iostream>
-#include <cstdlib>
-#include <vector>
-#include <sstream>
-#include <fstream>
 #include "utils.h"
-#include "vector.h"
-#include "color.h"
 
 namespace utils {
   
@@ -14,23 +7,6 @@ bool equal(float a, float b) {
   if (std::abs(a - b) < kEPSILON)
     return true;
   return false;
-}
-
-float dot(const Vector& a, const Vector& b) {
-  return(a[0] * b[0] +
-         a[1] * b[1] +
-         a[2] * b[2] +
-         a[3] * b[3]);
-}
-
-Vector cross(const Vector& a, const Vector& b) {
-  return Vector(a[1] * b[2] - a[2] * b[1],
-                a[2] * b[0] - a[0] * b[2],
-                a[0] * b[1] - a[1] * b[0]);
-}
-
-Color hadamard_product(const Color& c1, const Color& c2) {
-  return Color(c1[0] * c2[0], c1[1] * c2[1], c1[2] * c2[2]);
 }
 
 float clamp(float value, float min, float max) {

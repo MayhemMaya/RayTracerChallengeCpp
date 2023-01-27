@@ -3,45 +3,28 @@
 #include <string>
 #include <cmath>
 #include <vector>
-#include <array>
-#include <memory>
-#include "utils.h"
-#include "tuple.h"
-#include "point.h"
-#include "vector.h"
-#include "environment.h"
-#include "projectile.h"
-#include "canvas.h"
-#include "matrix2.h"
-#include "matrix3.h"
-#include "matrix4.h"
-#include "ray.h"
-#include "intersection.h"
-#include "hit.h"
-#include "object.h"
-#include "sphere.h"
-#include "point-light.h"
-#include "world.h"
-#include "engine.h"
-#include "camera.h"
-#include "plane.h"
+#include "ray-tracer.h"
 
 int main() {
 
-	int res_x = 100;
-	int res_y = 50;
+	int res_x = 200;
+	int res_y = 100;
 
 	World world = World(WorldType::EMPTY);
 
 	Plane floor("floor", Matrix4().scaling(10.0f, 0.01f, 10.0f));
 	Material floor_mat;
-	floor_mat.SetColor(Color(1.0f, 0.9f, 0.9f));
+	CheckerPattern floor_pattern = CheckerPattern(Colors::DarkGrey, Colors::White);
+	floor_pattern.SetTransform(Matrix4().scaling(0.125, 0.125, 0.125));
+	floor_mat.SetPattern(&floor_pattern);
 	floor_mat.SetSpecular(0.0f);
 	floor.SetMaterial(floor_mat);
 
 	Sphere middle("middle", Matrix4().translation(-0.5f, 1.0f, 0.5f));
+	StripePattern middle_pattern = StripePattern(Colors::White, Colors::Purple);
+	middle_pattern.SetTransform(Matrix4().scaling(0.25, 0.25, 0.25));
 	Material middle_mat;
-	middle_mat.SetColor(Color(0.1f, 1.0f, 0.5f));
+	middle_mat.SetPattern(&middle_pattern);
 	middle_mat.SetDiffuse(0.7f);
 	middle_mat.SetSpecular(0.3f);
 	middle.SetMaterial(middle_mat);
@@ -77,7 +60,7 @@ int main() {
 	Canvas image = Engine::render(camera, world);
 	
 	utils::ExportFile("render_test.ppm", image.ToPPM());
-	
+
 	std::cout << "\n\nPress any key to exit...";
 	std::cin.get();
 	return 0;
