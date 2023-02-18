@@ -253,64 +253,57 @@ std::string Matrix4::format() const {
   return ss.str();
 }
 
-Matrix4 Matrix4::identity() const {
+Matrix4& Matrix4::identity() {
   return *this;
 }
 
-Matrix4 Matrix4::translation(float x, float y, float z) const {
-  Matrix4 current = *this;
-  Matrix4 translation = current * Matrix4(1, 0, 0, x,
-                                          0, 1, 0, y,
-                                          0, 0, 1, z,
-                                          0, 0, 0, 1);
-  return translation;
+Matrix4& Matrix4::translation(float x, float y, float z) {
+  *this = *this * Matrix4(1, 0, 0, x,
+                   0, 1, 0, y,
+                   0, 0, 1, z,
+                   0, 0, 0, 1);
+  return *this;
 }
 
-Matrix4 Matrix4::scaling(float x, float y, float z) const {
-  Matrix4 current = *this;
-  Matrix4 scaling = current * Matrix4(x, 0, 0, 0,
-                                      0, y, 0, 0,
-                                      0, 0, z, 0,
-                                      0, 0, 0, 1);
-  return scaling;
+Matrix4& Matrix4::scaling(float x, float y, float z) {
+  *this = *this * Matrix4(x, 0, 0, 0,
+                   0, y, 0, 0,
+                   0, 0, z, 0,
+                   0, 0, 0, 1);
+  return *this;
 }
 
-Matrix4 Matrix4::rotation_x(float radians) const {
-  Matrix4 current = *this;
-  Matrix4 rotation_x = current * Matrix4(1, 0, 0, 0,
-                                         0, cos(radians), -sin(radians), 0,
-                                         0, sin(radians), cos(radians), 0,
-                                         0, 0, 0, 1);
-  return rotation_x;
+Matrix4& Matrix4::rotation_x(float radians) {
+  *this = *this * Matrix4(1, 0, 0, 0,
+                   0, cos(radians), -sin(radians), 0,
+                   0, sin(radians), cos(radians), 0,
+                   0, 0, 0, 1);
+  return *this;
 }
 
-Matrix4 Matrix4::rotation_y(float radians) const {
-  Matrix4 current = *this;
-  Matrix4 rotation_y = current * Matrix4(cos(radians), 0, sin(radians), 0,
-                                         0, 1, 0, 0,
-                                         -sin(radians), 0, cos(radians), 0,
-                                         0, 0, 0, 1);
-  return rotation_y;
+Matrix4& Matrix4::rotation_y(float radians) {
+  *this = *this * Matrix4(cos(radians), 0, sin(radians), 0,
+                  0, 1, 0, 0,
+                  -sin(radians), 0, cos(radians), 0,
+                  0, 0, 0, 1);
+  return *this;
 }
 
-Matrix4 Matrix4::rotation_z(float radians) const {
-  Matrix4 current = *this;
-  Matrix4 rotation_z = current * Matrix4(cos(radians), -sin(radians), 0, 0,
-                                         sin(radians), cos(radians), 0, 0,
-                                         0, 0, 1, 0,
-                                         0, 0, 0, 1);
-  return rotation_z;
+Matrix4& Matrix4::rotation_z(float radians) {
+  *this = *this * Matrix4(cos(radians), -sin(radians), 0, 0,
+                   sin(radians), cos(radians), 0, 0,
+                   0, 0, 1, 0,
+                   0, 0, 0, 1);
+  return *this;
 }
 
-Matrix4 Matrix4::shearing(float x_y, float x_z, float y_x,
-                          float y_z, float z_x, float z_y) const {
-  Matrix4 current = *this;
-  
-  Matrix4 shearing = current * Matrix4(1, x_y, x_z, 0,
-                                       y_x, 1, y_z, 0,
-                                       z_x, z_y, 1, 0,
-                                       0, 0, 0, 1);
-  return shearing;
+Matrix4& Matrix4::shearing(float x_y, float x_z, float y_x,
+                          float y_z, float z_x, float z_y) {
+  *this = *this * Matrix4(1,   x_y, x_z, 0,
+                  y_x, 1,   y_z, 0,
+                  z_x, z_y, 1,   0,
+                  0,   0,   0,   1);
+  return *this;
 }
 
 Matrix4 Matrix4::view_transform(const Point& from, const Point& to, const Vector& up) const {

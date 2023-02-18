@@ -106,7 +106,7 @@ float Camera::GetPixelSize() const { return pixel_size_; }
 float Camera::GetHalfWidth() const { return half_width_; }
 float Camera::GetHalfHeight() const { return half_height_; }
 
-void Camera::ListDetails() const {
+void Camera::ListDetails() {
   std::cout << "Name: " << this->GetName() << "\n"
     << "Type: " << this->GetObjectTypeName() << "\n"
     << "Transform:\n" << this->GetTransform().format()

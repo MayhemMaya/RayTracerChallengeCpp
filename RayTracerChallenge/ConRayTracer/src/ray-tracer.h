@@ -21,6 +21,7 @@
 #include "plane.h"
 #include "colors.h"
 #include "pattern.h"
+#include "mock-pattern.h"
 #include "material.h"
 #include "stripe-pattern.h"
 #include "gradient-pattern.h"

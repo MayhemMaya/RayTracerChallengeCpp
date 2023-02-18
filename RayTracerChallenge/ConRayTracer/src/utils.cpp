@@ -77,4 +77,15 @@ void ClearScreen()
   system("cls");
 }
 
+bool at_least_one_true(std::vector<bool> booleans) {
+  // iterate through all booleans and return true as soon as one is true
+  for (bool boolean : booleans) {
+    if (boolean) {
+      return true;
+    }
+  }
+  // if the loop finished and none were false return false
+  return false;
+}
+
 } // namespace utils

@@ -22,7 +22,7 @@ Object::~Object() {
   object_count_--;
 }
 
-void Object::ListDetails() const {
+void Object::ListDetails() {
   std::cout << "Name: " << name_ << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
       << "Transform:\n" << transform_.format() << std::endl;
@@ -63,7 +63,7 @@ std::string Object::GetObjectTypeName() const {
   return "k" + first_letter + type_name.substr(1);
 }
 
-bool Object::operator==(const Object& other) const {
+bool Object::operator==(const Object& other) {
   return(name_ == other.GetName() &&
          transform_ == other.GetTransform() &&
          type_ == other.GetObjectType());

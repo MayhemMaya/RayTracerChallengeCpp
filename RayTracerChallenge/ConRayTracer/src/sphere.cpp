@@ -24,7 +24,7 @@ Sphere::Sphere(const Material& material, const Matrix4& transform)
 Sphere::Sphere(const std::string& name, const Material& material, const Matrix4& transform)
     : Shape(name, ObjectType::kSphere, material, transform) {}
 
-bool Sphere::operator==(const Object& object) const {
+bool Sphere::operator==(const Object& object) {
   Sphere* other = (Sphere*)&object;
   return(this->GetName() == other->GetName() &&
     this->GetTransform() == other->GetTransform() &&
@@ -58,4 +58,28 @@ std::vector<Intersection> Sphere::local_intersect(const utils::RayStruct& local_
 Vector Sphere::local_normal_at(const Point& local_point) const {
   Vector local_normal = local_point - Point(0, 0, 0);
   return local_normal.normalize();
+}
+
+Sphere Sphere::glass_sphere() const {
+  Sphere s = Sphere("glass_sphere");
+  s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+  return s;
+}
+
+Sphere Sphere::glass_sphere(const std::string& name) const {
+  Sphere s = Sphere(name);
+  s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+  return s;
+}
+
+Sphere Sphere::glass_sphere(const Matrix4& transform) const {
+  Sphere s = Sphere("glass_sphere");
+  s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+  return s;
+}
+
+Sphere Sphere::glass_sphere(const std::string& name, const Matrix4& transform) const {
+  Sphere s = Sphere(name, transform);
+  s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+  return s;
 }

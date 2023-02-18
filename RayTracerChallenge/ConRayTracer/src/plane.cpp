@@ -24,7 +24,7 @@ Plane::Plane(const Material& material, const Matrix4& transform)
 Plane::Plane(const std::string& name, const Material& material, const Matrix4& transform)
   : Shape(name, ObjectType::kPlane, material, transform) {}
 
-bool Plane::operator==(const Object& object) const {
+bool Plane::operator==(const Object& object) {
   Plane* other = (Plane*)&object;
   return(this->GetName() == other->GetName() &&
     this->GetTransform() == other->GetTransform() &&

@@ -36,19 +36,19 @@
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
-	EXPECT_EQ(utils::clamp(-1.5f, 0.0f, 1.0f), 0.0f);
+	EXPECT_FLOAT_EQ(utils::clamp(-1.5f, 0.0f, 1.0f), 0.0f);
 }
 
 TEST(UtilsTests, ClampToOne) {
-	EXPECT_EQ(utils::clamp(1.5f, 0.0f, 1.0f), 1.0f);
+	EXPECT_FLOAT_EQ(utils::clamp(1.5f, 0.0f, 1.0f), 1.0f);
 }
 
 TEST(UtilsTests, SwapFloatValues) {
 	float a = 5.1f;
 	float b = 6.3f;
 	utils::swap(a, b);
-	EXPECT_EQ(a, 6.3f);
-	EXPECT_EQ(b, 5.1f);
+	EXPECT_FLOAT_EQ(a, 6.3f);
+	EXPECT_FLOAT_EQ(b, 5.1f);
 }
 
 TEST(UtilsTests, SwapIntegerValues) {
@@ -63,8 +63,8 @@ TEST(UtilsTests, SwapDoubleValues) {
 	double a = 7.4;
 	double b = 8.6;
 	utils::swap(a, b);
-	EXPECT_EQ(a, 8.6);
-	EXPECT_EQ(b, 7.4);
+	EXPECT_DOUBLE_EQ(a, 8.6);
+	EXPECT_DOUBLE_EQ(b, 7.4);
 }
 
 TEST(UtilsTests, SwapIntersectionValues) {
@@ -73,9 +73,9 @@ TEST(UtilsTests, SwapIntersectionValues) {
 	Intersection i1(1.0f, s1);
 	Intersection i2(2.0f, s2);
 	Intersection::swap(i1, i2);
-	EXPECT_EQ(i1.GetTime(), 2.0f);
+	EXPECT_FLOAT_EQ(i1.GetTime(), 2.0f);
 	EXPECT_TRUE((*i1.GetObject()) == (*s2));
-	EXPECT_EQ(i2.GetTime(), 1.0f);
+	EXPECT_FLOAT_EQ(i2.GetTime(), 1.0f);
 	EXPECT_TRUE((*i2.GetObject()) == (*s1));
 }
 
@@ -88,25 +88,40 @@ TEST(UtilsTests, ArrayDoesNotContainAValue) {
 	std::string arr[] = { "apple", "banana", "pear" };
 	EXPECT_FALSE(utils::contains(arr, "orange"));
 }
+
+TEST(UtilsTests, VectorOfBoolsWhenOneBoolIsTrue) {
+	std::vector<bool> bools = { false, false, true };
+	EXPECT_TRUE(utils::at_least_one_true(bools));
+}
+
+TEST(UtilsTests, VectorOfBoolsWhenManyBoolsAreTrue) {
+	std::vector<bool> bools = { false, true, false, true };
+	EXPECT_TRUE(utils::at_least_one_true(bools));
+}
+
+TEST(UtilsTests, VectorOfBoolsWhenNoBoolsAreTrue) {
+	std::vector<bool> bools = { false, false, false };
+	EXPECT_FALSE(utils::at_least_one_true(bools));
+}
 #pragma endregion
 
 #pragma region Chapter1Tests
 TEST(Chapter1_tests, A_tuple_with_w_as_1_is_a_point) {
 	MockTuple a(4.3f, -4.2f, 3.1f, 1.0f);
-	EXPECT_EQ(a[0], 4.3f);
-	EXPECT_EQ(a[1], -4.2f);
-	EXPECT_EQ(a[2], 3.1f);
-	EXPECT_EQ(a[3], 1.0f);
+	EXPECT_FLOAT_EQ(a[0], 4.3f);
+	EXPECT_FLOAT_EQ(a[1], -4.2f);
+	EXPECT_FLOAT_EQ(a[2], 3.1f);
+	EXPECT_FLOAT_EQ(a[3], 1.0f);
 	EXPECT_TRUE(a.IsPoint());
 	EXPECT_FALSE(a.IsVector());
 }
 
 TEST(Chapter1_tests, A_tuple_with_w_as_0_is_a_vector) {
 	MockTuple a(4.3f, -4.2f, 3.1f, 0.0f);
-	EXPECT_EQ(a[0], 4.3f);
-	EXPECT_EQ(a[1], -4.2f);
-	EXPECT_EQ(a[2], 3.1f);
-	EXPECT_EQ(a[3], 0.0f);
+	EXPECT_FLOAT_EQ(a[0], 4.3f);
+	EXPECT_FLOAT_EQ(a[1], -4.2f);
+	EXPECT_FLOAT_EQ(a[2], 3.1f);
+	EXPECT_FLOAT_EQ(a[3], 0.0f);
 	EXPECT_FALSE(a.IsPoint());
 	EXPECT_TRUE(a.IsVector());
 }
@@ -173,27 +188,27 @@ TEST(Chapter1_tests, Dividing_a_tuple_by_a_scalar) {
 
 TEST(Chapter1_tests, Computing_the_magnitude_of_vector_1_0_0) {
 	Vector v(1, 0, 0);
-	EXPECT_EQ(v.magnitude(), 1);
+	EXPECT_FLOAT_EQ(v.magnitude(), 1);
 }
 
 TEST(Chapter1_tests, Computing_the_magnitude_of_vector_0_1_0) {
 	Vector v(0, 1, 0);
-	EXPECT_EQ(v.magnitude(), 1);
+	EXPECT_FLOAT_EQ(v.magnitude(), 1);
 }
 
 TEST(Chapter1_tests, Computing_the_magnitude_of_vector_0_0_1) {
 	Vector v(0, 0, 1);
-	EXPECT_EQ(v.magnitude(), 1);
+	EXPECT_FLOAT_EQ(v.magnitude(), 1);
 }
 
 TEST(Chapter1_tests, Computing_the_magnitude_of_vector_1_2_3) {
 	Vector v(1, 2, 3);
-	EXPECT_EQ(v.magnitude(), (float)sqrt(14));
+	EXPECT_FLOAT_EQ(v.magnitude(), (float)sqrt(14));
 }
 
 TEST(Chapter1_tests, Computing_the_magnitude_of_negated_vector_1_2_3) {
 	Vector v(-1, -2, -3);
-	EXPECT_EQ(v.magnitude(), (float)sqrt(14));
+	EXPECT_FLOAT_EQ(v.magnitude(), (float)sqrt(14));
 }
 
 TEST(Chapter1_tests, Normalizing_vector_4_0_0_gives_1_0_0) {
@@ -215,7 +230,7 @@ TEST(Chapter1_tests, The_magnitude_of_a_normalized_vector) {
 TEST(Chapter1_tests, The_dot_product_of_two_vectors) {
 	Vector a(1, 2, 3);
 	Vector b(2, 3, 4);
-	EXPECT_EQ(a.dot(b), 20);
+	EXPECT_FLOAT_EQ(a.dot(b), 20);
 }
 
 TEST(Chapter1_tests, The_cross_product_of_two_vectors) {
@@ -227,11 +242,11 @@ TEST(Chapter1_tests, The_cross_product_of_two_vectors) {
 #pragma endregion
 
 #pragma region Chapter2Tests
-TEST(Chapter2_tests, Colors_are_red_green_tuples) {
+TEST(Chapter2_tests, Colors_are_red_green_blue_tuples) {
 	Color c(-0.5f, 0.4f, 1.7f);
-	EXPECT_EQ(c[0], -0.5f);
-	EXPECT_EQ(c[1], 0.4f);
-	EXPECT_EQ(c[2], 1.7f);
+	EXPECT_FLOAT_EQ(c[0], -0.5f);
+	EXPECT_FLOAT_EQ(c[1], 0.4f);
+	EXPECT_FLOAT_EQ(c[2], 1.7f);
 }
 
 TEST(Chapter2_tests, Adding_colors) {
@@ -325,31 +340,31 @@ TEST(Chapter3_tests, Constructing_and_inspecting_a_4x4_matrix) {
 		5.5f, 6.5f, 7.5f, 8.5f,
 		9, 10, 11, 12,
 		13.5f, 14.5f, 15.5f, 16.5f);
-	EXPECT_EQ(M(0, 0), 1);
-	EXPECT_EQ(M(0, 3), 4);
-	EXPECT_EQ(M(1, 0), 5.5f);
-	EXPECT_EQ(M(1, 2), 7.5f);
-	EXPECT_EQ(M(2, 2), 11);
-	EXPECT_EQ(M(3, 0), 13.5f);
-	EXPECT_EQ(M(3, 2), 15.5f);
+	EXPECT_FLOAT_EQ(M(0, 0), 1);
+	EXPECT_FLOAT_EQ(M(0, 3), 4);
+	EXPECT_FLOAT_EQ(M(1, 0), 5.5f);
+	EXPECT_FLOAT_EQ(M(1, 2), 7.5f);
+	EXPECT_FLOAT_EQ(M(2, 2), 11);
+	EXPECT_FLOAT_EQ(M(3, 0), 13.5f);
+	EXPECT_FLOAT_EQ(M(3, 2), 15.5f);
 }
 
 TEST(Chapter3_tests, A_2x2_matrix_ought_to_be_representable) {
 	Matrix2 M(-3, 5,
 						1, -2);
-	EXPECT_EQ(M(0, 0), -3);
-	EXPECT_EQ(M(0, 1), 5);
-	EXPECT_EQ(M(1, 0), 1);
-	EXPECT_EQ(M(1, 1), -2);
+	EXPECT_FLOAT_EQ(M(0, 0), -3);
+	EXPECT_FLOAT_EQ(M(0, 1), 5);
+	EXPECT_FLOAT_EQ(M(1, 0), 1);
+	EXPECT_FLOAT_EQ(M(1, 1), -2);
 }
 
 TEST(Chapter3_tests, A_3x3_matrix_ought_to_be_representable) {
 	Matrix3 M(-3, 5, 0,
 						1, -2, -7,
 						0, 1, 1);
-	EXPECT_EQ(M(0, 0), -3);
-	EXPECT_EQ(M(1, 1), -2);
-	EXPECT_EQ(M(2, 2), 1);
+	EXPECT_FLOAT_EQ(M(0, 0), -3);
+	EXPECT_FLOAT_EQ(M(1, 1), -2);
+	EXPECT_FLOAT_EQ(M(2, 2), 1);
 }
 
 TEST(Chapter3_tests, Matrix_equality_with_identical_matrices) {
@@ -439,7 +454,7 @@ TEST(Chapter3_tests, Transposing_the_identity_matrix) {
 
 TEST(Chapter3_tests, Calculating_the_determinant_of_a_2x2_matrix) {
 	Matrix2 A(1, 5, -3, 2);
-	EXPECT_EQ(A.determinant(), 17);
+	EXPECT_FLOAT_EQ(A.determinant(), 17);
 }
 
 TEST(Chapter3_tests, A_submatrix_of_a_3x3_matrix_is_a_2x2_matrix) {
@@ -465,28 +480,28 @@ TEST(Chapter3_tests, Calculating_a_minor_of_a_3x3_matrix) {
 						2, -1, -7,
 						6, -1, 5);
 	Matrix2 B = A.submatrix(1, 0);
-	EXPECT_EQ(B.determinant(), 25);
-	EXPECT_EQ(A.minor(1, 0), 25);
+	EXPECT_FLOAT_EQ(B.determinant(), 25);
+	EXPECT_FLOAT_EQ(A.minor(1, 0), 25);
 }
 
 TEST(Chapter3_tests, Calculating_a_cofactor_of_a_3x3_matrix) {
 	Matrix3 A(3, 5, 0,
 						2, -1, -7,
 						6, -1, 5);
-	EXPECT_EQ(A.minor(0, 0), -12);
-	EXPECT_EQ(A.cofactor(0, 0), -12);
-	EXPECT_EQ(A.minor(1, 0), 25);
-	EXPECT_EQ(A.cofactor(1, 0), -25);
+	EXPECT_FLOAT_EQ(A.minor(0, 0), -12);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 0), -12);
+	EXPECT_FLOAT_EQ(A.minor(1, 0), 25);
+	EXPECT_FLOAT_EQ(A.cofactor(1, 0), -25);
 }
 
 TEST(Chapter3_tests, Calculating_the_determinant_of_a_3x3_matrix) {
 	Matrix3 A(1, 2, 6,
 						-5, 8, -4,
 						2, 6, 4);
-	EXPECT_EQ(A.cofactor(0, 0), 56);
-	EXPECT_EQ(A.cofactor(0, 1), 12);
-	EXPECT_EQ(A.cofactor(0, 2), -46);
-	EXPECT_EQ(A.determinant(), -196);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 0), 56);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 1), 12);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 2), -46);
+	EXPECT_FLOAT_EQ(A.determinant(), -196);
 }
 
 TEST(Chapter3_tests, Calculating_the_determinant_of_a_4x4_matrix) {
@@ -494,11 +509,11 @@ TEST(Chapter3_tests, Calculating_the_determinant_of_a_4x4_matrix) {
 						-3, 1, 7, 3,
 						1, 2, -9, 6,
 						-6, 7, 7, -9);
-	EXPECT_EQ(A.cofactor(0, 0), 690);
-	EXPECT_EQ(A.cofactor(0, 1), 447);
-	EXPECT_EQ(A.cofactor(0, 2), 210);
-	EXPECT_EQ(A.cofactor(0, 3), 51);
-	EXPECT_EQ(A.determinant(), -4071);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 0), 690);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 1), 447);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 2), 210);
+	EXPECT_FLOAT_EQ(A.cofactor(0, 3), 51);
+	EXPECT_FLOAT_EQ(A.determinant(), -4071);
 }
 
 TEST(Chapter3_tests, Testing_an_invertible_matrix_for_invertibility) {
@@ -506,7 +521,7 @@ TEST(Chapter3_tests, Testing_an_invertible_matrix_for_invertibility) {
 						5, 5, 7, 6,
 						4, -9, 3, -7,
 						9, 1, 7, -6);
-	EXPECT_EQ(A.determinant(), -2120);
+	EXPECT_FLOAT_EQ(A.determinant(), -2120);
 	EXPECT_TRUE(A.invertible());
 }
 
@@ -515,7 +530,7 @@ TEST(Chapter3_tests, Testing_an_noninvertible_matrix_for_invertibility) {
 						9, 6, 2, 6,
 						0, -5, 1, -5,
 						0, 0, 0, 0);
-	EXPECT_EQ(A.determinant(), 0);
+	EXPECT_FLOAT_EQ(A.determinant(), 0);
 	EXPECT_FALSE(A.invertible());
 }
 
@@ -526,11 +541,11 @@ TEST(Chapter3_tests, Calculating_the_inverse_of_a_matrix) {
 						1, -3, 7, 4);
 
 	Matrix4 B = A.inverse();
-	EXPECT_EQ(A.determinant(), 532);
-	EXPECT_EQ(A.cofactor(2, 3), -160);
-	EXPECT_EQ(B(3, 2), -160.0f / 532.0f);
-	EXPECT_EQ(A.cofactor(3, 2), 105);
-	EXPECT_EQ(B(2, 3), 105.0f / 532.0f);
+	EXPECT_FLOAT_EQ(A.determinant(), 532);
+	EXPECT_FLOAT_EQ(A.cofactor(2, 3), -160);
+	EXPECT_FLOAT_EQ(B(3, 2), -160.0f / 532.0f);
+	EXPECT_FLOAT_EQ(A.cofactor(3, 2), 105);
+	EXPECT_FLOAT_EQ(B(2, 3), 105.0f / 532.0f);
 	EXPECT_TRUE(B == Matrix4(0.21805f, 0.45113f, 0.24060f, -0.04511f,
 													-0.80827f, -1.45677f, -0.44361f, 0.52068f,
 													-0.07895f, -0.22368f, -0.05263f, 0.19737f,
@@ -713,6 +728,12 @@ TEST(Chapter4_tests, Chained_transformations_must_be_applied_in_reverse_order) {
 	Matrix4 T = C * B * A;
 	EXPECT_TRUE(T * p == Point(15, 0, 7));
 }
+
+TEST(Chapter4_tests, Chained_function_transformations_must_be_applied_in_reverse_order) {
+	Point p(1, 0, 1);
+	Matrix4 T = Matrix4().translation(10, 5, 7).scaling(5, 5, 5).rotation_x(utils::kPI / 2.0f);
+	EXPECT_TRUE(T * p == Point(15, 0, 7));
+}
 #pragma endregion
 
 #pragma region Chapter5Tests
@@ -737,8 +758,8 @@ TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_two_points) {
 	Sphere s;
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 4.0f);
-	EXPECT_EQ(xs[1].GetTime(), 6.0f);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), 4.0f);
+	EXPECT_FLOAT_EQ(xs[1].GetTime(), 6.0f);
 }
 
 TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_a_tangent) {
@@ -746,8 +767,8 @@ TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 	Sphere s;
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 5.0f);
-	EXPECT_EQ(xs[1].GetTime(), 5.0f);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), 5.0f);
+	EXPECT_FLOAT_EQ(xs[1].GetTime(), 5.0f);
 }
 
 TEST(Chapter9_tests, A_ray_misses_a_sphere) {
@@ -762,8 +783,8 @@ TEST(Chapter9_tests, A_ray_originates_inside_a_sphere) {
 	Sphere s;
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), -1.0f);
-	EXPECT_EQ(xs[1].GetTime(), 1.0f);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), -1.0f);
+	EXPECT_FLOAT_EQ(xs[1].GetTime(), 1.0f);
 }
 
 TEST(Chapter9_tests, A_sphere_is_behind_a_ray) {
@@ -771,14 +792,14 @@ TEST(Chapter9_tests, A_sphere_is_behind_a_ray) {
 	Sphere s;
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), -6.0f);
-	EXPECT_EQ(xs[1].GetTime(), -4.0f);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), -6.0f);
+	EXPECT_FLOAT_EQ(xs[1].GetTime(), -4.0f);
 }
 
 TEST(Chapter5_tests, An_intersection_encapsulates_time_and_object) {
 	Sphere* s = new Sphere();
 	Intersection i(3.5f, s);
-	EXPECT_EQ(i.GetTime(), 3.5f);
+	EXPECT_FLOAT_EQ(i.GetTime(), 3.5f);
 	EXPECT_TRUE((*i.GetObject()) == (*s));
 }
 
@@ -788,19 +809,18 @@ TEST(Chapter5_tests, Aggregating_intersections) {
 	Intersection i2(2, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i1, i2 });
 	EXPECT_EQ(xs.size(), 2);
-	EXPECT_EQ(xs[0].GetTime(), 1);
-	EXPECT_EQ(xs[1].GetTime(), 2);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), 1.0f);
+	EXPECT_FLOAT_EQ(xs[1].GetTime(), 2.0f);
 }
 
-/*
-TEST(Chapter5_tests, Intersect_sets_the_object_on_the_intersection) {
-	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere s;
-	std::vector<float> xs = r.intersect(s);
-	EXPECT_EQ(xs.size(), 2);
-	EXPECT_TRUE(xs[0].GetObject() == s);
-	EXPECT_TRUE(xs[1].GetObject() == s);
-}*/
+//TEST(Chapter5_tests, Intersect_sets_the_object_on_the_intersection) {
+//	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+//	Sphere s;
+//	std::vector<float> xs = r.intersect(s);
+//	EXPECT_EQ(xs.size(), 2);
+//	EXPECT_TRUE(xs[0].GetObject() == s);
+//	EXPECT_TRUE(xs[1].GetObject() == s);
+//}
 
 TEST(Chapter5_tests, The_hit_when_all_intersections_have_positive_time) {
 	Sphere* s = new Sphere();
@@ -957,10 +977,10 @@ TEST(Chapter6_tests, A_point_light_has_a_position_and_intensity) {
 TEST(Chapter6_tests, The_default_material) {
 	Material m;
 	EXPECT_TRUE(m.GetColor() == Color(1, 1, 1));
-	EXPECT_EQ(m.GetAmbient(), 0.1f);
-	EXPECT_EQ(m.GetDiffuse(), 0.9f);
-	EXPECT_EQ(m.GetSpecular(), 0.9f);
-	EXPECT_EQ(m.GetShininess(), 200.0f);
+	EXPECT_FLOAT_EQ(m.GetAmbient(), 0.1f);
+	EXPECT_FLOAT_EQ(m.GetDiffuse(), 0.9f);
+	EXPECT_FLOAT_EQ(m.GetSpecular(), 0.9f);
+	EXPECT_FLOAT_EQ(m.GetShininess(), 200.0f);
 }
 
 TEST(Chapter9_tests, The_default_material) {
@@ -1049,9 +1069,9 @@ TEST(Chapter7_tests, The_default_world) {
 	PointLight light("pointlight1", Point(-10, 10, -10), Color(1, 1, 1));
 	Sphere s1("sphere1");
 	Material m;
-	m.SetColor(Color(0.8, 1.0, 0.6));
-	m.SetDiffuse(0.7);
-	m.SetSpecular(0.2);
+	m.SetColor(Color(0.8f, 1.0f, 0.6f));
+	m.SetDiffuse(0.7f);
+	m.SetSpecular(0.2f);
 	s1.SetMaterial(m);
 	Sphere s2("sphere2");
 	s2.SetTransform(Matrix4().scaling(0.5f, 0.5f, 0.5f));
@@ -1067,10 +1087,10 @@ TEST(Chapter7_tests, Intersect_a_world_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
 	std::vector<Intersection> xs = r.intersect(w);
 	EXPECT_EQ(xs.size(), 4);
-	EXPECT_EQ(xs[0].GetTime(), 4);
-	EXPECT_EQ(xs[1].GetTime(), 4.5f);
-	EXPECT_EQ(xs[2].GetTime(), 5.5f);
-	EXPECT_EQ(xs[3].GetTime(), 6);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), 4.0f);
+	EXPECT_FLOAT_EQ(xs[1].GetTime(), 4.5f);
+	EXPECT_FLOAT_EQ(xs[2].GetTime(), 5.5f);
+	EXPECT_FLOAT_EQ(xs[3].GetTime(), 6.0f);
 }
 
 TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
@@ -1078,11 +1098,11 @@ TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
 	Sphere* shape = new Sphere();
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
-	EXPECT_EQ(comps.time_, i.GetTime());
-	EXPECT_TRUE(comps.object_ == i.GetObject());
-	EXPECT_TRUE(comps.point_ == Point(0, 0, -1));
-	EXPECT_TRUE(comps.eyev_ == Vector(0, 0, -1));
-	EXPECT_TRUE(comps.normalv_ == Vector(0, 0, -1));
+	EXPECT_FLOAT_EQ(comps.time, i.GetTime());
+	EXPECT_TRUE(comps.object == i.GetObject());
+	EXPECT_TRUE(comps.point == Point(0, 0, -1));
+	EXPECT_TRUE(comps.eyev == Vector(0, 0, -1));
+	EXPECT_TRUE(comps.normalv == Vector(0, 0, -1));
 }
 
 TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
@@ -1090,7 +1110,7 @@ TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
 	Sphere* shape = new Sphere();
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
-	EXPECT_FALSE(comps.inside_);
+	EXPECT_FALSE(comps.inside);
 }
 
 TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
@@ -1098,10 +1118,10 @@ TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
 	Sphere* shape = new Sphere();
 	Intersection i(1, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
-	EXPECT_TRUE(comps.point_ == Point(0, 0, 1));
-	EXPECT_TRUE(comps.eyev_ == Vector(0, 0, -1));
-	EXPECT_TRUE(comps.inside_);
-	EXPECT_TRUE(comps.normalv_ == Vector(0, 0, -1)); // normal would have been (0, 0, 1), but is inverted!
+	EXPECT_TRUE(comps.point == Point(0, 0, 1));
+	EXPECT_TRUE(comps.eyev == Vector(0, 0, -1));
+	EXPECT_TRUE(comps.inside);
+	EXPECT_TRUE(comps.normalv == Vector(0, 0, -1)); // normal would have been (0, 0, 1), but is inverted!
 }
 
 TEST(Chapter7_tests, Shading_an_intersection) {
@@ -1144,13 +1164,9 @@ TEST(Chapter7_tests, The_color_when_a_ray_hits) {
 TEST(Chapter7_tests, The_color_with_an_intersection_behind_the_ray) {
 	World w(WorldType::DEFAULT);
 	Shape* outer = w.GetShapes()[0];
-	Material outer_mat = outer->GetMaterial();
-	outer_mat.SetAmbient(1);
-	outer->SetMaterial(outer_mat);
+	outer->GetMaterial().SetAmbient(1);
 	Shape* inner = w.GetShapes()[1];
-	Material inner_mat = inner->GetMaterial();
-	inner_mat.SetAmbient(1);
-	inner->SetMaterial(inner_mat);
+	inner->GetMaterial().SetAmbient(1);
 	Ray r(Point(0, 0, 0.75f), Vector(0, 0, -1));
 	Color c = Engine::color_at(w, r);
 	EXPECT_TRUE(c == inner->GetMaterial().GetColor());
@@ -1206,12 +1222,12 @@ TEST(Chapter7_tests, Constructing_a_camera) {
 
 TEST(Chapter7_tests, The_pixel_size_for_a_horizontal_canvas) {
 	Camera c(200, 125, utils::kPI / 2.0f);
-	EXPECT_EQ(c.GetPixelSize(), 0.01f);
+	EXPECT_FLOAT_EQ(c.GetPixelSize(), 0.01f);
 }
 
 TEST(Chapter7_tests, The_pixel_size_for_a_vertical_canvas) {
 	Camera c(125, 200, utils::kPI / 2.0f);
-	EXPECT_EQ(c.GetPixelSize(), 0.01f);
+	EXPECT_FLOAT_EQ(c.GetPixelSize(), 0.01f);
 }
 
 TEST(Chapter7_tests, Constructing_a_ray_through_the_center_of_the_canvas) {
@@ -1305,8 +1321,8 @@ TEST(Chapter8_tests, The_hit_should_offset_the_point) {
 	Sphere* shape = new Sphere((Matrix4().translation(0, 0, 1)));
 	Intersection i(5, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
-	EXPECT_TRUE(comps.over_point_[2] < -utils::kEPSILON / 2);
-	EXPECT_TRUE(comps.point_[2] > comps.over_point_[2]);
+	EXPECT_LT(comps.over_point[2], -utils::kEPSILON / 2);
+	EXPECT_GT(comps.point[2], comps.over_point[2]);
 }
 #pragma endregion
 
@@ -1345,7 +1361,7 @@ TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_above) {
 	Ray r(Point(0, 1, 0), Vector(0, -1, 0));
 	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 1);
-	EXPECT_EQ(xs[0].GetTime(), 1);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), 1.0f);
 	EXPECT_TRUE((*xs[0].GetObject()) == p);
 }
 
@@ -1354,7 +1370,7 @@ TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_below) {
 	Ray r(Point(0, -1, 0), Vector(0, 1, 0));
 	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 1);
-	EXPECT_EQ(xs[0].GetTime(), 1);
+	EXPECT_FLOAT_EQ(xs[0].GetTime(), 1.0f);
 	EXPECT_TRUE((*xs[0].GetObject()) == p);
 }
 #pragma endregion
@@ -1510,5 +1526,248 @@ TEST(Chapter10_tests, Dividing_a_color_by_a_value) {
 #pragma endregion
 
 #pragma region Chapter11Tests
+TEST(Chapter11_tests, Reflectivity_for_the_default_material) {
+	Material m;
+	EXPECT_FLOAT_EQ(m.GetReflectivity(), 0.0f);
+}
 
+TEST(Chapter11_tests, Precomputing_the_reflection_vector) {
+	Plane shape;
+	Ray r = Ray(Point(0, 1, -1), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	Intersection i(sqrt(2), &shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	EXPECT_TRUE(comps.reflectv == Vector(0, sqrt(2) / 2, sqrt(2) / 2));
+}
+
+TEST(Chapter11_tests, The_reflected_color_for_a_nonreflective_material) {
+	World w = World(WorldType::DEFAULT);
+	Ray r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
+	Shape* shape = w.GetShapes()[1];
+	shape->GetMaterial().SetAmbient(1);
+	Intersection i(1, shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color color = Engine::reflected_color(w, comps);
+	EXPECT_TRUE(color == Color(0, 0, 0));
+}
+
+TEST(Chapter11_tests, The_reflected_color_for_a_reflective_material) {
+	World w = World(WorldType::DEFAULT);
+	Plane shape = Plane(Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
+	w.AddObject(&shape);
+	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	Intersection i(sqrt(2), &shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color color = Engine::reflected_color(w, comps);
+	EXPECT_TRUE(color == Color(0.19032, 0.2379, 0.14274));
+}
+
+TEST(Chapter11_tests, The_shade_hit_function_with_a_reflective_material) {
+	World w = World(WorldType::DEFAULT);
+	Plane shape = Plane(Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
+	w.AddObject(&shape);
+	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	Intersection i(sqrt(2), &shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color color = Engine::shade_hit(w, comps);
+	EXPECT_TRUE(color == Color(0.87677, 0.92436, 0.82918));
+}
+
+TEST(Chapter11_tests, The_color_at_function_with_mutually_reflective_surfaces) {
+	World w = World(WorldType::EMPTY);
+	PointLight light = PointLight(Point(0, 0, 0), Color(1, 1, 1));
+	w.AddObject(&light);
+	Plane lower = Plane(Material().SetReflectivity(1.0f), Matrix4().translation(0, -1, 0));
+	w.AddObject(&lower);
+	Plane upper = Plane(Material().SetReflectivity(1.0f), Matrix4().translation(0, 1, 0));
+	w.AddObject(&upper);
+	Ray r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
+	EXPECT_NO_THROW(Engine::color_at(w, r), testing::ExitedWithCode(0), "Success");
+}
+
+TEST(Chapter11_tests, The_reflected_color_at_the_maximum_recursive_depth) {
+	World w = World(WorldType::DEFAULT);
+	Plane shape = Plane(Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
+	w.AddObject(&shape);
+	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	Intersection i(sqrt(2), &shape);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color color = Engine::reflected_color(w, comps, 0);
+	EXPECT_TRUE(color == Color(0, 0, 0));
+}
+
+TEST(Chapter11_tests, Transparency_and_Refractive_Index_for_the_default_material) {
+	Material m;
+	EXPECT_FLOAT_EQ(m.GetTransparency(), 0.0f);
+	EXPECT_FLOAT_EQ(m.GetRefractiveIndex(), 1.0f);
+}
+
+TEST(Chapter11_tests, A_helper_for_producing_a_sphere_with_a_glassy_material) {
+	Sphere s = Sphere().glass_sphere();
+	EXPECT_FLOAT_EQ(s.GetMaterial().GetTransparency(), 1.0f);
+	EXPECT_FLOAT_EQ(s.GetMaterial().GetRefractiveIndex(), 1.5f);
+}
+
+TEST(Chapter11_tests, Finding_n1_and_n2_at_various_intersections) {
+	float n1_values[] = { 1.0f, 1.5f, 2.0f, 2.5f, 2.5f, 1.5f };
+	float n2_values[] = { 1.5f, 2.0f, 2.5f, 2.5f, 1.5f, 1.0f };
+
+	Sphere A = Sphere().glass_sphere();
+	A.SetTransform(Matrix4().scaling(2, 2, 2));
+	A.GetMaterial().SetRefractiveIndex(1.5f);
+
+	Sphere B = Sphere().glass_sphere();
+	B.SetTransform(Matrix4().translation(0, 0, -0.25f));
+	B.GetMaterial().SetRefractiveIndex(2.0f);
+
+	Sphere C = Sphere().glass_sphere();
+	C.SetTransform(Matrix4().translation(0, 0, 0.25f));
+	C.GetMaterial().SetRefractiveIndex(2.5f);
+
+	Ray r = Ray(Point(0, 0, -4), Vector(0, 0, 1));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(2,			&A),
+		Intersection(2.75f, &B),
+		Intersection(3.25f, &C),
+		Intersection(4.75f, &B),
+		Intersection(5.25f, &C),
+		Intersection(6,			&A)
+	});
+
+	for (int index = 0; index <= 5; index++) {
+		Engine::Computation comps = Engine::prepare_computations(xs[index], r, xs);
+		ASSERT_FLOAT_EQ(comps.n1, n1_values[index]);
+		ASSERT_FLOAT_EQ(comps.n2, n2_values[index]);
+	}
+}
+
+TEST(Chapter11_tests, The_under_point_is_offset_below_the_surface) {
+	Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+	Sphere shape = Sphere().glass_sphere();
+	shape.SetTransform(Matrix4().translation(0, 0, 1.0f));
+	Intersection i(5, &shape);
+	std::vector<Intersection> xs = Intersection::intersections({ i });
+	Engine::Computation comps = Engine::prepare_computations(i, r, xs);
+	EXPECT_GT(comps.under_point[2], utils::kEPSILON / 2);
+	EXPECT_LT(comps.point[2], comps.under_point[2]);
+}
+
+TEST(Chapter11_tests, The_refracted_color_with_an_opaque_surface) {
+	World w(WorldType::DEFAULT);
+	Shape* shape = w.GetShapes()[0];
+	Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(4, shape),
+		Intersection(6, shape)
+	});
+	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
+	Color c = Engine::refracted_color(w, comps, 5);
+	EXPECT_TRUE(c == Color(0, 0, 0));
+}
+
+TEST(Chapter11_tests, The_refracted_color_at_the_maximum_recursive_depth) {
+	World w(WorldType::DEFAULT);
+	Shape* shape = w.GetShapes()[0];
+	shape->GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+	Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(4, shape),
+		Intersection(6, shape)
+	});
+	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
+	Color c = Engine::refracted_color(w, comps, 0);
+	EXPECT_TRUE(c == Color(0, 0, 0));
+}
+
+TEST(Chapter11_tests, The_refracted_color_under_total_internal_reflection) {
+	World w(WorldType::DEFAULT);
+	Shape* shape = w.GetShapes()[0];
+	shape->GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+	Ray r = Ray(Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(-sqrt(2) / 2, shape),
+		Intersection(sqrt(2) / 2, shape)
+	});
+	// using xs[1] here not xs[0] as we are now inside the sphere so use the second intersection
+	Engine::Computation comps = Engine::prepare_computations(xs[1], r, xs);
+	Color c = Engine::refracted_color(w, comps, 5);
+	EXPECT_TRUE(c == Color(0, 0, 0));
+}
+
+TEST(Chapter11_tests, The_refracted_color_with_a_refracted_ray) {
+	World w(WorldType::DEFAULT);
+	Shape* A = w.GetShapes()[0];
+	MockPattern pattern;
+	A->GetMaterial().SetAmbient(1.0f).SetPattern(&pattern);
+	Shape* B = w.GetShapes()[1];
+	B->GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
+	Ray r = Ray(Point(0, 0, 0.1), Vector(0, 1, 0));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(-0.9899f, A),
+		Intersection(-0.4899f, B),
+		Intersection(0.4899f, B),
+		Intersection(0.9899f, A),
+	});
+	Engine::Computation comps = Engine::prepare_computations(xs[2], r, xs);
+	Color c = Engine::refracted_color(w, comps, 5);
+	EXPECT_TRUE(c == Color(0, 0.99888f, 0.04725f));
+}
+
+TEST(Chapter11_tests, The_shade_hit_function_with_a_transparent_material) {
+	World w(WorldType::DEFAULT);
+	Plane floor = Plane(Material().SetTransparency(0.5f).SetRefractiveIndex(1.5f), Matrix4().translation(0, -1, 0));
+	w.AddObject(&floor);
+	Sphere ball = Sphere(Material().SetColor(Color(1, 0, 0)).SetAmbient(0.5f), Matrix4().translation(0, -3.5f, -0.5f));
+	w.AddObject(&ball);
+	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	std::vector<Intersection> xs = Intersection::intersections({ Intersection(sqrt(2), &floor) });
+	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
+	Color c = Engine::shade_hit(w, comps, 5);
+	EXPECT_TRUE(c == Color(0.93642f, 0.68642f, 0.68642f));
+}
+
+TEST(Chapter11_tests, The_schlick_approximation_under_total_internal_reflection) {
+	Sphere shape = Sphere().glass_sphere();
+	Ray r = Ray(Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(-sqrt(2) / 2, &shape),
+		Intersection(sqrt(2) / 2, &shape)
+	});
+	Engine::Computation comps = Engine::prepare_computations(xs[1], r, xs);
+	float reflectance = Engine::schlick(comps);
+	EXPECT_FLOAT_EQ(reflectance, 1.0f);
+}
+
+TEST(Chapter11_tests, The_schlick_approximation_with_a_perpendicular_viewing_angle) {
+	Sphere shape = Sphere().glass_sphere();
+	Ray r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
+	std::vector<Intersection> xs = Intersection::intersections({
+		Intersection(-1, &shape),
+		Intersection(1, &shape)
+		});
+	Engine::Computation comps = Engine::prepare_computations(xs[1], r, xs);
+	float reflectance = Engine::schlick(comps);
+	EXPECT_FLOAT_EQ(reflectance, 0.04f);
+}
+
+TEST(Chapter11_tests, The_schlick_approximation_with_a_small_angle_and_n2_greater_than_n1) {
+	Sphere shape = Sphere().glass_sphere();
+	Ray r = Ray(Point(0, 0.99f, -2), Vector(0, 0, 1));
+	std::vector<Intersection> xs = Intersection::intersections({ Intersection(1.8589f, &shape) });
+	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
+	float reflectance = Engine::schlick(comps);
+	EXPECT_TRUE(utils::equal(reflectance, 0.48873)); // Double not float so no 'f'
+}
+
+TEST(Chapter11_tests, The_shade_hit_function_with_a_reflective_transparent_material) {
+	World w(WorldType::DEFAULT);
+	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
+	Plane floor = Plane(Material().SetReflectivity(0.5f).SetTransparency(0.5f).SetRefractiveIndex(1.5f), Matrix4().translation(0, -1, 0));
+	w.AddObject(&floor);
+	Sphere ball = Sphere(Material().SetColor(Color(1, 0, 0)).SetAmbient(0.5f), Matrix4().translation(0, -3.5f, -0.5f));
+	w.AddObject(&ball);
+	std::vector<Intersection> xs = Intersection::intersections({ Intersection(sqrt(2), &floor) });
+	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
+	Color c = Engine::shade_hit(w, comps, 5);
+	EXPECT_TRUE(c == Color(0.93391f, 0.69643f, 0.69243f));
+}
 #pragma endregion

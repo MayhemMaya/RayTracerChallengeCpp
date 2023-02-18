@@ -15,12 +15,12 @@ class Shape : public Object {
   Shape(const std::string& name, const ObjectType& type, const Material& material,
                                                          const Matrix4& transform);
   virtual ~Shape() = 0;
-  void ListDetails() const override;
+  void ListDetails() override;
   Vector normal_at(const Point& point) const;
-  Material GetMaterial() const;
+  Material& GetMaterial();
   void SetMaterial(const Material& material);
   static int GetCount();
-  bool operator==(const Object& object) const override;
+  bool operator==(const Object& object) override;
   Shape& operator=(const Object& other) override;
   virtual std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) = 0;
   virtual Vector local_normal_at(const Point& local_point) const = 0;

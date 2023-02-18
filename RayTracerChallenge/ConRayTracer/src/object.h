@@ -22,6 +22,7 @@ static std::string type_names[] = {
   "pointLight",
   "camera",
   "plane"
+  "glass_sphere"
 };
 
 class Object {
@@ -30,7 +31,7 @@ class Object {
    Object(const std::string& name, const ObjectType& type, const Matrix4& transform);
    Object(const std::string& name, const ObjectType& type, const Point& position);
    virtual ~Object() = 0;
-   virtual void ListDetails() const;
+   virtual void ListDetails();
    std::string GetName() const;
    void SetName(const std::string& name);
    Matrix4 GetTransform() const;
@@ -40,7 +41,7 @@ class Object {
    void SetObjectType(const ObjectType& type);
    Matrix4 GetSavedTransformInverse() const;
    virtual Point GetPosition() const;
-   virtual bool operator==(const Object& other) const;
+   virtual bool operator==(const Object& other);
    virtual Object& operator=(const Object& other);
    static int GetCount();
  protected:

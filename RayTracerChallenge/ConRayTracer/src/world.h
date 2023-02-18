@@ -15,7 +15,7 @@ enum class WorldType {
 
 class World {
  public:
-   World() = default;
+   World();
    World(const WorldType& type);
    ~World();
    std::vector<Object*> GetObjects() const;
@@ -32,4 +32,5 @@ class World {
    bool ContainsObject(Object* object) const;
  private:
    std::vector<Object*> objects_;
+   bool hasLightSource_;
 };

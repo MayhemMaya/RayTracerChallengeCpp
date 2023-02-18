@@ -33,14 +33,14 @@ class Matrix4 {
   bool invertible() const;
   Matrix4 inverse() const;
   std::string format() const;
-  Matrix4 identity() const;
-  Matrix4 translation(float x, float y, float z) const;
-  Matrix4 scaling(float x, float y, float z) const;
-  Matrix4 rotation_x(float radians) const;
-  Matrix4 rotation_y(float radians) const;
-  Matrix4 rotation_z(float radians) const;
-  Matrix4 shearing(float x_y, float x_z, float y_x,
-                   float y_z, float z_x, float z_y) const;
+  Matrix4& identity();
+  Matrix4& translation(float x, float y, float z);
+  Matrix4& scaling(float x, float y, float z);
+  Matrix4& rotation_x(float radians);
+  Matrix4& rotation_y(float radians);
+  Matrix4& rotation_z(float radians);
+  Matrix4& shearing(float x_y, float x_z, float y_x,
+                   float y_z, float z_x, float z_y);
   Matrix4 view_transform(const Point& from, const Point& to, const Vector& up) const;
  private:
   float data_[4][4] = {

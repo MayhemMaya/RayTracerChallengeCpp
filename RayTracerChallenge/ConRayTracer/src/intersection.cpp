@@ -32,7 +32,7 @@ void Intersection::SetObject(Object* object) {
 }
 
 bool Intersection::operator==(const Intersection& other) const {
-  return(time_ == other.GetTime() && object_ == other.GetObject());
+  return(time_ == other.GetTime() && (*object_) == (*other.GetObject()));
 }
 
 Intersection& Intersection::operator=(const Intersection& other) {

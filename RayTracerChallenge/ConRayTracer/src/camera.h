@@ -21,7 +21,7 @@ class Camera : public Object {
    float GetPixelSize() const;
    float GetHalfWidth() const;
    float GetHalfHeight() const;
-   void ListDetails() const override;
+   void ListDetails() override;
    static int GetCount();
    bool operator==(const Object& object) const;
    Camera& operator=(const Object& object);

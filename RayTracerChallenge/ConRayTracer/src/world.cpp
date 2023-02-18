@@ -1,18 +1,33 @@
 #include "world.h"
 
-World::World(const WorldType& type) {
-  if (type == WorldType::DEFAULT) {
-    objects_.push_back(new PointLight("pointlight1", Point(-10, 10, -10), Color(1, 1, 1)));
+bool check_for_light_source(const std::vector<Object*>& world_objects) {
+  for (int i = 0; i < world_objects.size(); i++) {
+    if (utils::instance_of<LightSource>(world_objects[i]))
+      return true;
+  }
+  return false;
+}
 
+World::World() : objects_({}), hasLightSource_(false) {}
+
+std::vector<Object*> default_world(const WorldType& type) {
+  if (type == WorldType::DEFAULT) {
     Material m;
     m.SetColor(Color(0.8f, 1.0f, 0.6f));
     m.SetDiffuse(0.7f);
     m.SetSpecular(0.2f);
-    objects_.push_back(new Sphere("sphere1", m));
 
-    objects_.push_back(new Sphere("sphere2", Matrix4().scaling(0.5f, 0.5f, 0.5f)));
+    return {
+      new PointLight("pointlight1", Point(-10, 10, -10), Color(1, 1, 1)),
+      new Sphere("sphere1", m),
+      new Sphere("sphere2", Matrix4().scaling(0.5f, 0.5f, 0.5f))
+    };
   }
+  return {};
 }
+
+World::World(const WorldType& type)
+  : objects_(default_world(type)), hasLightSource_(type == WorldType::DEFAULT) {}
 
 World::~World() {
   for (int i = 0; i < objects_.size(); i++) {
@@ -80,6 +95,7 @@ void World::AddObject(Object* object) {
     }
   }
   objects_.push_back(object);
+  hasLightSource_ = check_for_light_source(objects_);
 }
 void World::DeleteObject(const std::string& name) {
   for (int i = 0; i < objects_.size(); i++) {
@@ -87,14 +103,11 @@ void World::DeleteObject(const std::string& name) {
       objects_.erase(objects_.begin() + i);
     }
   }
+  hasLightSource_ = check_for_light_source(objects_);
 }
 
 bool World::ContainsLightSource() const {
-  for (int i = 0; i < objects_.size(); i++) {
-    if (utils::instance_of<LightSource>(objects_[i]))
-      return true;
-  }
-  return false;
+  return hasLightSource_;
 }
 
 bool World::ContainsCamera() const {

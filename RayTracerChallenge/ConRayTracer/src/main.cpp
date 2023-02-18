@@ -6,44 +6,73 @@
 #include "ray-tracer.h"
 
 int main() {
-
 	int res_x = 200;
 	int res_y = 100;
 
+	Material mirror;
+	mirror.SetAmbient(0.0f);
+	mirror.SetDiffuse(0.0f);
+	mirror.SetSpecular(1.0f);
+	mirror.SetShininess(200.0f);
+	mirror.SetReflectivity(1.0f);
+
+	CheckerPattern checker1 = CheckerPattern(Colors::Black, Colors::White);
+	CheckerPattern checker2 = CheckerPattern(Colors::Black, Colors::White);
+	checker1.SetTransform(Matrix4().scaling(0.125, 0.125, 0.125));
+	checker2.SetTransform(Matrix4().scaling(0.125, 0.125, 0.125));
+
 	World world = World(WorldType::EMPTY);
 
-	Plane floor("floor", Matrix4().scaling(10.0f, 0.01f, 10.0f));
+	Plane floor("floor", Matrix4().scaling(10.0f, 1.0f, 10.0f));
 	Material floor_mat;
-	CheckerPattern floor_pattern = CheckerPattern(Colors::DarkGrey, Colors::White);
-	floor_pattern.SetTransform(Matrix4().scaling(0.125, 0.125, 0.125));
-	floor_mat.SetPattern(&floor_pattern);
-	floor_mat.SetSpecular(0.0f);
+	floor_mat.SetPattern(&checker2);
+	floor_mat.SetSpecular(1.0f);
+	floor_mat.SetReflectivity(0.25f);
 	floor.SetMaterial(floor_mat);
 
-	Sphere middle("middle", Matrix4().translation(-0.5f, 1.0f, 0.5f));
-	StripePattern middle_pattern = StripePattern(Colors::White, Colors::Purple);
-	middle_pattern.SetTransform(Matrix4().scaling(0.25, 0.25, 0.25));
-	Material middle_mat;
-	middle_mat.SetPattern(&middle_pattern);
-	middle_mat.SetDiffuse(0.7f);
-	middle_mat.SetSpecular(0.3f);
-	middle.SetMaterial(middle_mat);
+	Plane back_wall("back_wall", Matrix4().translation(0, 0, 2.5).scaling(10.0f, 10.0f, 1.0f).rotation_x(utils::radians(90)));
+	Material back_wall_mat;
+	back_wall_mat.SetPattern(&checker1);
+	back_wall_mat.SetSpecular(0.5f);
+	back_wall.SetMaterial(back_wall_mat);
+	//Plane front_wall("front_wall", Matrix4().translation(0, 0, -5).scaling(10.0f, 0.01f, 10.0f).rotation_x(utils::radians(-90)));
+	//front_wall.SetMaterial(mirror);
 
-	Sphere right("right", Matrix4().translation(1.5f, 0.5f, -0.5f) * Matrix4().scaling(0.5f, 0.5f, 0.5f));
-	Material right_mat;
+	Sphere middle("middle", Matrix4().translation(-0.5f, 1.0f, 0.5f));
+	/*Material middle_mat;
+	middle_mat.SetColor(Colors::DarkRed);
+	middle_mat.SetSpecular(1.0f);
+	middle_mat.SetShininess(200.0f);
+	middle_mat.SetReflectivity(0.0f);*/
+	middle.SetMaterial(mirror);
+
+	Sphere right = Sphere("right", Matrix4().translation(1.5f, 0.5f, -0.5f).scaling(0.5f, 0.5f, 0.5f));
+	right.GetMaterial().SetShininess(1000.0f);
+	right.GetMaterial().SetSpecular(0.0f);
+	right.GetMaterial().SetTransparency(1.0f);
+	right.GetMaterial().SetDiffuse(0.0f);
+	right.GetMaterial().SetReflectivity(0.9f);
+	right.GetMaterial().SetAmbient(0.0f);
+	right.GetMaterial().SetRefractiveIndex(1.5f);
+	/*Material right_mat;
 	right_mat.SetColor(Color(0.5f, 1.0f, 0.1f));
 	right_mat.SetDiffuse(0.7f);
 	right_mat.SetSpecular(0.3f);
-	right.SetMaterial(right_mat);
+	right.SetMaterial(right_mat);*/
 
-	Sphere left("left", Matrix4().translation(-1.5f, 0.33f, -0.75f) * Matrix4().scaling(0.33f, 0.33f, 0.33f));
+	Sphere left = Sphere("left", Matrix4().translation(-1.5f, 0.33f, -0.75f).scaling(0.33f, 0.33f, 0.33f));
 	Material left_mat;
 	left_mat.SetColor(Color(1.0f, 0.8f, 0.1f));
 	left_mat.SetDiffuse(0.7f);
 	left_mat.SetSpecular(0.3f);
 	left.SetMaterial(left_mat);
 	
-	PointLight light(Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
+	//PointLight light(Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
+	//PointLight light(Point(-5.0f, 10.0f, 0.0f), Color(1.0f, 1.0f, 1.0f));
+	PointLight light(Point(0.0f, 5.0f, -5.0f), Colors::White);
+	//PointLight light1("red_light", Point(-10.0f, 5.0f, -5.0f), Colors::Red);
+	//PointLight light2("green_light", Point(0.0f, 5.0f, -5.0f), Colors::Green);
+	//PointLight light3("blue_light", Point(10.0f, 5.0f, -5.0f), Colors::Blue);
 
 	Camera camera(res_x, res_y, utils::kPI / 3.0f);
 	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 1.5f, -5.0f),
@@ -51,10 +80,15 @@ int main() {
 																							 Vector(0.0f, 1.0f, 0.0f)));
 
 	world.AddObject(&floor);
+	world.AddObject(&back_wall);
+	//world.AddObject(&front_wall);
 	world.AddObject(&middle);
 	world.AddObject(&right);
 	world.AddObject(&left);
 	world.AddObject(&light);
+	/*world.AddObject(&light1);
+	world.AddObject(&light2);
+	world.AddObject(&light3);*/
 	world.AddObject(&camera);
 
 	Canvas image = Engine::render(camera, world);

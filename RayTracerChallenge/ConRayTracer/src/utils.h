@@ -16,6 +16,8 @@ namespace utils {
   // Unit tests may be affected.
 static float kEPSILON = 0.001f;
 static double kPI = 3.141592653589793;
+static int kRECURSION_DEPTH = 5;
+static bool kUSE_ALL_LIGHTS = false;
 bool equal(float a, float b);
 float clamp(float value, float min, float max);
 std::vector<std::string> split_lines(const std::string& str);
@@ -28,6 +30,7 @@ float radians(float degrees);
 float roundoff(float value, int precision);
 float map(int value, int in_min, int in_max, float out_min, float out_max);
 void ClearScreen();
+bool at_least_one_true(std::vector<bool> booleans);
 
 struct RayStruct {
   Point origin;

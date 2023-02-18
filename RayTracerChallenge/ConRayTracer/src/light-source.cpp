@@ -43,7 +43,7 @@ int LightSource::GetCount() {
   return light_count_;
 }
 
-bool LightSource::operator==(const Object& object) const {
+bool LightSource::operator==(const Object& object) {
   LightSource* other = (LightSource*)&object;
   return(this->GetName() == other->GetName() &&
     this->GetTransform() == other->GetTransform() &&

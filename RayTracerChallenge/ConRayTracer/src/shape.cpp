@@ -51,7 +51,7 @@ Shape::~Shape() {
   shape_count_--;
 }
 
-void Shape::ListDetails() const {
+void Shape::ListDetails() {
   std::cout << "Name: " << this->GetName() << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
       << "Transform:\n" << this->GetTransform().format()
@@ -67,7 +67,7 @@ Vector Shape::normal_at(const Point& point) const {
   return world_normal.normalize();
 }
 
-Material Shape::GetMaterial() const {
+Material& Shape::GetMaterial() {
   return material_;
 }
 void Shape::SetMaterial(const Material& material) {
@@ -78,7 +78,7 @@ int Shape::GetCount() {
   return shape_count_;
 }
 
-bool Shape::operator==(const Object& object) const {
+bool Shape::operator==(const Object& object) {
   Shape* other = (Shape*)&object;
   return(this->GetName() == other->GetName() &&
          this->GetTransform() == other->GetTransform() &&
