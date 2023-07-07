@@ -31,3 +31,4 @@
 #include "raindrops-pattern.h"
 #include "radial-ring-gradient-pattern.h"
 #include "blended-pattern.h"
+#include "cube.h"

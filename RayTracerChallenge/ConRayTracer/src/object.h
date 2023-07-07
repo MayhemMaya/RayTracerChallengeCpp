@@ -12,7 +12,8 @@ enum class ObjectType {
   kSphere,
   kPointLight,
   kCamera,
-  kPlane
+  kPlane, 
+  kCube
 };
 
 static std::string type_names[] = {

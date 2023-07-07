@@ -133,6 +133,9 @@
     <ClCompile Include="src\blended-pattern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\canvas.h">
@@ -247,6 +250,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\blended-pattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

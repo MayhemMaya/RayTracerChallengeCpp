@@ -33,6 +33,7 @@
 #include "gradient-pattern.cpp"
 #include "ring-pattern.cpp"
 #include "checker-pattern.cpp"
+#include "cube.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -1769,5 +1770,88 @@ TEST(Chapter11_tests, The_shade_hit_function_with_a_reflective_transparent_mater
 	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
 	Color c = Engine::shade_hit(w, comps, 5);
 	EXPECT_TRUE(c == Color(0.93391f, 0.69643f, 0.69243f));
+}
+#pragma endregion
+
+#pragma region Chapter12Tests
+TEST(Chapter12_tests, A_ray_intersects_a_cube) {
+	struct CubeFace {
+		CubeFace(const Point& origin, const Vector& direction, float t1, float t2) {
+			this->origin = origin;
+			this->direction = direction;
+			this->t1 = t1;
+			this->t2 = t2;
+		}
+		Point origin;
+		Vector direction;
+		float t1, t2;
+	};
+
+	std::vector<CubeFace> faces = { 
+		CubeFace(Point(5, 0.5f, 0), Vector(-1, 0, 0), 4, 6),		// +x
+		CubeFace(Point(-5, 0.5f, 0), Vector(1, 0, 0), 4, 6),		// -x
+		CubeFace(Point(0.5f, 5, 0), Vector(0, -1, 0), 4, 6),		// +y
+		CubeFace(Point(0.5f, -5, 0), Vector(0, 1, 0), 4, 6),		// -y
+		CubeFace(Point(0.5f, 0, 5), Vector(0, 0, -1), 4, 6),		// +z
+		CubeFace(Point(0.5f, 0, -5), Vector(0, 0, 1), 4, 6),		// -z
+		CubeFace(Point(0, 0.5f, 0), Vector(0, 0, 1), -1, 1)			// inside
+	};
+
+	for (auto face : faces)
+	{
+		Cube c;
+		Ray r(face.origin, face.direction);
+		std::vector<Intersection> xs = c.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), 2);
+		ASSERT_EQ(xs[0].GetTime(), face.t1);
+		ASSERT_EQ(xs[1].GetTime(), face.t2);
+	}
+}
+
+TEST(Chapter12_tests, A_ray_misses_a_cube) {
+	std::vector<Ray> rays = {
+		Ray(Point(-2, 0, 0), Vector(0.2673f, 0.5345f, 0.8018f)),
+		Ray(Point(0, -2, 0), Vector(0.8018f, 0.2673f, 0.5345f)),
+		Ray(Point(0, 0, -2), Vector(0.5345f, 0.8018f, 0.2673f)),
+		Ray(Point(2, 0, 2), Vector(0, 0, -1)),
+		Ray(Point(0, 2, 2), Vector(0, -1, 0)),
+		Ray(Point(2, 2, 0), Vector(-1, 0, 0))
+	};
+
+	for (auto ray : rays)
+	{
+		Cube c;
+		std::vector<Intersection> xs = c.local_intersect(ray.to_ray_struct());
+		ASSERT_EQ(xs.size(), 0);
+	}
+}
+
+TEST(Chapter12_tests, The_normal_on_the_surface_of_a_cube) {
+	struct PointNormalPair {
+		PointNormalPair(const Point& point, const Vector& normal) {
+			this->point = point;
+			this->normal = normal;
+		}
+		Point point;
+		Vector normal;
+	};
+
+	std::vector<PointNormalPair> pairs = {
+		PointNormalPair(Point(1, 0.5f, -0.8f), Vector(1, 0, 0)),
+		PointNormalPair(Point(-1, -0.2f, 0.9f), Vector(-1, 0, 0)),
+		PointNormalPair(Point(-0.4f, 1, -0.1f), Vector(0, 1, 0)),
+		PointNormalPair(Point(0.3f, -1, -0.7f), Vector(0, -1, 0)),
+		PointNormalPair(Point(-0.6f, 0.3, 1), Vector(0, 0, 1)),
+		PointNormalPair(Point(0.4f, 0.4f, -1), Vector(0, 0, -1)),
+		PointNormalPair(Point(1, 1, 1), Vector(1, 0, 0)),
+		PointNormalPair(Point(-1, -1, -1), Vector(-1, 0, 0))
+	};
+
+	for (auto pair : pairs)
+	{
+		Cube c;
+		Vector normal = c.local_normal_at(pair.point);
+		ASSERT_TRUE(normal == pair.normal);
+	}
 }
 #pragma endregion

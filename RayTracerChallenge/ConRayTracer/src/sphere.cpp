@@ -4,7 +4,8 @@
 
 Sphere::Sphere() : Shape("sphere", ObjectType::kSphere) {}
 
-Sphere::Sphere(const std::string& name) : Shape(name, ObjectType::kSphere) {}
+Sphere::Sphere(const std::string& name)
+    : Shape(name, ObjectType::kSphere) {}
 
 Sphere::Sphere(const Material& material)
     : Shape("sphere", ObjectType::kSphere, material) {}

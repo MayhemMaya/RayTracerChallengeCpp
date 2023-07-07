@@ -35,15 +35,15 @@ int main() {
 	back_wall_mat.SetPattern(&checker1);
 	back_wall_mat.SetSpecular(0.5f);
 	back_wall.SetMaterial(back_wall_mat);
-	//Plane front_wall("front_wall", Matrix4().translation(0, 0, -5).scaling(10.0f, 0.01f, 10.0f).rotation_x(utils::radians(-90)));
-	//front_wall.SetMaterial(mirror);
+	// Plane front_wall("front_wall", Matrix4().translation(0, 0, -5).scaling(10.0f, 0.01f, 10.0f).rotation_x(utils::radians(-90)));
+	// front_wall.SetMaterial(mirror);
 
 	Sphere middle("middle", Matrix4().translation(-0.5f, 1.0f, 0.5f));
-	/*Material middle_mat;
-	middle_mat.SetColor(Colors::DarkRed);
-	middle_mat.SetSpecular(1.0f);
-	middle_mat.SetShininess(200.0f);
-	middle_mat.SetReflectivity(0.0f);*/
+	// Material middle_mat;
+	// middle_mat.SetColor(Colors::DarkRed);
+	// middle_mat.SetSpecular(1.0f);
+	// middle_mat.SetShininess(200.0f);
+	// middle_mat.SetReflectivity(0.0f);
 	middle.SetMaterial(mirror);
 
 	Sphere right = Sphere("right", Matrix4().translation(1.5f, 0.5f, -0.5f).scaling(0.5f, 0.5f, 0.5f));
@@ -54,11 +54,11 @@ int main() {
 	right.GetMaterial().SetReflectivity(0.9f);
 	right.GetMaterial().SetAmbient(0.0f);
 	right.GetMaterial().SetRefractiveIndex(1.5f);
-	/*Material right_mat;
-	right_mat.SetColor(Color(0.5f, 1.0f, 0.1f));
-	right_mat.SetDiffuse(0.7f);
-	right_mat.SetSpecular(0.3f);
-	right.SetMaterial(right_mat);*/
+	// Material right_mat;
+	// right_mat.SetColor(Color(0.5f, 1.0f, 0.1f));
+	// right_mat.SetDiffuse(0.7f);
+	// right_mat.SetSpecular(0.3f);
+	// right.SetMaterial(right_mat);
 
 	Sphere left = Sphere("left", Matrix4().translation(-1.5f, 0.33f, -0.75f).scaling(0.33f, 0.33f, 0.33f));
 	Material left_mat;
@@ -66,7 +66,14 @@ int main() {
 	left_mat.SetDiffuse(0.7f);
 	left_mat.SetSpecular(0.3f);
 	left.SetMaterial(left_mat);
-	
+
+	Cube cube = Cube(Matrix4().translation(0.5f, 0.5f, -0.75f).scaling(0.25f, 0.25f, 0.25f).rotation_x(45).rotation_y(45).rotation_z(45));
+	Material cube_mat;
+	cube_mat.SetColor(Color(0.05f, 0.7f, 1.0f));
+	cube_mat.SetDiffuse(0.7f);
+	cube_mat.SetSpecular(0.3f);
+	cube.SetMaterial(cube_mat);
+
 	//PointLight light(Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
 	//PointLight light(Point(-5.0f, 10.0f, 0.0f), Color(1.0f, 1.0f, 1.0f));
 	PointLight light(Point(0.0f, 5.0f, -5.0f), Colors::White);
@@ -81,14 +88,15 @@ int main() {
 
 	world.AddObject(&floor);
 	world.AddObject(&back_wall);
-	//world.AddObject(&front_wall);
+	// world.AddObject(&front_wall);
 	world.AddObject(&middle);
 	world.AddObject(&right);
 	world.AddObject(&left);
 	world.AddObject(&light);
-	/*world.AddObject(&light1);
-	world.AddObject(&light2);
-	world.AddObject(&light3);*/
+	world.AddObject(&cube);
+	// world.AddObject(&light1);
+	// world.AddObject(&light2);
+	// world.AddObject(&light3);
 	world.AddObject(&camera);
 
 	Canvas image = Engine::render(camera, world);
@@ -97,5 +105,6 @@ int main() {
 
 	std::cout << "\n\nPress any key to exit...";
 	std::cin.get();
+	
 	return 0;
 }

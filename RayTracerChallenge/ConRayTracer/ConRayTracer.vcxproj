@@ -185,6 +185,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\cube.cpp" />
     <ClCompile Include="src\blended-pattern.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\canvas.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\blended-pattern.h" />
     <ClInclude Include="src\checker-pattern.h" />
     <ClInclude Include="src\colors.h" />
+    <ClInclude Include="src\cube.h" />
     <ClInclude Include="src\gradient-pattern.h" />
     <ClInclude Include="src\mock-pattern.h" />
     <ClInclude Include="src\mock-shape.h" />
