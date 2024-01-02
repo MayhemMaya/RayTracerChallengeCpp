@@ -34,6 +34,8 @@
 #include "ring-pattern.cpp"
 #include "checker-pattern.cpp"
 #include "cube.cpp"
+#include "cylinder.cpp"
+#include "cone.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -1815,7 +1817,8 @@ TEST(Chapter12_tests, A_ray_misses_a_cube) {
 		Ray(Point(0, 0, -2), Vector(0.5345f, 0.8018f, 0.2673f)),
 		Ray(Point(2, 0, 2), Vector(0, 0, -1)),
 		Ray(Point(0, 2, 2), Vector(0, -1, 0)),
-		Ray(Point(2, 2, 0), Vector(-1, 0, 0))
+		Ray(Point(2, 2, 0), Vector(-1, 0, 0)),
+		Ray(Point(0, 0, 2), Vector(0, 0, 1))
 	};
 
 	for (auto ray : rays)
@@ -1852,6 +1855,265 @@ TEST(Chapter12_tests, The_normal_on_the_surface_of_a_cube) {
 		Cube c;
 		Vector normal = c.local_normal_at(pair.point);
 		ASSERT_TRUE(normal == pair.normal);
+	}
+}
+#pragma endregion
+
+#pragma region Chapter13Tests
+TEST(Chapter13_tests, A_ray_misses_a_cylinder) {
+	std::vector<Ray> rays = {
+		Ray(Point(1, 0, 0), Vector(0, 1, 0)),
+		Ray(Point(0, 0, 0), Vector(0, 1, 0)),
+		Ray(Point(0, 0, -5), Vector(1, 1, 1)),
+	};
+
+	for (auto ray : rays) {
+		Cylinder cyl;
+		Vector direction = ray.GetDirection().normalize();
+		Ray r(ray.GetOrigin(), direction);
+		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), 0);
+	}
+}
+
+TEST(Chapter13_tests, A_ray_strikes_a_cylinder) {
+	struct CylinderIntersect {
+		CylinderIntersect(const Point& origin, const Vector& direction, float t0, float t1) {
+			this->origin = origin;
+			this->direction = direction;
+			this->t0 = t0;
+			this->t1 = t1;
+		}
+		Point origin;
+		Vector direction;
+		float t0, t1;
+	};
+
+	std::vector<CylinderIntersect> examples = {
+		CylinderIntersect(Point(1, 0, -5), Vector(0, 0, 1), 5, 5),
+		CylinderIntersect(Point(0, 0, -5), Vector(0, 0, 1), 4, 6),
+		CylinderIntersect(Point(0.5f, 0, -5), Vector(0.1f, 1, 1), 6.80798f, 7.08872f)
+	};
+
+	for (auto example : examples) {
+		Cylinder cyl;
+		Vector direction = example.direction.normalize();
+		Ray r(example.origin, direction);
+		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), 2);
+		ASSERT_TRUE(utils::equal(xs[0].GetTime(), example.t0));
+		ASSERT_TRUE(utils::equal(xs[1].GetTime(), example.t1));
+	}
+}
+
+TEST(Chapter13_tests, Normal_vector_on_a_cylinder) {
+	struct PointNormalPair {
+		PointNormalPair(const Point& point, const Vector& normal) {
+			this->point = point;
+			this->normal = normal;
+		}
+		Point point;
+		Vector normal;
+	};
+
+	std::vector<PointNormalPair> pairs = {
+		PointNormalPair(Point(1, 0, 0), Vector(1, 0, 0)),
+		PointNormalPair(Point(0, 5, -1), Vector(0, 0, -1)),
+		PointNormalPair(Point(0, -2, 1), Vector(0, 0, 1)),
+		PointNormalPair(Point(-1, 1, 0), Vector(-1, 0, 0))
+	};
+
+	for (auto pair : pairs) {
+		Cylinder cyl;
+		Vector n = cyl.local_normal_at(pair.point);
+		ASSERT_TRUE(n == pair.normal);
+	}
+}
+
+TEST(Chapter13_tests, The_default_minimum_and_maximum_for_a_cylinder) {
+	Cylinder cyl;
+	EXPECT_FLOAT_EQ(cyl.GetMinimum(), -utils::kINFINITY);
+	EXPECT_FLOAT_EQ(cyl.GetMaximum(), utils::kINFINITY);
+}
+
+TEST(Chapter13_tests, Intersecting_a_constrained_cylinder) {
+	struct PointDirectionCountPair {
+		PointDirectionCountPair(const Point& point, const Vector& direction, const int& count) {
+			this->point = point;
+			this->direction = direction;
+			this->count = count;
+		}
+		Point point;
+		Vector direction;
+		int count;
+	};
+
+	std::vector<PointDirectionCountPair> examples = {
+		PointDirectionCountPair(Point(0, 1.5f, 0), Vector(0.1f, 1, 0), 0),
+		PointDirectionCountPair(Point(0, 3, -5), Vector(0, 0, 1), 0),
+		PointDirectionCountPair(Point(0, 0, -5), Vector(0, 0, 1), 0),
+		PointDirectionCountPair(Point(0, 2, -5), Vector(0, 0, 1), 0),
+		PointDirectionCountPair(Point(0, 1, -5), Vector(0, 0, 1), 0),
+		PointDirectionCountPair(Point(0, 1.5f, -2), Vector(0, 0, 1), 2)
+	};
+
+	for (auto example : examples) {
+		Cylinder cyl(1, 2);
+		Vector direction = example.direction.normalize();
+		Ray r(example.point, direction);
+		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), example.count);
+	}
+}
+
+TEST(Chapter13_tests, The_default_closed_value_for_a_cylinder) {
+	Cylinder cyl;
+	EXPECT_FALSE(cyl.GetClosed());
+}
+
+TEST(Chapter13_tests, Intersecting_the_caps_of_a_closed_cylinder) {
+	struct PointDirectionCountPair {
+		PointDirectionCountPair(const Point& point, const Vector& direction, const int& count) {
+			this->point = point;
+			this->direction = direction;
+			this->count = count;
+		}
+		Point point;
+		Vector direction;
+		int count;
+	};
+
+	std::vector<PointDirectionCountPair> examples = {
+		PointDirectionCountPair(Point(0, 3, 0), Vector(0, -1, 0), 2),
+		PointDirectionCountPair(Point(0, 3, -2), Vector(0, -1, 2), 2),
+		PointDirectionCountPair(Point(0, 4, -2), Vector(0, -1, 1), 2), // corner case
+		PointDirectionCountPair(Point(0, 0, -2), Vector(0, 1, 2), 2),
+		PointDirectionCountPair(Point(0, -1, -2), Vector(0, 1, 1), 2) // corner case
+	};
+
+	for (auto example : examples) {
+		Cylinder cyl(1, 2, true);
+		Vector direction = example.direction.normalize();
+		Ray r(example.point, direction);
+		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), example.count);
+	}
+}
+
+TEST(Chapter13_tests, The_normal_vector_on_a_cylinders_end_caps) {
+	struct PointNormalPair {
+		PointNormalPair(const Point& point, const Vector& normal) {
+			this->point = point;
+			this->normal = normal;
+		}
+		Point point;
+		Vector normal;
+	};
+
+	std::vector<PointNormalPair> pairs = {
+		PointNormalPair(Point(0, 1, 0), Vector(0, -1, 0)),
+		PointNormalPair(Point(0.5f, 1, 0), Vector(0, -1, 0)),
+		PointNormalPair(Point(0, 1, 0.5f), Vector(0, -1, 0)),
+		PointNormalPair(Point(0, 2, 0), Vector(0, 1, 0)),
+		PointNormalPair(Point(0.5f, 2, 0), Vector(0, 1, 0)),
+		PointNormalPair(Point(0, 2, 0.5f), Vector(0, 1, 0))
+	};
+
+	for (auto pair : pairs) {
+		Cylinder cyl(1, 2, true);
+		Vector n = cyl.local_normal_at(pair.point);
+		ASSERT_TRUE(n == pair.normal);
+	}
+}
+
+TEST(Chapter13_tests, Intersecting_a_cone_with_a_ray) {
+	struct ConeIntersect {
+		ConeIntersect(const Point& origin, const Vector& direction, float t0, float t1) {
+			this->origin = origin;
+			this->direction = direction;
+			this->t0 = t0;
+			this->t1 = t1;
+		}
+		Point origin;
+		Vector direction;
+		float t0, t1;
+	};
+
+	std::vector<ConeIntersect> examples = {
+		ConeIntersect(Point(0, 0, -5), Vector(0, 0, 1), 5, 5),
+		ConeIntersect(Point(0, 0, -5), Vector(1, 1, 1), 8.66025f, 8.66025f),
+		ConeIntersect(Point(1, 1, -5.0f), Vector(-0.5f, -1, 1), 4.55006f, 49.44994f)
+	};
+
+	for (auto example : examples) {
+		Cone shape;
+		Vector direction = example.direction.normalize();
+		Ray r(example.origin, direction);
+		std::vector<Intersection> xs = shape.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), 2);
+		ASSERT_TRUE(utils::equal(xs[0].GetTime(), example.t0));
+		ASSERT_TRUE(utils::equal(xs[1].GetTime(), example.t1));
+	}
+}
+
+TEST(Chapter13_tests, Intersecting_a_cone_with_a_ray_parallel_to_one_of_its_halves) {
+	Cone shape;
+	Vector direction = Vector(0, 1, 1).normalize();
+	Ray r(Point(0, 0, -1), direction);
+	std::vector<Intersection> xs = shape.local_intersect(r.to_ray_struct());
+	ASSERT_EQ(xs.size(), 1);
+	ASSERT_TRUE(utils::equal(xs[0].GetTime(), 0.35355f));
+}
+
+TEST(Chapter13_tests, Intersecting_a_cones_end_caps) {
+	struct PointDirectionCountPair {
+		PointDirectionCountPair(const Point& point, const Vector& direction, const int& count) {
+			this->point = point;
+			this->direction = direction;
+			this->count = count;
+		}
+		Point point;
+		Vector direction;
+		int count;
+	};
+
+	std::vector<PointDirectionCountPair> examples = {
+		PointDirectionCountPair(Point(0, 0, -5), Vector(0, 1, 0), 0),
+		PointDirectionCountPair(Point(0, 0, -0.25f), Vector(0, 1, 1), 2),
+		PointDirectionCountPair(Point(0, 0, -0.25f), Vector(0, 1, 0), 4)
+	};
+
+	Cone shape(-0.5f, 0.5f, true);
+
+	for (auto example : examples) {
+		Vector direction = example.direction.normalize();
+		Ray r(example.point, direction);
+		std::vector<Intersection> xs = shape.local_intersect(r.to_ray_struct());
+		ASSERT_EQ(xs.size(), example.count);
+	}
+}
+
+TEST(Chapter13_tests, Computing_the_normal_vector_on_a_cone) {
+	struct PointNormalPair {
+		PointNormalPair(const Point& point, const Vector& normal) {
+			this->point = point;
+			this->normal = normal;
+		}
+		Point point;
+		Vector normal;
+	};
+
+	std::vector<PointNormalPair> pairs = {
+		PointNormalPair(Point(0, 0, 0), Vector(0, 0, 0)),
+		PointNormalPair(Point(1, 1, 1), Vector(1, -sqrt(2), 1)),
+		PointNormalPair(Point(-1, -1, 0), Vector(-1, 1, 0))
+	};
+
+	Cone shape;
+
+	for (auto pair : pairs) {
+		Vector n = shape.local_normal_at(pair.point);
+		ASSERT_TRUE(n == pair.normal);
 	}
 }
 #pragma endregion

@@ -32,3 +32,5 @@
 #include "radial-ring-gradient-pattern.h"
 #include "blended-pattern.h"
 #include "cube.h"
+#include "cylinder.h"
+#include "cone.h"

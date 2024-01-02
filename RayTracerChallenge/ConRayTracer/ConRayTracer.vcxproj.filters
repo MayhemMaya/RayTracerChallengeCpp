@@ -136,6 +136,12 @@
     <ClCompile Include="src\cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\cylinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\canvas.h">
@@ -253,6 +259,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cylinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include "object.h"
 
 Intersection::Intersection()
-    : time_(0.0), object_(nullptr) {}
+    : time_(0.0f), object_(nullptr) {}
 
 Intersection::Intersection(float time, Object* object)
     : time_(time), object_(object) {}

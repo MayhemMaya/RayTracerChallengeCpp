@@ -9,15 +9,21 @@
 #include "point.h"
 #include <cmath>
 #include <algorithm>
+#include <limits>
 
 namespace utils {
 
-  // Had to adjust the epsilon value here from 0.0001f to 0.001f due to acne appearing on the image when calculating shadows using is_shadowed()
-  // Unit tests may be affected.
+struct RayStruct {
+  Point origin;
+  Vector direction;
+};
+// Had to adjust the epsilon value here from 0.0001f to 0.001f due to acne appearing on the image when calculating shadows using is_shadowed()
+// Unit tests may be affected.
 static float kEPSILON = 0.001f;
 static double kPI = 3.141592653589793;
 static int kRECURSION_DEPTH = 5;
 static bool kUSE_ALL_LIGHTS = false;
+static float kINFINITY = std::numeric_limits<float>::infinity();
 bool equal(float a, float b);
 float clamp(float value, float min, float max);
 std::vector<std::string> split_lines(const std::string& str);
@@ -31,11 +37,8 @@ float roundoff(float value, int precision);
 float map(int value, int in_min, int in_max, float out_min, float out_max);
 void ClearScreen();
 bool at_least_one_true(std::vector<bool> booleans);
-
-struct RayStruct {
-  Point origin;
-  Vector direction;
-};
+bool check_cylinder_cap(const RayStruct& local_ray, const float& t);
+bool check_cone_cap(const RayStruct& local_ray, const float& t, const float& y);
 
 template <typename Base, typename T>
 
@@ -47,5 +50,11 @@ template<class C, typename T>
 inline bool contains(C&& c, T t) {
   return std::find(std::begin(c), std::end(c), t) != std::end(c);
 };
+
+template <typename T>
+bool is_close_to_zero(T x)
+{
+  return std::abs(x) < std::numeric_limits<T>::epsilon();
+}
 
 } // namespace utils

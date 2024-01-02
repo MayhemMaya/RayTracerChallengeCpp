@@ -1,5 +1,4 @@
 #include "cube.h"
-#include <limits>
 #include <algorithm>
 
 Cube::Cube() : Shape("cube", ObjectType::kCube) {}
@@ -43,8 +42,8 @@ Cube& Cube::operator=(const Object& object) {
 }
 
 TimeValuePair check_axis(float axis_origin, float axis_direction) {
-  float tmin_numerator = (-1 - axis_origin);
-  float tmax_numerator = (1 - axis_origin);
+  const auto tmin_numerator = (-1 - axis_origin);
+  const auto tmax_numerator = (1 - axis_origin);
 
   TimeValuePair pair;
 
@@ -53,8 +52,8 @@ TimeValuePair check_axis(float axis_origin, float axis_direction) {
     pair.tmax = tmax_numerator / axis_direction;
   }
   else {
-    pair.tmin = tmin_numerator * std::numeric_limits<float>::infinity();
-    pair.tmax = tmax_numerator * std::numeric_limits<float>::infinity();
+    pair.tmin = tmin_numerator * utils::kINFINITY;
+    pair.tmax = tmax_numerator * utils::kINFINITY;
   }
 
   if (pair.tmin > pair.tmax) utils::swap(pair.tmin, pair.tmax);
@@ -67,16 +66,16 @@ std::vector<Intersection> Cube::local_intersect(const utils::RayStruct& local_ra
   TimeValuePair y = check_axis(local_ray.origin[1], local_ray.direction[1]);
   TimeValuePair z = check_axis(local_ray.origin[2], local_ray.direction[2]);
 
-  float tmin = std::max({ x.tmin, y.tmin, z.tmin });
-  float tmax = std::min({ x.tmax, y.tmax, z.tmax });
+  const auto tmin = std::max({ x.tmin, y.tmin, z.tmin });
+  const auto tmax = std::min({ x.tmax, y.tmax, z.tmax });
 
-  if (tmin > tmax) return {};
+  if (tmin > tmax || tmax < 0) return {};
 
   return { Intersection(tmin, this), Intersection(tmax, this) };
 }
 
 Vector Cube::local_normal_at(const Point& local_point) const {
-  float maxc = std::max({ abs(local_point[0]), abs(local_point[1]), abs(local_point[2]) });
+  const auto maxc = std::max({ abs(local_point[0]), abs(local_point[1]), abs(local_point[2]) });
 
   if (maxc == abs(local_point[0])) {
     return Vector(local_point[0], 0, 0);

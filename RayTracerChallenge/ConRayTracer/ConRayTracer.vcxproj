@@ -185,6 +185,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\cone.cpp" />
     <ClCompile Include="src\cube.cpp" />
     <ClCompile Include="src\blended-pattern.cpp" />
     <ClCompile Include="src\camera.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="src\checker-pattern.cpp" />
     <ClCompile Include="src\color.cpp" />
     <ClCompile Include="src\colors.cpp" />
+    <ClCompile Include="src\cylinder.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\environment.cpp" />
     <ClCompile Include="src\gradient-pattern.cpp" />
@@ -229,7 +231,9 @@
     <ClInclude Include="src\blended-pattern.h" />
     <ClInclude Include="src\checker-pattern.h" />
     <ClInclude Include="src\colors.h" />
+    <ClInclude Include="src\cone.h" />
     <ClInclude Include="src\cube.h" />
+    <ClInclude Include="src\cylinder.h" />
     <ClInclude Include="src\gradient-pattern.h" />
     <ClInclude Include="src\mock-pattern.h" />
     <ClInclude Include="src\mock-shape.h" />

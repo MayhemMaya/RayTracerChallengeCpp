@@ -88,4 +88,19 @@ bool at_least_one_true(std::vector<bool> booleans) {
   return false;
 }
 
+// checks to see if the intersection at `t` is within a radius
+// of 1 (the radius of your cylinders/cones) from the y axis.
+
+bool check_cylinder_cap(const RayStruct& local_ray, const float& t) {
+  const auto x = local_ray.origin[0] + t * local_ray.direction[0];
+  const auto z = local_ray.origin[2] + t * local_ray.direction[2];
+  return (x * x) + (z * z) <= 1;
+}
+
+bool check_cone_cap(const RayStruct& local_ray, const float& t, const float& y) {
+  const auto x = local_ray.origin[0] + t * local_ray.direction[0];
+  const auto z = local_ray.origin[2] + t * local_ray.direction[2];
+  return (x * x) + (z * z) <= abs(y);
+}
+
 } // namespace utils
