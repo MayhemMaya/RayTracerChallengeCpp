@@ -1,25 +1,14 @@
 #include "cube.h"
 #include <algorithm>
 
-Cube::Cube() : Shape("cube", ObjectType::kCube) {}
-
 Cube::Cube(const std::string& name)
   : Shape(name, ObjectType::kCube) {}
-
-Cube::Cube(const Material& material)
-  : Shape("cube", ObjectType::kCube, material) {}
-
-Cube::Cube(const Matrix4& transform)
-  : Shape("cube", ObjectType::kCube, transform) {}
 
 Cube::Cube(const std::string& name, const Material& material)
   : Shape(name, ObjectType::kCube, material) {}
 
 Cube::Cube(const std::string& name, const Matrix4& transform)
   : Shape(name, ObjectType::kCube, transform) {}
-
-Cube::Cube(const Material& material, const Matrix4& transform)
-  : Shape("cube", ObjectType::kCube, material, transform) {}
 
 Cube::Cube(const std::string& name, const Material& material, const Matrix4& transform)
   : Shape(name, ObjectType::kCube, material, transform) {}

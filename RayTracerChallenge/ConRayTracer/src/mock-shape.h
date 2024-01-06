@@ -4,7 +4,6 @@
 
 class MockShape : public Shape {
  public:
-   MockShape();
    MockShape(const std::string& name);
    bool operator==(const Object& object) override;
    MockShape& operator=(const Object& other) override;

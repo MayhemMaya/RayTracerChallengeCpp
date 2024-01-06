@@ -6,6 +6,7 @@
 #include "ray-tracer.h"
 
 int main() {
+
 	int res_x = 200;
 	int res_y = 100;
 
@@ -67,7 +68,7 @@ int main() {
 	left_mat.SetSpecular(0.3f);
 	left.SetMaterial(left_mat);
 
-	Cube cube = Cube(Matrix4().translation(0.5f, 0.5f, -0.75f).scaling(0.25f, 0.25f, 0.25f).rotation_x(45).rotation_y(45).rotation_z(45));
+	Cube cube = Cube("Cube", Matrix4().translation(0.5f, 0.5f, -0.75f).scaling(0.25f, 0.25f, 0.25f).rotation_x(45).rotation_y(45).rotation_z(45));
 	Material cube_mat;
 	cube_mat.SetColor(Color(0.05f, 0.7f, 1.0f));
 	cube_mat.SetDiffuse(0.7f);
@@ -76,12 +77,12 @@ int main() {
 
 	//PointLight light(Point(-10.0f, 10.0f, -10.0f), Color(1.0f, 1.0f, 1.0f));
 	//PointLight light(Point(-5.0f, 10.0f, 0.0f), Color(1.0f, 1.0f, 1.0f));
-	PointLight light(Point(0.0f, 5.0f, -5.0f), Colors::White);
+	PointLight light("PointLight", Point(0.0f, 5.0f, -5.0f), Colors::White);
 	//PointLight light1("red_light", Point(-10.0f, 5.0f, -5.0f), Colors::Red);
 	//PointLight light2("green_light", Point(0.0f, 5.0f, -5.0f), Colors::Green);
 	//PointLight light3("blue_light", Point(10.0f, 5.0f, -5.0f), Colors::Blue);
 
-	Camera camera(res_x, res_y, utils::kPI / 3.0f);
+	Camera camera("Camera", res_x, res_y, utils::kPI / 3.0f);
 	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 1.5f, -5.0f),
 																							 Point(0.0f, 1.0f, 0.0f),
 																							 Vector(0.0f, 1.0f, 0.0f)));

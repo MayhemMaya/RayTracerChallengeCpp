@@ -3,21 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
-
-Cone::Cone(float minimum, float maximum, bool closed)
-  : Shape("cone", ObjectType::kCone),
-  minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
 Cone::Cone(const std::string& name, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCone),
-  minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
-Cone::Cone(const Material& material, float minimum, float maximum, bool closed)
-  : Shape("cone", ObjectType::kCone, material),
-  minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
-Cone::Cone(const Matrix4& transform, float minimum, float maximum, bool closed)
-  : Shape("cone", ObjectType::kCone, transform),
   minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
 Cone::Cone(const std::string& name, const Material& material, float minimum, float maximum, bool closed)
@@ -26,10 +13,6 @@ Cone::Cone(const std::string& name, const Material& material, float minimum, flo
 
 Cone::Cone(const std::string& name, const Matrix4& transform, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCone, transform),
-  minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
-Cone::Cone(const Material& material, const Matrix4& transform, float minimum, float maximum, bool closed)
-  : Shape("cone", ObjectType::kCone, material, transform),
   minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
 Cone::Cone(const std::string& name, const Material& material, const Matrix4& transform, float minimum, float maximum, bool closed)

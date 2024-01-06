@@ -4,13 +4,9 @@
 
 class Cone : public Shape {
 public:
-  Cone(float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cone(const std::string& name, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
-  Cone(const Material& material, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
-  Cone(const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cone(const std::string& name, const Material& material, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cone(const std::string& name, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
-  Cone(const Material& material, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cone(const std::string& name, const Material& material, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   bool operator==(const Object& object) override;
   Cone& operator=(const Object& object) override;

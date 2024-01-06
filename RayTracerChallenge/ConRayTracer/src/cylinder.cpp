@@ -2,21 +2,8 @@
 #include <limits>
 #include <algorithm>
 
-
-Cylinder::Cylinder(float minimum, float maximum, bool closed)
-  : Shape("cylinder", ObjectType::kCylinder),
-  minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
 Cylinder::Cylinder(const std::string& name, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCylinder),
-    minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
-Cylinder::Cylinder(const Material& material, float minimum, float maximum, bool closed)
-  : Shape("cylinder", ObjectType::kCylinder, material),
-    minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
-Cylinder::Cylinder(const Matrix4& transform, float minimum, float maximum, bool closed)
-  : Shape("cylinder", ObjectType::kCylinder, transform),
     minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
 Cylinder::Cylinder(const std::string& name, const Material& material, float minimum, float maximum, bool closed)
@@ -25,10 +12,6 @@ Cylinder::Cylinder(const std::string& name, const Material& material, float mini
 
 Cylinder::Cylinder(const std::string& name, const Matrix4& transform, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCylinder, transform),
-    minimum_(minimum), maximum_(maximum), closed_(closed) {}
-
-Cylinder::Cylinder(const Material& material, const Matrix4& transform, float minimum, float maximum, bool closed)
-  : Shape("cylinder", ObjectType::kCylinder, material, transform),
     minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
 Cylinder::Cylinder(const std::string& name, const Material& material, const Matrix4& transform, float minimum, float maximum, bool closed)

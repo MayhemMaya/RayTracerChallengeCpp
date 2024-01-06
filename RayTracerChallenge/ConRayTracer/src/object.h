@@ -5,8 +5,9 @@
 #include "point.h"
 #include "utils.h"
 #include <string>
+#include <map>
 
-enum class ObjectType {
+static enum class ObjectType {
   kUnknown,
   kShape,
   kSphere,
@@ -15,17 +16,21 @@ enum class ObjectType {
   kPlane, 
   kCube,
   kCylinder,
-  kCone
+  kCone,
+  kGroup
 };
 
-static std::string type_names[] = {
-  "unknown",
-  "shape",
-  "sphere",
-  "pointLight",
-  "camera",
-  "plane"
-  "glass_sphere"
+static std::map<ObjectType, std::string> typeMap {
+  {ObjectType::kUnknown, "kUnknown"},
+  {ObjectType::kShape, "kShape"},
+  {ObjectType::kSphere, "kSphere"},
+  {ObjectType::kPointLight, "kPointLight"},
+  {ObjectType::kCamera, "kCamera"},
+  {ObjectType::kPlane, "kPlane"},
+  {ObjectType::kCube, "kCube"},
+  {ObjectType::kCylinder, "kCube"},
+  {ObjectType::kCone, "kCone"},
+  {ObjectType::kGroup, "kGroup"},
 };
 
 class Object {
@@ -47,6 +52,7 @@ class Object {
    virtual bool operator==(const Object& other);
    virtual Object& operator=(const Object& other);
    static int GetCount();
+
  protected:
    static int object_count_;
    std::string name_;

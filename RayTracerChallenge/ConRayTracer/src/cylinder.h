@@ -4,13 +4,9 @@
 
 class Cylinder : public Shape {
 public:
-  Cylinder(float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cylinder(const std::string& name, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
-  Cylinder(const Material& material, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
-  Cylinder(const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cylinder(const std::string& name, const Material& material, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cylinder(const std::string& name, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
-  Cylinder(const Material& material, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cylinder(const std::string& name, const Material& material, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   bool operator==(const Object& object) override;
   Cylinder& operator=(const Object& object) override;

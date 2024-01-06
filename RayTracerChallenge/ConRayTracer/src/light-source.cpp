@@ -12,11 +12,6 @@ LightSource::LightSource(const std::string& name, const ObjectType& type,
                                            const Color& intensity)
     : Object(name, type, position), intensity_(intensity) {
   light_count_++;
-  if (utils::contains(type_names, name)) {
-    std::stringstream ss;
-    ss << light_count_;
-    this->SetName(this->GetName() + ss.str());
-  }
 }
 
 LightSource::~LightSource() {

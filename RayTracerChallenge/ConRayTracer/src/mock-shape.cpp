@@ -1,8 +1,7 @@
 #include "mock-shape.h"
 
-MockShape::MockShape() : Shape("shape", ObjectType::kShape) {}
-
-MockShape::MockShape(const std::string& name) : Shape(name, ObjectType::kShape) {}
+MockShape::MockShape(const std::string& name) : Shape(name, ObjectType::kShape) {
+}
 
 bool MockShape::operator==(const Object& object) {
   MockShape* other = (MockShape*)&object;

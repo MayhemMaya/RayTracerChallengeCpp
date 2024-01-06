@@ -25,7 +25,7 @@ Object::~Object() {
 void Object::ListDetails() {
   std::cout << "Name: " << name_ << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
-      << "Transform:\n" << transform_.format() << std::endl;
+      << "Transform:\n" << transform_.format() << "\n";
 }
 
 std::string Object::GetName() const { return name_; }
@@ -57,10 +57,7 @@ Point Object::GetPosition() const {
 ObjectType Object::GetObjectType() const { return type_; }
 
 std::string Object::GetObjectTypeName() const {
-  std::string type_name = type_names[static_cast<int>(type_)];
-  std::string first_letter = type_name.substr(0, 1);
-  std::transform(first_letter.begin(), first_letter.end(), first_letter.begin(), ::toupper);
-  return "k" + first_letter + type_name.substr(1);
+  return typeMap[type_];
 }
 
 bool Object::operator==(const Object& other) {

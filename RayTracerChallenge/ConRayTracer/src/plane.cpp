@@ -2,24 +2,14 @@
 #include "vector.h"
 #include "point.h"
 
-Plane::Plane() : Shape("plane", ObjectType::kPlane) {}
 
 Plane::Plane(const std::string& name) : Shape(name, ObjectType::kPlane) {}
-
-Plane::Plane(const Material& material)
-  : Shape("plane", ObjectType::kPlane, material) {}
-
-Plane::Plane(const Matrix4& transform)
-  : Shape("plane", ObjectType::kPlane, transform) {}
 
 Plane::Plane(const std::string& name, const Material& material)
   : Shape(name, ObjectType::kPlane, material) {}
 
 Plane::Plane(const std::string& name, const Matrix4& transform)
   : Shape(name, ObjectType::kPlane, transform) {}
-
-Plane::Plane(const Material& material, const Matrix4& transform)
-  : Shape("plane", ObjectType::kPlane, material, transform) {}
 
 Plane::Plane(const std::string& name, const Material& material, const Matrix4& transform)
   : Shape(name, ObjectType::kPlane, material, transform) {}

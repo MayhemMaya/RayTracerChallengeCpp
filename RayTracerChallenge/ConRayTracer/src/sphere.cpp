@@ -2,28 +2,21 @@
 #include "vector.h"
 #include "point.h"
 
-Sphere::Sphere() : Shape("sphere", ObjectType::kSphere) {}
-
 Sphere::Sphere(const std::string& name)
-    : Shape(name, ObjectType::kSphere) {}
-
-Sphere::Sphere(const Material& material)
-    : Shape("sphere", ObjectType::kSphere, material) {}
-
-Sphere::Sphere(const Matrix4& transform)
-    : Shape("sphere", ObjectType::kSphere, transform) {}
+    : Shape(name, ObjectType::kSphere) {
+}
 
 Sphere::Sphere(const std::string& name, const Material& material)
-    : Shape(name, ObjectType::kSphere, material) {}
+    : Shape(name, ObjectType::kSphere, material) {
+}
 
 Sphere::Sphere(const std::string& name, const Matrix4& transform)
-    : Shape(name, ObjectType::kSphere, transform) {}
-
-Sphere::Sphere(const Material& material, const Matrix4& transform)
-    : Shape("sphere", ObjectType::kSphere, material, transform) {}
+    : Shape(name, ObjectType::kSphere, transform) {
+}
 
 Sphere::Sphere(const std::string& name, const Material& material, const Matrix4& transform)
-    : Shape(name, ObjectType::kSphere, material, transform) {}
+    : Shape(name, ObjectType::kSphere, material, transform) {
+}
 
 bool Sphere::operator==(const Object& object) {
   Sphere* other = (Sphere*)&object;
@@ -61,25 +54,13 @@ Vector Sphere::local_normal_at(const Point& local_point) const {
   return local_normal.normalize();
 }
 
-Sphere Sphere::glass_sphere() const {
-  Sphere s = Sphere("glass_sphere");
-  s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
-  return s;
-}
-
-Sphere Sphere::glass_sphere(const std::string& name) const {
+Sphere Sphere::glass_sphere(const std::string& name) {
   Sphere s = Sphere(name);
   s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
   return s;
 }
 
-Sphere Sphere::glass_sphere(const Matrix4& transform) const {
-  Sphere s = Sphere("glass_sphere");
-  s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
-  return s;
-}
-
-Sphere Sphere::glass_sphere(const std::string& name, const Matrix4& transform) const {
+Sphere Sphere::glass_sphere(const std::string& name, const Matrix4& transform) {
   Sphere s = Sphere(name, transform);
   s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
   return s;

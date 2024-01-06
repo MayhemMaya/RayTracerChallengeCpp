@@ -71,8 +71,8 @@ TEST(UtilsTests, SwapDoubleValues) {
 }
 
 TEST(UtilsTests, SwapIntersectionValues) {
-	Sphere* s1 = new Sphere();
-	Shape* s2 = new Sphere();
+	Sphere* s1 = new Sphere("Sphere1");
+	Shape* s2 = new Sphere("Sphere2");
 	Intersection i1(1.0f, s1);
 	Intersection i2(2.0f, s2);
 	Intersection::swap(i1, i2);
@@ -758,7 +758,7 @@ TEST(Chapter5_tests, Computing_a_point_from_a_distance) {
 
 TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_two_points) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere s;
+	Sphere s("Sphere");
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_FLOAT_EQ(xs[0].GetTime(), 4.0f);
@@ -767,7 +767,7 @@ TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_two_points) {
 
 TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 	Ray r(Point(0, 1, -5), Vector(0, 0, 1));
-	Sphere s;
+	Sphere s("Sphere");
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_FLOAT_EQ(xs[0].GetTime(), 5.0f);
@@ -776,14 +776,14 @@ TEST(Chapter9_tests, A_ray_intersects_a_sphere_at_a_tangent) {
 
 TEST(Chapter9_tests, A_ray_misses_a_sphere) {
 	Ray r(Point(0, 2, -5), Vector(0, 0, 1));
-	Sphere s;
+	Sphere s("Sphere");
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Chapter9_tests, A_ray_originates_inside_a_sphere) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
-	Sphere s;
+	Sphere s("Sphere");
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_FLOAT_EQ(xs[0].GetTime(), -1.0f);
@@ -792,7 +792,7 @@ TEST(Chapter9_tests, A_ray_originates_inside_a_sphere) {
 
 TEST(Chapter9_tests, A_sphere_is_behind_a_ray) {
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
-	Sphere s;
+	Sphere s("Sphere");
 	std::vector<Intersection> xs = s.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 2);
 	EXPECT_FLOAT_EQ(xs[0].GetTime(), -6.0f);
@@ -800,14 +800,14 @@ TEST(Chapter9_tests, A_sphere_is_behind_a_ray) {
 }
 
 TEST(Chapter5_tests, An_intersection_encapsulates_time_and_object) {
-	Sphere* s = new Sphere();
+	Sphere* s = new Sphere("Sphere");
 	Intersection i(3.5f, s);
 	EXPECT_FLOAT_EQ(i.GetTime(), 3.5f);
 	EXPECT_TRUE((*i.GetObject()) == (*s));
 }
 
 TEST(Chapter5_tests, Aggregating_intersections) {
-	Sphere* s = new Sphere();
+	Sphere* s = new Sphere("Sphere");
 	Intersection i1(1, s);
 	Intersection i2(2, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i1, i2 });
@@ -826,7 +826,7 @@ TEST(Chapter5_tests, Aggregating_intersections) {
 //}
 
 TEST(Chapter5_tests, The_hit_when_all_intersections_have_positive_time) {
-	Sphere* s = new Sphere();
+	Sphere* s = new Sphere("Sphere");
 	Intersection i1(1, s);
 	Intersection i2(2, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
@@ -835,7 +835,7 @@ TEST(Chapter5_tests, The_hit_when_all_intersections_have_positive_time) {
 }
 
 TEST(Chapter5_tests, The_hit_when_some_intersections_have_negative_time) {
-	Sphere* s = new Sphere();
+	Sphere* s = new Sphere("Sphere");
 	Intersection i1(-1, s);
 	Intersection i2(1, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
@@ -844,7 +844,7 @@ TEST(Chapter5_tests, The_hit_when_some_intersections_have_negative_time) {
 }
 
 TEST(Chapter5_tests, The_hit_when_all_intersections_have_negative_time) {
-	Sphere* s = new Sphere();
+	Sphere* s = new Sphere("Sphere");
 	Intersection i1(-2, s);
 	Intersection i2(-1, s);
 	std::vector<Intersection> xs = Intersection::intersections({ i2, i1 });
@@ -853,7 +853,7 @@ TEST(Chapter5_tests, The_hit_when_all_intersections_have_negative_time) {
 }
 
 TEST(Chapter5_tests, The_hit_is_always_the_lowest_nonnegative_intersection) {
-	Sphere* s = new Sphere();
+	Sphere* s = new Sphere("Sphere");
 	Intersection i1(5, s);
 	Intersection i2(7, s);
 	Intersection i3(-3, s);
@@ -880,19 +880,19 @@ TEST(Chapter5_tests, Scaling_a_ray) {
 }
 
 TEST(Chapter9_tests, The_default_transformation) {
-	MockShape s;
+	MockShape s("Shape");
 	EXPECT_TRUE(s.GetTransform() == Matrix4().identity());
 }
 
 TEST(Chapter9_tests, Assigning_a_transformation) {
-	MockShape s;
+	MockShape s("Shape");
 	s.SetTransform(Matrix4().translation(2, 3, 4));
 	EXPECT_TRUE(s.GetTransform() == Matrix4().translation(2, 3, 4));
 }
 
 TEST(Chapter9_tests, Intersecting_a_scaled_shape_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	MockShape s;
+	MockShape s("Shape");
 	s.SetTransform(Matrix4().scaling(2, 2, 2));
 	std::vector<Intersection> xs = r.intersect(&s);
 	EXPECT_TRUE(s.GetSavedRay().origin == Point(0, 0, -2.5));
@@ -901,7 +901,7 @@ TEST(Chapter9_tests, Intersecting_a_scaled_shape_with_a_ray) {
 
 TEST(Chapter9_tests, Intersecting_a_translated_shape_with_a_ray) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	MockShape s;
+	MockShape s("Shape");
 	s.SetTransform(Matrix4().translation(5, 0, 0));
 	std::vector<Intersection> xs = r.intersect(&s);
 	EXPECT_TRUE(s.GetSavedRay().origin == Point(-5, 0, -5));
@@ -911,44 +911,44 @@ TEST(Chapter9_tests, Intersecting_a_translated_shape_with_a_ray) {
 
 #pragma region Chapter6Tests
 TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_point_on_the_x_axis) {
-	Sphere s;
+	Sphere s("Sphere");
 	Vector n = s.local_normal_at(Point(1, 0, 0));
 	EXPECT_TRUE(n == Vector(1, 0, 0));
 }
 
 TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_point_on_the_y_axis) {
-	Sphere s;
+	Sphere s("Sphere");
 	Vector n = s.local_normal_at(Point(0, 1, 0));
 	EXPECT_TRUE(n == Vector(0, 1, 0));
 }
 
 TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_point_on_the_z_axis) {
-	Sphere s;
+	Sphere s("Sphere");
 	Vector n = s.local_normal_at(Point(0, 0, 1));
 	EXPECT_TRUE(n == Vector(0, 0, 1));
 }
 
 TEST(Chapter9_tests, The_normal_on_a_sphere_at_a_nonaxial_point) {
-	Sphere s;
+	Sphere s("Sphere");
 	Vector n = s.local_normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	EXPECT_TRUE(n == Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 }
 
 TEST(Chapter9_tests, The_normal_is_a_normalized_vector) {
-	Sphere s;
+	Sphere s("Sphere");
 	Vector n = s.local_normal_at(Point(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
 	EXPECT_TRUE(n == n.normalize());
 }
 
 TEST(Chapter9_tests, Computing_the_normal_on_a_translated_shape) {
-	MockShape s;
+	MockShape s("Shape");
 	s.SetTransform(Matrix4().translation(0, 1, 0));
 	Vector n = s.normal_at(Point(0, 1.70711f, -0.70711f));
 	EXPECT_TRUE(n == Vector(0, 0.70711f, -0.70711f));
 }
 
 TEST(Chapter9_tests, Computing_the_normal_on_a_transformed_shape) {
-	MockShape s;
+	MockShape s("Shape");
 	Matrix4 m = Matrix4().scaling(1, 0.5f, 1) * Matrix4().rotation_z(utils::kPI / 5.0f);
 	s.SetTransform(m);
 	Vector n = s.normal_at(Point(0, sqrt(2) / 2, -sqrt(2) / 2));
@@ -972,7 +972,7 @@ TEST(Chapter6_tests, Reflecting_a_vector_off_a_slanted_surface) {
 TEST(Chapter6_tests, A_point_light_has_a_position_and_intensity) {
 	Color intensity(1, 1, 1);
 	Point position(0, 0, 0);
-	PointLight light(position, intensity);
+	PointLight light("PointLight", position, intensity);
 	EXPECT_TRUE(light.GetPosition() == position);
 	EXPECT_TRUE(light.GetIntensity() == intensity);
 }
@@ -987,13 +987,13 @@ TEST(Chapter6_tests, The_default_material) {
 }
 
 TEST(Chapter9_tests, The_default_material) {
-	MockShape s;
+	MockShape s("Shape");
 	Material m = s.GetMaterial();
 	EXPECT_TRUE(m == Material());
 }
 
 TEST(Chapter9_tests, Assigning_a_material) {
-	MockShape s;
+	MockShape s("Shape");
 	Material m;
 	m.SetAmbient(1);
 	s.SetMaterial(m);
@@ -1001,60 +1001,60 @@ TEST(Chapter9_tests, Assigning_a_material) {
 }
 
 TEST(Chapter6_tests, Lighting_with_the_eye_between_the_light_and_the_surface) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
-	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
+	PointLight light("PointLight", Point(0, 0, -10), Color(1, 1, 1));
 	bool in_shadow = false;
 	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(1.9f, 1.9f, 1.9f));
 }
 
 TEST(Chapter6_tests, Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
-	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
+	PointLight light("PointLight", Point(0, 0, -10), Color(1, 1, 1));
 	bool in_shadow = false;
 	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(1.0f, 1.0f, 1.0f));
 }
 
 TEST(Chapter6_tests, Lighting_with_eye_opposite_surface_light_offset_45_degrees) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
-	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
+	PointLight light("PointLight", Point(0, 10, -10), Color(1, 1, 1));
 	bool in_shadow = false;
 	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.7364f, 0.7364f, 0.7364f));
 }
 
 TEST(Chapter6_tests, Lighting_with_eye_in_the_path_of_the_reflection_vector) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, -sqrt(2) / 2, -sqrt(2) / 2);
 	Vector normalv(0, 0, -1);
-	PointLight light(Point(0, 10, -10), Color(1, 1, 1));
+	PointLight light("PointLight", Point(0, 10, -10), Color(1, 1, 1));
 	bool in_shadow = false;
 	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result.round(4) == Color(1.6364f, 1.6364f, 1.6364f));
 }
 
 TEST(Chapter6_tests, Lighting_with_the_light_behind_the_surface) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
-	PointLight light(Point(0, 0, 10), Color(1, 1, 1));
+	PointLight light("PointLight", Point(0, 0, 10), Color(1, 1, 1));
 	bool in_shadow = true;
 	Color result = Engine::lighting(m, &object, light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
@@ -1069,14 +1069,14 @@ TEST(Chapter7_tests, Creating_a_world) {
 }
 
 TEST(Chapter7_tests, The_default_world) {
-	PointLight light("pointlight1", Point(-10, 10, -10), Color(1, 1, 1));
-	Sphere s1("sphere1");
+	PointLight light("PointLight1", Point(-10, 10, -10), Color(1, 1, 1));
+	Sphere s1("Sphere1");
 	Material m;
 	m.SetColor(Color(0.8f, 1.0f, 0.6f));
 	m.SetDiffuse(0.7f);
 	m.SetSpecular(0.2f);
 	s1.SetMaterial(m);
-	Sphere s2("sphere2");
+	Sphere s2("Sphere2");
 	s2.SetTransform(Matrix4().scaling(0.5f, 0.5f, 0.5f));
 
 	World w(WorldType::DEFAULT);
@@ -1098,7 +1098,7 @@ TEST(Chapter7_tests, Intersect_a_world_with_a_ray) {
 
 TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere* shape = new Sphere();
+	Sphere* shape = new Sphere("Sphere");
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_FLOAT_EQ(comps.time, i.GetTime());
@@ -1110,7 +1110,7 @@ TEST(Chapter7_tests, Precomputing_the_state_of_an_intersection) {
 
 TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere* shape = new Sphere();
+	Sphere* shape = new Sphere("Sphere");
 	Intersection i(4, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_FALSE(comps.inside);
@@ -1118,7 +1118,7 @@ TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_outside) {
 
 TEST(Chapter7_tests, The_hit_when_a_intersection_occurs_on_the_inside) {
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
-	Sphere* shape = new Sphere();
+	Sphere* shape = new Sphere("Sphere");
 	Intersection i(1, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_TRUE(comps.point == Point(0, 0, 1));
@@ -1139,9 +1139,13 @@ TEST(Chapter7_tests, Shading_an_intersection) {
 
 TEST(Chapter7_tests, Shading_an_intersection_from_the_inside) {
 	World w(WorldType::DEFAULT);
+	// Get the default light
+	PointLight* light = (PointLight*)w.GetLights()[0];
 	// remove the default light and add a new light
-	w.DeleteObject("pointlight1");
-	w.AddObject(new PointLight("pointlight1", Point(0, 0.25f, 0), Color(1, 1, 1)));
+	w.DeleteObject("PointLight1");
+	EXPECT_FALSE(w.ContainsLightSource());
+	w.AddObject(new PointLight("PointLight1", Point(0, 0.25f, 0), Color(1, 1, 1)));
+
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	Shape* shape = w.GetShapes()[1];
 	Intersection i(0.5f, shape);
@@ -1215,7 +1219,7 @@ TEST(Chapter7_tests, Constructing_a_camera) {
 	int hsize = 160;
 	int vsize = 120;
 	float field_of_view = utils::kPI / 2.0f;
-	Camera c(hsize, vsize, field_of_view);
+	Camera c("Camera", hsize, vsize, field_of_view);
 	EXPECT_EQ(c.GetHorizontalSize(), 160);
 	EXPECT_EQ(c.GetVerticalSize(), 120);
 	EXPECT_TRUE(utils::equal(c.GetFieldOfView(), utils::kPI / 2.0f));
@@ -1224,31 +1228,31 @@ TEST(Chapter7_tests, Constructing_a_camera) {
 }
 
 TEST(Chapter7_tests, The_pixel_size_for_a_horizontal_canvas) {
-	Camera c(200, 125, utils::kPI / 2.0f);
+	Camera c("Camera", 200, 125, utils::kPI / 2.0f);
 	EXPECT_FLOAT_EQ(c.GetPixelSize(), 0.01f);
 }
 
 TEST(Chapter7_tests, The_pixel_size_for_a_vertical_canvas) {
-	Camera c(125, 200, utils::kPI / 2.0f);
+	Camera c("Camera", 125, 200, utils::kPI / 2.0f);
 	EXPECT_FLOAT_EQ(c.GetPixelSize(), 0.01f);
 }
 
 TEST(Chapter7_tests, Constructing_a_ray_through_the_center_of_the_canvas) {
-	Camera c(201, 101, utils::kPI / 2.0f);
+	Camera c("Camera", 201, 101, utils::kPI / 2.0f);
 	Ray r = Engine::ray_for_pixel(c, 100, 50);
 	EXPECT_TRUE(r.GetOrigin() == Point(0, 0, 0));
 	EXPECT_TRUE(r.GetDirection() == Vector(0, 0, -1));
 }
 
 TEST(Chapter7_tests, Constructing_a_ray_through_a_corner_of_the_canvas) {
-	Camera c(201, 101, utils::kPI / 2.0f);
+	Camera c("Camera", 201, 101, utils::kPI / 2.0f);
 	Ray r = Engine::ray_for_pixel(c, 0, 0);
 	EXPECT_TRUE(r.GetOrigin() == Point(0, 0, 0));
 	EXPECT_TRUE(r.GetDirection() == Vector(0.66519f, 0.33259f, -0.66851f));
 }
 
 TEST(Chapter7_tests, Constructing_a_ray_when_the_camera_is_transformed) {
-	Camera c(201, 101, utils::kPI / 2.0f);
+	Camera c("Camera", 201, 101, utils::kPI / 2.0f);
 	c.SetTransform(Matrix4().rotation_y(utils::kPI / 4.0f) * Matrix4().translation(0, -2, 5));
 	Ray r = Engine::ray_for_pixel(c, 100, 50);
 	EXPECT_TRUE(r.GetOrigin() == Point(0, 2, -5));
@@ -1257,7 +1261,7 @@ TEST(Chapter7_tests, Constructing_a_ray_when_the_camera_is_transformed) {
 
 TEST(Chapter7_tests, Rendering_a_world_with_a_camera) {
 	World w(WorldType::DEFAULT);
-	Camera c(11, 11, utils::kPI / 2.0f);
+	Camera c("Camera", 11, 11, utils::kPI / 2.0f);
 	Point from(0, 0, -5);
 	Point to(0, 0, 0);
 	Vector up(0, 1, 0);
@@ -1269,12 +1273,12 @@ TEST(Chapter7_tests, Rendering_a_world_with_a_camera) {
 
 #pragma region Chapter8Tests
 TEST(Chapter8_tests, Lighting_with_the_surface_in_shadow) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	Point position(0, 0, 0);
 	Vector evev(0, 0, -1);
 	Vector normalv(0, 0, -1);
-	PointLight light(Point(0, 0, -10), Color(1, 1, 1));
+	PointLight light("PointLight", Point(0, 0, -10), Color(1, 1, 1));
 	bool in_shadow = true;
 	Color result = Engine::lighting(m, &object,  light, position, evev, normalv, in_shadow);
 	EXPECT_TRUE(result == Color(0.1f, 0.1f, 0.1f));
@@ -1306,11 +1310,11 @@ TEST(Chapter8_tests, There_is_no_shadow_when_an_object_is_behind_the_point) {
 
 TEST(Chapter8_tests, shade_hit_is_given_an_intersection_in_shadow) {
 	World w(WorldType::EMPTY);
-	PointLight light(Point(0, 0, -10), Color(1.0f, 1.0f, 1.0f));
+	PointLight light("PointLight", Point(0, 0, -10), Color(1.0f, 1.0f, 1.0f));
 	w.AddObject(&light);
-	Sphere* s1 = new Sphere();
+	Sphere* s1 = new Sphere("Sphere");
 	w.AddObject(s1);
-	Sphere* s2 = new Sphere((Matrix4().translation(0, 0, 10)));
+	Sphere* s2 = new Sphere("Sphere", Matrix4().translation(0, 0, 10));
 	w.AddObject(s2);
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Intersection i(4, s2);
@@ -1321,7 +1325,7 @@ TEST(Chapter8_tests, shade_hit_is_given_an_intersection_in_shadow) {
 
 TEST(Chapter8_tests, The_hit_should_offset_the_point) {
 	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere* shape = new Sphere((Matrix4().translation(0, 0, 1)));
+	Sphere* shape = new Sphere("Sphere", Matrix4().translation(0, 0, 1));
 	Intersection i(5, shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
 	EXPECT_LT(comps.over_point[2], -utils::kEPSILON / 2);
@@ -1331,12 +1335,12 @@ TEST(Chapter8_tests, The_hit_should_offset_the_point) {
 
 #pragma region Chapter9Tests
 TEST(Chapter9_tests, A_sphere_is_a_shape) {
-	Sphere s;
+	Sphere s("Sphere");
 	EXPECT_TRUE(utils::instance_of<Shape>(&s));
 }
 
 TEST(Chapter9_tests, The_normal_of_a_plane_is_constant_everywhere) {
-	Plane p;
+	Plane p("Plane");
 	Vector n1 = p.local_normal_at(Point(0, 0, 0));
 	Vector n2 = p.local_normal_at(Point(10, 0, -10));
 	Vector n3 = p.local_normal_at(Point(-5, 0, 150));
@@ -1346,21 +1350,21 @@ TEST(Chapter9_tests, The_normal_of_a_plane_is_constant_everywhere) {
 }
 
 TEST(Chapter9_tests, Intersect_with_a_ray_parallel_to_the_plane) {
-	Plane p;
+	Plane p("Plane");
 	Ray r(Point(0, 10, 0), Vector(0, 0, 1));
 	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Chapter9_tests, Intersect_a_plane_with_a_coplanar_ray) {
-	Plane p;
+	Plane p("Plane");
 	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
 	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_above) {
-	Plane p;
+	Plane p("Plane");
 	Ray r(Point(0, 1, 0), Vector(0, -1, 0));
 	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 1);
@@ -1369,7 +1373,7 @@ TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_above) {
 }
 
 TEST(Chapter9_tests, A_ray_intersecting_a_plane_from_below) {
-	Plane p;
+	Plane p("Plane");
 	Ray r(Point(0, -1, 0), Vector(0, 1, 0));
 	std::vector<Intersection> xs = p.local_intersect(r.to_ray_struct());
 	EXPECT_EQ(xs.size(), 1);
@@ -1419,7 +1423,7 @@ TEST(Chapter10_tests, A_stripe_pattern_alternates_in_x) {
 }
 
 TEST(Chapter10_tests, Lighting_with_a_pattern_applied) {
-	Sphere object;
+	Sphere object("Sphere");
 	Material m;
 	StripePattern p = StripePattern(Color(1, 1, 1), Color(0, 0, 0));
 	m.SetPattern(&p);
@@ -1428,7 +1432,7 @@ TEST(Chapter10_tests, Lighting_with_a_pattern_applied) {
 	m.SetSpecular(0);
 	Vector eyev = Vector(0, 0, -1);
 	Vector normalv = Vector(0, 0, -1);
-	PointLight light = PointLight(Point(0, 0, -10), Color(1, 1, 1));
+	PointLight light = PointLight("PointLight", Point(0, 0, -10), Color(1, 1, 1));
 	Color c1 = Engine::lighting(m, &object, light, Point(0.9, 0, 0), eyev, normalv, false);
 	Color c2 = Engine::lighting(m, &object, light, Point(1.1, 0, 0), eyev, normalv, false);
 	EXPECT_TRUE(c1 == Color(1, 1, 1));
@@ -1448,7 +1452,7 @@ TEST(Chapter10_tests, A_material_can_be_given_a_pattern) {
 }
 
 TEST(Chapter10_tests, Stripes_with_an_object_transformation) {
-	Sphere object;
+	Sphere object("Sphere");
 	object.SetTransform(Matrix4().scaling(2, 2, 2));
 	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
 	Color c = pattern.pattern_at_object(&object, Point(1.5, 0, 0));
@@ -1456,7 +1460,7 @@ TEST(Chapter10_tests, Stripes_with_an_object_transformation) {
 }
 
 TEST(Chapter10_tests, Stripes_with_a_pattern_transformation) {
-	Sphere object;
+	Sphere object("Sphere");
 	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
 	pattern.SetTransform(Matrix4().scaling(2, 2, 2));
 	Color c = pattern.pattern_at_object(&object, Point(1.5, 0, 0));
@@ -1464,7 +1468,7 @@ TEST(Chapter10_tests, Stripes_with_a_pattern_transformation) {
 }
 
 TEST(Chapter10_tests, Stripes_with_both_an_object_and_a_pattern_transformation) {
-	Sphere object;
+	Sphere object("Sphere");
 	object.SetTransform(Matrix4().scaling(2, 2, 2));
 	StripePattern pattern = StripePattern(Colors::White, Colors::Black);
 	pattern.SetTransform(Matrix4().translation(0.5, 0, 0));
@@ -1535,7 +1539,7 @@ TEST(Chapter11_tests, Reflectivity_for_the_default_material) {
 }
 
 TEST(Chapter11_tests, Precomputing_the_reflection_vector) {
-	Plane shape;
+	Plane shape("Plane");
 	Ray r = Ray(Point(0, 1, -1), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	Intersection i(sqrt(2), &shape);
 	Engine::Computation comps = Engine::prepare_computations(i, r);
@@ -1555,7 +1559,7 @@ TEST(Chapter11_tests, The_reflected_color_for_a_nonreflective_material) {
 
 TEST(Chapter11_tests, The_reflected_color_for_a_reflective_material) {
 	World w = World(WorldType::DEFAULT);
-	Plane shape = Plane(Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
+	Plane shape = Plane("Plane", Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
 	w.AddObject(&shape);
 	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	Intersection i(sqrt(2), &shape);
@@ -1566,7 +1570,7 @@ TEST(Chapter11_tests, The_reflected_color_for_a_reflective_material) {
 
 TEST(Chapter11_tests, The_shade_hit_function_with_a_reflective_material) {
 	World w = World(WorldType::DEFAULT);
-	Plane shape = Plane(Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
+	Plane shape = Plane("Plane", Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
 	w.AddObject(&shape);
 	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	Intersection i(sqrt(2), &shape);
@@ -1577,11 +1581,11 @@ TEST(Chapter11_tests, The_shade_hit_function_with_a_reflective_material) {
 
 TEST(Chapter11_tests, The_color_at_function_with_mutually_reflective_surfaces) {
 	World w = World(WorldType::EMPTY);
-	PointLight light = PointLight(Point(0, 0, 0), Color(1, 1, 1));
+	PointLight light = PointLight("PointLight1", Point(0, 0, 0), Color(1, 1, 1));
 	w.AddObject(&light);
-	Plane lower = Plane(Material().SetReflectivity(1.0f), Matrix4().translation(0, -1, 0));
+	Plane lower = Plane("Plane1", Material().SetReflectivity(1.0f), Matrix4().translation(0, -1, 0));
 	w.AddObject(&lower);
-	Plane upper = Plane(Material().SetReflectivity(1.0f), Matrix4().translation(0, 1, 0));
+	Plane upper = Plane("Plane2", Material().SetReflectivity(1.0f), Matrix4().translation(0, 1, 0));
 	w.AddObject(&upper);
 	Ray r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
 	EXPECT_NO_THROW(Engine::color_at(w, r), testing::ExitedWithCode(0), "Success");
@@ -1589,7 +1593,7 @@ TEST(Chapter11_tests, The_color_at_function_with_mutually_reflective_surfaces) {
 
 TEST(Chapter11_tests, The_reflected_color_at_the_maximum_recursive_depth) {
 	World w = World(WorldType::DEFAULT);
-	Plane shape = Plane(Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
+	Plane shape = Plane("Plane", Material().SetReflectivity(0.5f), Matrix4().translation(0, -1, 0));
 	w.AddObject(&shape);
 	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	Intersection i(sqrt(2), &shape);
@@ -1605,7 +1609,7 @@ TEST(Chapter11_tests, Transparency_and_Refractive_Index_for_the_default_material
 }
 
 TEST(Chapter11_tests, A_helper_for_producing_a_sphere_with_a_glassy_material) {
-	Sphere s = Sphere().glass_sphere();
+	Sphere s = Sphere::glass_sphere("Glass_sphere");
 	EXPECT_FLOAT_EQ(s.GetMaterial().GetTransparency(), 1.0f);
 	EXPECT_FLOAT_EQ(s.GetMaterial().GetRefractiveIndex(), 1.5f);
 }
@@ -1614,15 +1618,15 @@ TEST(Chapter11_tests, Finding_n1_and_n2_at_various_intersections) {
 	float n1_values[] = { 1.0f, 1.5f, 2.0f, 2.5f, 2.5f, 1.5f };
 	float n2_values[] = { 1.5f, 2.0f, 2.5f, 2.5f, 1.5f, 1.0f };
 
-	Sphere A = Sphere().glass_sphere();
+	Sphere A = Sphere::glass_sphere("Glass_sphere1");
 	A.SetTransform(Matrix4().scaling(2, 2, 2));
 	A.GetMaterial().SetRefractiveIndex(1.5f);
 
-	Sphere B = Sphere().glass_sphere();
+	Sphere B = Sphere::glass_sphere("Glass_sphere2");
 	B.SetTransform(Matrix4().translation(0, 0, -0.25f));
 	B.GetMaterial().SetRefractiveIndex(2.0f);
 
-	Sphere C = Sphere().glass_sphere();
+	Sphere C = Sphere::glass_sphere("Glass_sphere3");
 	C.SetTransform(Matrix4().translation(0, 0, 0.25f));
 	C.GetMaterial().SetRefractiveIndex(2.5f);
 
@@ -1645,7 +1649,7 @@ TEST(Chapter11_tests, Finding_n1_and_n2_at_various_intersections) {
 
 TEST(Chapter11_tests, The_under_point_is_offset_below_the_surface) {
 	Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-	Sphere shape = Sphere().glass_sphere();
+	Sphere shape = Sphere::glass_sphere("Glass_sphere");
 	shape.SetTransform(Matrix4().translation(0, 0, 1.0f));
 	Intersection i(5, &shape);
 	std::vector<Intersection> xs = Intersection::intersections({ i });
@@ -1717,9 +1721,9 @@ TEST(Chapter11_tests, The_refracted_color_with_a_refracted_ray) {
 
 TEST(Chapter11_tests, The_shade_hit_function_with_a_transparent_material) {
 	World w(WorldType::DEFAULT);
-	Plane floor = Plane(Material().SetTransparency(0.5f).SetRefractiveIndex(1.5f), Matrix4().translation(0, -1, 0));
+	Plane floor = Plane("floor", Material().SetTransparency(0.5f).SetRefractiveIndex(1.5f), Matrix4().translation(0, -1, 0));
 	w.AddObject(&floor);
-	Sphere ball = Sphere(Material().SetColor(Color(1, 0, 0)).SetAmbient(0.5f), Matrix4().translation(0, -3.5f, -0.5f));
+	Sphere ball = Sphere("ball", Material().SetColor(Color(1, 0, 0)).SetAmbient(0.5f), Matrix4().translation(0, -3.5f, -0.5f));
 	w.AddObject(&ball);
 	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
 	std::vector<Intersection> xs = Intersection::intersections({ Intersection(sqrt(2), &floor) });
@@ -1729,7 +1733,7 @@ TEST(Chapter11_tests, The_shade_hit_function_with_a_transparent_material) {
 }
 
 TEST(Chapter11_tests, The_schlick_approximation_under_total_internal_reflection) {
-	Sphere shape = Sphere().glass_sphere();
+	Sphere shape = Sphere::glass_sphere("Glass_sphere");
 	Ray r = Ray(Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0));
 	std::vector<Intersection> xs = Intersection::intersections({
 		Intersection(-sqrt(2) / 2, &shape),
@@ -1741,7 +1745,7 @@ TEST(Chapter11_tests, The_schlick_approximation_under_total_internal_reflection)
 }
 
 TEST(Chapter11_tests, The_schlick_approximation_with_a_perpendicular_viewing_angle) {
-	Sphere shape = Sphere().glass_sphere();
+	Sphere shape = Sphere::glass_sphere("Glass_sphere");
 	Ray r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
 	std::vector<Intersection> xs = Intersection::intersections({
 		Intersection(-1, &shape),
@@ -1753,7 +1757,7 @@ TEST(Chapter11_tests, The_schlick_approximation_with_a_perpendicular_viewing_ang
 }
 
 TEST(Chapter11_tests, The_schlick_approximation_with_a_small_angle_and_n2_greater_than_n1) {
-	Sphere shape = Sphere().glass_sphere();
+	Sphere shape = Sphere::glass_sphere("Glass_sphere");
 	Ray r = Ray(Point(0, 0.99f, -2), Vector(0, 0, 1));
 	std::vector<Intersection> xs = Intersection::intersections({ Intersection(1.8589f, &shape) });
 	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
@@ -1764,9 +1768,9 @@ TEST(Chapter11_tests, The_schlick_approximation_with_a_small_angle_and_n2_greate
 TEST(Chapter11_tests, The_shade_hit_function_with_a_reflective_transparent_material) {
 	World w(WorldType::DEFAULT);
 	Ray r = Ray(Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2));
-	Plane floor = Plane(Material().SetReflectivity(0.5f).SetTransparency(0.5f).SetRefractiveIndex(1.5f), Matrix4().translation(0, -1, 0));
+	Plane floor = Plane("floor", Material().SetReflectivity(0.5f).SetTransparency(0.5f).SetRefractiveIndex(1.5f), Matrix4().translation(0, -1, 0));
 	w.AddObject(&floor);
-	Sphere ball = Sphere(Material().SetColor(Color(1, 0, 0)).SetAmbient(0.5f), Matrix4().translation(0, -3.5f, -0.5f));
+	Sphere ball = Sphere("ball", Material().SetColor(Color(1, 0, 0)).SetAmbient(0.5f), Matrix4().translation(0, -3.5f, -0.5f));
 	w.AddObject(&ball);
 	std::vector<Intersection> xs = Intersection::intersections({ Intersection(sqrt(2), &floor) });
 	Engine::Computation comps = Engine::prepare_computations(xs[0], r, xs);
@@ -1801,7 +1805,7 @@ TEST(Chapter12_tests, A_ray_intersects_a_cube) {
 
 	for (auto face : faces)
 	{
-		Cube c;
+		Cube c("Cube");
 		Ray r(face.origin, face.direction);
 		std::vector<Intersection> xs = c.local_intersect(r.to_ray_struct());
 		ASSERT_EQ(xs.size(), 2);
@@ -1823,7 +1827,7 @@ TEST(Chapter12_tests, A_ray_misses_a_cube) {
 
 	for (auto ray : rays)
 	{
-		Cube c;
+		Cube c("Cube");
 		std::vector<Intersection> xs = c.local_intersect(ray.to_ray_struct());
 		ASSERT_EQ(xs.size(), 0);
 	}
@@ -1852,7 +1856,7 @@ TEST(Chapter12_tests, The_normal_on_the_surface_of_a_cube) {
 
 	for (auto pair : pairs)
 	{
-		Cube c;
+		Cube c("Cube");
 		Vector normal = c.local_normal_at(pair.point);
 		ASSERT_TRUE(normal == pair.normal);
 	}
@@ -1868,7 +1872,7 @@ TEST(Chapter13_tests, A_ray_misses_a_cylinder) {
 	};
 
 	for (auto ray : rays) {
-		Cylinder cyl;
+		Cylinder cyl("Cylinder");
 		Vector direction = ray.GetDirection().normalize();
 		Ray r(ray.GetOrigin(), direction);
 		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
@@ -1896,7 +1900,7 @@ TEST(Chapter13_tests, A_ray_strikes_a_cylinder) {
 	};
 
 	for (auto example : examples) {
-		Cylinder cyl;
+		Cylinder cyl("Cylinder");
 		Vector direction = example.direction.normalize();
 		Ray r(example.origin, direction);
 		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
@@ -1924,14 +1928,14 @@ TEST(Chapter13_tests, Normal_vector_on_a_cylinder) {
 	};
 
 	for (auto pair : pairs) {
-		Cylinder cyl;
+		Cylinder cyl("Cylinder");
 		Vector n = cyl.local_normal_at(pair.point);
 		ASSERT_TRUE(n == pair.normal);
 	}
 }
 
 TEST(Chapter13_tests, The_default_minimum_and_maximum_for_a_cylinder) {
-	Cylinder cyl;
+	Cylinder cyl("Cylinder");
 	EXPECT_FLOAT_EQ(cyl.GetMinimum(), -utils::kINFINITY);
 	EXPECT_FLOAT_EQ(cyl.GetMaximum(), utils::kINFINITY);
 }
@@ -1958,7 +1962,7 @@ TEST(Chapter13_tests, Intersecting_a_constrained_cylinder) {
 	};
 
 	for (auto example : examples) {
-		Cylinder cyl(1, 2);
+		Cylinder cyl("Cylinder", 1, 2);
 		Vector direction = example.direction.normalize();
 		Ray r(example.point, direction);
 		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
@@ -1967,7 +1971,7 @@ TEST(Chapter13_tests, Intersecting_a_constrained_cylinder) {
 }
 
 TEST(Chapter13_tests, The_default_closed_value_for_a_cylinder) {
-	Cylinder cyl;
+	Cylinder cyl("Cylinder");
 	EXPECT_FALSE(cyl.GetClosed());
 }
 
@@ -1992,7 +1996,7 @@ TEST(Chapter13_tests, Intersecting_the_caps_of_a_closed_cylinder) {
 	};
 
 	for (auto example : examples) {
-		Cylinder cyl(1, 2, true);
+		Cylinder cyl("Cylinder", 1, 2, true);
 		Vector direction = example.direction.normalize();
 		Ray r(example.point, direction);
 		std::vector<Intersection> xs = cyl.local_intersect(r.to_ray_struct());
@@ -2020,7 +2024,7 @@ TEST(Chapter13_tests, The_normal_vector_on_a_cylinders_end_caps) {
 	};
 
 	for (auto pair : pairs) {
-		Cylinder cyl(1, 2, true);
+		Cylinder cyl("Cylinder", 1, 2, true);
 		Vector n = cyl.local_normal_at(pair.point);
 		ASSERT_TRUE(n == pair.normal);
 	}
@@ -2046,7 +2050,7 @@ TEST(Chapter13_tests, Intersecting_a_cone_with_a_ray) {
 	};
 
 	for (auto example : examples) {
-		Cone shape;
+		Cone shape("Cone");
 		Vector direction = example.direction.normalize();
 		Ray r(example.origin, direction);
 		std::vector<Intersection> xs = shape.local_intersect(r.to_ray_struct());
@@ -2057,7 +2061,7 @@ TEST(Chapter13_tests, Intersecting_a_cone_with_a_ray) {
 }
 
 TEST(Chapter13_tests, Intersecting_a_cone_with_a_ray_parallel_to_one_of_its_halves) {
-	Cone shape;
+	Cone shape("Cone");
 	Vector direction = Vector(0, 1, 1).normalize();
 	Ray r(Point(0, 0, -1), direction);
 	std::vector<Intersection> xs = shape.local_intersect(r.to_ray_struct());
@@ -2083,7 +2087,7 @@ TEST(Chapter13_tests, Intersecting_a_cones_end_caps) {
 		PointDirectionCountPair(Point(0, 0, -0.25f), Vector(0, 1, 0), 4)
 	};
 
-	Cone shape(-0.5f, 0.5f, true);
+	Cone shape("Cone", -0.5f, 0.5f, true);
 
 	for (auto example : examples) {
 		Vector direction = example.direction.normalize();
@@ -2109,7 +2113,7 @@ TEST(Chapter13_tests, Computing_the_normal_vector_on_a_cone) {
 		PointNormalPair(Point(-1, -1, 0), Vector(-1, 1, 0))
 	};
 
-	Cone shape;
+	Cone shape("Cone");
 
 	for (auto pair : pairs) {
 		Vector n = shape.local_normal_at(pair.point);

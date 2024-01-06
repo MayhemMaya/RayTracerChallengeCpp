@@ -18,9 +18,9 @@ std::vector<Object*> default_world(const WorldType& type) {
     m.SetSpecular(0.2f);
 
     return {
-      new PointLight("pointlight1", Point(-10, 10, -10), Color(1, 1, 1)),
-      new Sphere("sphere1", m),
-      new Sphere("sphere2", Matrix4().scaling(0.5f, 0.5f, 0.5f))
+      new PointLight("PointLight1", Point(-10, 10, -10), Color(1, 1, 1)),
+      new Sphere("Sphere1", m),
+      new Sphere("Sphere2", Matrix4().scaling(0.5f, 0.5f, 0.5f))
     };
   }
   return {};
@@ -91,18 +91,19 @@ void World::AddObject(Object* object) {
     if (objects_[i]->GetName() == object->GetName()) {
       std::cout << "Error: Cannot add object to world. An object with the name '"
           << object->GetName() << "' already exists." << std::endl;
-      return;
     }
   }
   objects_.push_back(object);
   hasLightSource_ = check_for_light_source(objects_);
 }
-void World::DeleteObject(const std::string& name) {
+
+void World::DeleteObject(const std::string& name) {    
   for (int i = 0; i < objects_.size(); i++) {
     if (objects_[i]->GetName() == name) {
       objects_.erase(objects_.begin() + i);
     }
   }
+
   hasLightSource_ = check_for_light_source(objects_);
 }
 
