@@ -4,7 +4,7 @@
 
 Hit Hit::hit(const std::vector<Intersection>& intersections) {
   Hit hit;
-  for (Intersection i : intersections) {
+  for (auto& i : intersections) {
     if (i.GetTime() > 0) {
       hit.i = i;
       hit.result = HitResult::HIT;

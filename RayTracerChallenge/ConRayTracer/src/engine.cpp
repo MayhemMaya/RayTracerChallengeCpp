@@ -66,8 +66,8 @@ Color lighting(const Material& material, Shape* object,
 }
 
 bool contains_intersection_object(const std::vector<Object*>& containers_list, Object* obj) {
-  for (int i = 0; i < containers_list.size(); i++) {
-    if ((*containers_list[i]) == (*obj)) {
+  for (auto& item : containers_list) {
+    if ((*item) == (*obj)) {
       return true;
     }
   }
@@ -117,13 +117,13 @@ Computation prepare_computations(const Intersection& intersection, const Ray& ra
 
   std::vector<Object*> containers;
 
-  for (int i = 0; i < intersections.size(); i++) {
+  for (auto& _intersection : intersections) {
     // check if the intersection is the hit
-    if (intersections[i] == intersection) {
+    if (_intersection == intersection) {
       comps.n1 = calculate_n_value(containers);
     }
 
-    Object* intersection_object = intersections[i].GetObject();
+    Object* intersection_object = _intersection.GetObject();
 
     if (contains_intersection_object(containers, intersection_object)) {
       // remove the intersection object
@@ -135,7 +135,7 @@ Computation prepare_computations(const Intersection& intersection, const Ray& ra
     }
 
     // check if the intersection is the hit again
-    if (intersections[i] == intersection) {
+    if (_intersection == intersection) {
       comps.n2 = calculate_n_value(containers);
       break;
     }

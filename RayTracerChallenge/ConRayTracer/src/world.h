@@ -25,11 +25,11 @@ class World {
    int GetObjectCount() const;
    void ListObjects() const;
    void ListObjects(const ObjectType& type) const;
-   void AddObject(Object* object);
+   void AddObject(Object* other);
    void DeleteObject(const std::string& name);
    bool ContainsLightSource() const;
    bool ContainsCamera() const;
-   bool ContainsObject(Object* object) const;
+   bool ContainsObject(Object* other) const;
  private:
    std::vector<Object*> objects_;
    bool hasLightSource_;

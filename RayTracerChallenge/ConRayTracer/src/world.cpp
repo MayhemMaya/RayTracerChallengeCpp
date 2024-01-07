@@ -1,8 +1,8 @@
 #include "world.h"
 
 bool check_for_light_source(const std::vector<Object*>& world_objects) {
-  for (int i = 0; i < world_objects.size(); i++) {
-    if (utils::instance_of<LightSource>(world_objects[i]))
+  for (auto world_object : world_objects) {
+    if (utils::instance_of<LightSource>(world_object))
       return true;
   }
   return false;
@@ -32,8 +32,6 @@ World::World(const WorldType& type)
 World::~World() {
   for (int i = 0; i < objects_.size(); i++) {
     objects_[i] = nullptr;
-  }
-  for (int i = 0; i < objects_.size(); i++) {
     delete objects_[i];
   }
 }
@@ -44,27 +42,27 @@ std::vector<Object*> World::GetObjects() const {
 
 std::vector<LightSource*> World::GetLights() const {
   std::vector<LightSource*> lights;
-  for (int i = 0; i < objects_.size(); i++) {
-    if (utils::instance_of<LightSource>(objects_[i]))
-      lights.push_back((LightSource*)(objects_[i]));
+  for (auto& object : objects_) {
+    if (utils::instance_of<LightSource>(object))
+      lights.push_back((LightSource*)(object));
   }
   return lights;
 }
 
 std::vector<Shape*> World::GetShapes() const {
   std::vector<Shape*> shapes;
-  for (int i = 0; i < objects_.size(); i++) {
-    if (utils::instance_of<Shape>(objects_[i]))
-      shapes.push_back((Shape*)(objects_[i]));
+  for (auto& object : objects_) {
+    if (utils::instance_of<Shape>(object))
+      shapes.push_back((Shape*)(object));
   }
   return shapes;
 }
 
 std::vector<Camera*> World::GetCameras() const {
   std::vector<Camera*> cameras;
-  for (int i = 0; i < objects_.size(); i++) {
-    if (utils::instance_of<Camera>(objects_[i]))
-      cameras.push_back((Camera*)(objects_[i]));
+  for (auto object : objects_) {
+    if (utils::instance_of<Camera>(object))
+      cameras.push_back((Camera*)(object));
   }
   return cameras;
 }
@@ -74,26 +72,27 @@ int World::GetObjectCount() const {
 }
 
 void World::ListObjects() const {
-  for (int i = 0; i < objects_.size(); i++) {
-    std::cout << objects_[i]->GetName() << std::endl;
+  for (auto& object : objects_) {
+    std::cout << object->GetName() << std::endl;
   }
 }
 
 void World::ListObjects(const ObjectType& type) const {
-  for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetObjectType() == type)
-      std::cout << objects_[i]->GetName() << std::endl;
+  for (auto& object : objects_) {
+    if (object->GetObjectType() == type)
+      std::cout << object->GetName() << std::endl;
   }
 }
 
-void World::AddObject(Object* object) {
-  for (int i = 0; i < objects_.size(); i++) {
-    if (objects_[i]->GetName() == object->GetName()) {
+void World::AddObject(Object* other) {
+  for (auto& object : objects_) {
+    if (object->GetName() == other->GetName()) {
       std::cout << "Error: Cannot add object to world. An object with the name '"
-          << object->GetName() << "' already exists." << std::endl;
+          << other->GetName() << "' already exists." << std::endl;
+      return;
     }
   }
-  objects_.push_back(object);
+  objects_.push_back(other);
   hasLightSource_ = check_for_light_source(objects_);
 }
 
@@ -112,16 +111,16 @@ bool World::ContainsLightSource() const {
 }
 
 bool World::ContainsCamera() const {
-  for (int i = 0; i < objects_.size(); i++) {
-    if (utils::instance_of<Camera>(objects_[i]))
+  for (auto& object : objects_) {
+    if (utils::instance_of<Camera>(object))
       return true;
   }
   return false;
 }
 
-bool World::ContainsObject(Object* object) const {
-  for (int i = 0; i < objects_.size(); i++) {
-    if ((*objects_[i]) == (*object)) {
+bool World::ContainsObject(Object* other) const {
+  for (auto& object : objects_) {
+    if ((*object) == (*other)) {
       return true;
     }
   }

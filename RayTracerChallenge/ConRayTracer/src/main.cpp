@@ -7,6 +7,22 @@
 
 int main() {
 
+	World w(WorldType::EMPTY);
+	PointLight light("PointLight1", Point(0, 0, -10), Color(1.0f, 1.0f, 1.0f));
+	w.AddObject(&light);
+	Sphere* s1 = new Sphere("Sphere1");
+	w.AddObject(s1);
+	Sphere* s2 = new Sphere("Sphere2", Matrix4().translation(0, 0, 10));
+	w.AddObject(s2);
+	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+	Intersection i(4, s2);
+	Engine::Computation comps = Engine::prepare_computations(i, r);
+	Color c = Engine::shade_hit(w, comps);
+
+	std::cout << c << "\n";
+
+	/*
+
 	int res_x = 200;
 	int res_y = 100;
 
@@ -103,6 +119,7 @@ int main() {
 	Canvas image = Engine::render(camera, world);
 	
 	utils::ExportFile("render_test.ppm", image.ToPPM());
+	*/
 
 	std::cout << "\n\nPress any key to exit...";
 	std::cin.get();

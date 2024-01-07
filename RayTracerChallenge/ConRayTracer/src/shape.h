@@ -28,4 +28,5 @@ class Shape : public Object {
  private:
   static int shape_count_;
   Material material_;
+  Shape* parent_;
 };

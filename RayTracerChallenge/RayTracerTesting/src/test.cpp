@@ -36,6 +36,7 @@
 #include "cube.cpp"
 #include "cylinder.cpp"
 #include "cone.cpp"
+#include "group.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -1310,11 +1311,11 @@ TEST(Chapter8_tests, There_is_no_shadow_when_an_object_is_behind_the_point) {
 
 TEST(Chapter8_tests, shade_hit_is_given_an_intersection_in_shadow) {
 	World w(WorldType::EMPTY);
-	PointLight light("PointLight", Point(0, 0, -10), Color(1.0f, 1.0f, 1.0f));
+	PointLight light("PointLight1", Point(0, 0, -10), Color(1.0f, 1.0f, 1.0f));
 	w.AddObject(&light);
-	Sphere* s1 = new Sphere("Sphere");
+	Sphere* s1 = new Sphere("Sphere1");
 	w.AddObject(s1);
-	Sphere* s2 = new Sphere("Sphere", Matrix4().translation(0, 0, 10));
+	Sphere* s2 = new Sphere("Sphere2", Matrix4().translation(0, 0, 10));
 	w.AddObject(s2);
 	Ray r(Point(0, 0, 5), Vector(0, 0, 1));
 	Intersection i(4, s2);
@@ -2119,5 +2120,13 @@ TEST(Chapter13_tests, Computing_the_normal_vector_on_a_cone) {
 		Vector n = shape.local_normal_at(pair.point);
 		ASSERT_TRUE(n == pair.normal);
 	}
+}
+#pragma endregion
+
+#pragma region Chapter14Tests
+TEST(Chapter14_tests, Creating_a_new_group) {
+	Group g("Group");
+	EXPECT_TRUE(g.GetTransform() == Matrix4().identity());
+
 }
 #pragma endregion

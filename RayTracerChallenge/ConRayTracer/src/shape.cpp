@@ -5,30 +5,30 @@
 int Shape::shape_count_ = 0;
 
 Shape::Shape(const std::string& name, const ObjectType& type)
-    : Object(name, type) {
+    : Object(name, type), material_(Material()), parent_(nullptr) {
   shape_count_++;
 }
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Matrix4& transform)
-    : Object(name, type, transform) {
+    : Object(name, type, transform), material_(Material()), parent_(nullptr) {
   shape_count_++;
 }
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material)
-    : Object(name, type) {
+    : Object(name, type), material_(material), parent_(nullptr) {
   shape_count_++;
-  this->material_ = material;
 }
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material,
                                                    const Matrix4& transform)
-    : Object(name, type, transform) {
+    : Object(name, type, transform), material_(material), parent_(nullptr) {
   shape_count_++;
-  this->material_ = material;
 }
 
 Shape::~Shape() {
   shape_count_--;
+  parent_ = nullptr;
+  delete parent_;
 }
 
 void Shape::ListDetails() {
@@ -63,6 +63,7 @@ bool Shape::operator==(const Object& object) {
   return(this->GetName() == other->GetName() &&
          this->GetTransform() == other->GetTransform() &&
          this->GetObjectType() == other->GetObjectType() && 
+         this->GetMaterial() == other->GetMaterial() &&
          this->GetMaterial() == other->GetMaterial());
 }
 
