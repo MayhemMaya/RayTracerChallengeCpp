@@ -34,3 +34,4 @@
 #include "cube.h"
 #include "cylinder.h"
 #include "cone.h"
+#include "group.h"

@@ -26,7 +26,9 @@ class World {
    void ListObjects() const;
    void ListObjects(const ObjectType& type) const;
    void AddObject(Object* other);
+   void AddObjects(const std::vector<Object*>& objects);
    void DeleteObject(const std::string& name);
+   void DeleteObjects(const std::vector<std::string>& names);
    bool ContainsLightSource() const;
    bool ContainsCamera() const;
    bool ContainsObject(Object* other) const;

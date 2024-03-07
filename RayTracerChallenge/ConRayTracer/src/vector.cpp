@@ -3,11 +3,11 @@
 #include "vector.h"
 #include "utils.h"
 
-Vector::Vector() : Tuple(0, 0, 0, 0) {}
-Vector::Vector(float x, float y, float z) : Tuple(x, y, z, 0) {}
+Vector::Vector() : Tuple(0.0f, 0.0f, 0.0f, 0.0f) {}
+Vector::Vector(float x, float y, float z) : Tuple(x, y, z, 0.0f) {}
 
 std::ostream& operator<<(std::ostream& os, const Vector& obj) {
-  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")" << std::endl;
+  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")" << "\n";
   return os;
 }
 

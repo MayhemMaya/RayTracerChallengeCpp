@@ -1,4 +1,5 @@
 #include "world.h"
+#include <stdexcept>
 
 bool check_for_light_source(const std::vector<Object*>& world_objects) {
   for (auto world_object : world_objects) {
@@ -73,37 +74,49 @@ int World::GetObjectCount() const {
 
 void World::ListObjects() const {
   for (auto& object : objects_) {
-    std::cout << object->GetName() << std::endl;
+    std::cout << object->GetName() << "\n";
   }
 }
 
 void World::ListObjects(const ObjectType& type) const {
   for (auto& object : objects_) {
     if (object->GetObjectType() == type)
-      std::cout << object->GetName() << std::endl;
+      std::cout << object->GetName() << "\n";
   }
 }
 
 void World::AddObject(Object* other) {
   for (auto& object : objects_) {
     if (object->GetName() == other->GetName()) {
-      std::cout << "Error: Cannot add object to world. An object with the name '"
-          << other->GetName() << "' already exists." << std::endl;
-      return;
+      throw std::invalid_argument("Error: Cannot add object to world. An object with the name '"
+          + other->GetName() + "' already exists.\n");
     }
   }
   objects_.push_back(other);
   hasLightSource_ = check_for_light_source(objects_);
 }
 
+void World::AddObjects(const std::vector<Object*>& objects) {
+  for (auto& object : objects) {
+    this->AddObject(object);
+  }
+}
+
 void World::DeleteObject(const std::string& name) {    
   for (int i = 0; i < objects_.size(); i++) {
     if (objects_[i]->GetName() == name) {
+      objects_[i] = nullptr;
       objects_.erase(objects_.begin() + i);
     }
   }
 
   hasLightSource_ = check_for_light_source(objects_);
+}
+
+void World::DeleteObjects(const std::vector<std::string>& names) {
+  for (auto& name : names) {
+    this->DeleteObject(name);
+  }
 }
 
 bool World::ContainsLightSource() const {

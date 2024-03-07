@@ -2,11 +2,11 @@
 #include "point.h"
 #include "utils.h"
 
-Point::Point() : Tuple(0, 0, 0, 1) {}
-Point::Point(float x, float y, float z) : Tuple(x, y, z, 1) {}
+Point::Point() : Tuple(0.0f, 0.0f, 0.0f, 1.0f) {}
+Point::Point(float x, float y, float z) : Tuple(x, y, z, 1.0f) {}
 
 std::ostream& operator<<(std::ostream& os, const Point& obj) {
-  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")" << std::endl;
+  os << "(" << obj.x_ << ", " << obj.y_ << ", " << obj.z_ << ")" << "\n";
   return os;
 }
 

@@ -5,8 +5,14 @@
 #include "matrix3.h"
 #include "mock-tuple.h"
 #include "point.h"
+#include <stdexcept>
 
-Matrix4::Matrix4() {}
+Matrix4::Matrix4() : data_{ {
+     {1.0f, 0.0f, 0.0f, 0.0f},
+     {0.0f, 1.0f, 0.0f, 0.0f},
+     {0.0f, 0.0f, 1.0f, 0.0f},
+     {0.0f, 0.0f, 0.0f, 1.0f}
+   } } {}
 
 Matrix4::Matrix4(const Matrix4& copy) {
   for (int r = 0; r < 4; r++) {
@@ -54,7 +60,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix4& obj) {
         os << obj(r, c) << ", ";
       else os << obj(r, c);
     }
-    os << "]" << std::endl;
+    os << "]\n";
   }
   return os;
 }
@@ -226,7 +232,7 @@ bool Matrix4::invertible() const {
 
 Matrix4 Matrix4::inverse() const {
   if (!this->invertible()) {
-    return *this;
+    throw std::invalid_argument("Error: Matrix is not invertible.");
   }
 
   Matrix4 M;
@@ -248,7 +254,7 @@ std::string Matrix4::format() const {
         ss << (*this)(r, c) << ", ";
       else ss << (*this)(r, c);
     }
-    ss << "]" << std::endl;
+    ss << "]\n";
   }
   return ss.str();
 }
@@ -258,51 +264,51 @@ Matrix4& Matrix4::identity() {
 }
 
 Matrix4& Matrix4::translation(float x, float y, float z) {
-  *this = *this * Matrix4(1, 0, 0, x,
-                   0, 1, 0, y,
-                   0, 0, 1, z,
-                   0, 0, 0, 1);
+  *this = *this * Matrix4(1.0f, 0.0f, 0.0f, x,
+                   0.0f, 1.0f, 0.0f, y,
+                   0.0f, 0.0f, 1.0f, z,
+                   0.0f, 0.0f, 0.0f, 1.0f);
   return *this;
 }
 
 Matrix4& Matrix4::scaling(float x, float y, float z) {
-  *this = *this * Matrix4(x, 0, 0, 0,
-                   0, y, 0, 0,
-                   0, 0, z, 0,
-                   0, 0, 0, 1);
+  *this = *this * Matrix4(x, 0.0f, 0.0f, 0.0f,
+                          0.0f, y, 0.0f, 0.0f,
+                          0.0f, 0.0f, z, 0.0f,
+                          0.0f, 0.0f, 0.0f, 1.0f);
   return *this;
 }
 
 Matrix4& Matrix4::rotation_x(float radians) {
-  *this = *this * Matrix4(1, 0, 0, 0,
-                   0, cos(radians), -sin(radians), 0,
-                   0, sin(radians), cos(radians), 0,
-                   0, 0, 0, 1);
+  *this = *this * Matrix4(1.0f, 0.0f, 0.0f, 0.0f,
+                   0.0f, cos(radians), -sin(radians), 0.0f,
+                   0.0f, sin(radians), cos(radians), 0.0f,
+                   0.0f, 0.0f, 0.0f, 1.0f);
   return *this;
 }
 
 Matrix4& Matrix4::rotation_y(float radians) {
-  *this = *this * Matrix4(cos(radians), 0, sin(radians), 0,
-                  0, 1, 0, 0,
-                  -sin(radians), 0, cos(radians), 0,
-                  0, 0, 0, 1);
+  *this = *this * Matrix4(cos(radians), 0.0f, sin(radians), 0.0f,
+                  0.0f, 1.0f, 0.0f, 0.0f,
+                  -sin(radians), 0.0f, cos(radians), 0.0f,
+                  0.0f, 0.0f, 0.0f, 1.0f);
   return *this;
 }
 
 Matrix4& Matrix4::rotation_z(float radians) {
-  *this = *this * Matrix4(cos(radians), -sin(radians), 0, 0,
-                   sin(radians), cos(radians), 0, 0,
-                   0, 0, 1, 0,
-                   0, 0, 0, 1);
+  *this = *this * Matrix4(cos(radians), -sin(radians), 0.0f, 0.0f,
+                   sin(radians), cos(radians), 0.0f, 0.0f,
+                   0.0f, 0.0f, 1.0f, 0.0f,
+                   0.0f, 0.0f, 0.0f, 1.0f);
   return *this;
 }
 
 Matrix4& Matrix4::shearing(float x_y, float x_z, float y_x,
                           float y_z, float z_x, float z_y) {
-  *this = *this * Matrix4(1,   x_y, x_z, 0,
-                  y_x, 1,   y_z, 0,
-                  z_x, z_y, 1,   0,
-                  0,   0,   0,   1);
+  *this = *this * Matrix4(1.0f,   x_y, x_z, 0.0f,
+                  y_x, 1.0f,   y_z, 0.0f,
+                  z_x, z_y, 1.0f,   0.0f,
+                  0.0f,   0.0f,   0.0f,   1.0f);
   return *this;
 }
 
@@ -310,9 +316,9 @@ Matrix4 Matrix4::view_transform(const Point& from, const Point& to, const Vector
   Vector forward = (to - from).normalize();
   Vector left = forward.cross(up.normalize());
   Vector true_up = left.cross(forward);
-  Matrix4 orientation = Matrix4(left[0], left[1], left[2], 0,
-                                true_up[0], true_up[1], true_up[2], 0,
-                                -forward[0], -forward[1], -forward[2], 0,
-                                0, 0, 0, 1);
+  Matrix4 orientation = Matrix4(left[0], left[1], left[2], 0.0f,
+                                true_up[0], true_up[1], true_up[2], 0.0f,
+                                -forward[0], -forward[1], -forward[2], 0.0f,
+                                0.0f, 0.0f, 0.0f, 1.0f);
   return orientation * Matrix4().translation(-from[0], -from[1], -from[2]);
 }

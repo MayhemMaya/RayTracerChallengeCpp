@@ -18,9 +18,7 @@ public:
   std::variant<Color, Pattern*> GetB() const;
   bool holdsNestedPattern() const;
   virtual bool operator==(const Pattern& other) const;
-  Matrix4 GetSavedTransformInverse() const;
 private:
   std::variant<Color, Pattern*> a_, b_;
   Matrix4 transform_;
-  Matrix4 saved_transform_inverse_;
 };

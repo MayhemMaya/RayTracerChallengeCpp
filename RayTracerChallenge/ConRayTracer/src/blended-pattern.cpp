@@ -8,10 +8,10 @@ Color BlendedPattern::pattern_at(const Point& point) {
   auto b_variant = this->GetB();
 
   Pattern* a(*(std::get_if<Pattern*>(&a_variant)));
-  Point nested_a_pattern_point = a->GetSavedTransformInverse() * point;
+  Point nested_a_pattern_point = a->GetTransform().inverse() * point;
   Color colorA = a->pattern_at(nested_a_pattern_point);
   Pattern* b(*(std::get_if<Pattern*>(&b_variant)));
-  Point nested_b_pattern_point = b->GetSavedTransformInverse() * point;
+  Point nested_b_pattern_point = b->GetTransform().inverse() * point;
   Color colorB = b->pattern_at(nested_b_pattern_point);
 
   Color average = (colorA + colorB) / 2;

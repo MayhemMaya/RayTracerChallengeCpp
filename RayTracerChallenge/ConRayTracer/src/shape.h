@@ -24,9 +24,8 @@ class Shape : public Object {
   Shape& operator=(const Object& other) override;
   virtual std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) = 0;
   virtual Vector local_normal_at(const Point& local_point) const = 0;
-
- private:
+  static Vector normal_to_world(const Object* shape, Vector normal);
+ protected:
   static int shape_count_;
   Material material_;
-  Shape* parent_;
 };

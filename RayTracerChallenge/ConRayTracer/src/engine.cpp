@@ -218,8 +218,8 @@ Ray ray_for_pixel(const Camera& camera, int px, int py) {
   // using the camera matrix, transform the canvas point and the origin,
   // and then compute the ray's direction vector.
   // (remember that the canvas is at z=-1)
-  Point pixel = camera.GetSavedTransformInverse() * Point(world_x, world_y, -1.0f);
-  Point origin = camera.GetSavedTransformInverse() * Point(0, 0, 0);
+  Point pixel = camera.GetTransform().inverse() * Point(world_x, world_y, -1.0f);
+  Point origin = camera.GetTransform().inverse() * Point(0, 0, 0);
   Vector direction = (pixel - origin).normalize();
   return Ray(origin, direction);
 }
@@ -237,11 +237,11 @@ Canvas render(const Camera& camera, const World& world) {
       image.WritePixel(x, y, color);
       float progress = utils::roundoff(utils::map(pixel_position, 0, pixel_count, 0.0f, 1.0f), 2);
       int progress_int = int(progress * 100.0);
-      std::cout << "Rendering in progress... " << progress_int << "% complete." << std::endl;
+      std::cout << "Rendering in progress... " << progress_int << "% complete.\n";
       pixel_position++;
     }
   }
-  std::cout << std::endl;
+  std::cout << "\n";
 
   return image;
 }

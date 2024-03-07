@@ -2,7 +2,10 @@
 #include "matrix2.h"
 #include "utils.h"
 
-Matrix2::Matrix2() {}
+Matrix2::Matrix2() : data_{ {
+     {1.0f, 0.0f},
+     {0.0f, 1.0f}
+   } } {}
 
 Matrix2::Matrix2(float a11, float a12, 
                  float a21, float a22) {
@@ -28,7 +31,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix2& obj) {
         os << obj(r, c) << ", ";
       else os << obj(r, c);
     }
-    os << "]" << std::endl;
+    os << "]\n";
   }
   return os;
 }

@@ -2127,6 +2127,97 @@ TEST(Chapter13_tests, Computing_the_normal_vector_on_a_cone) {
 TEST(Chapter14_tests, Creating_a_new_group) {
 	Group g("Group");
 	EXPECT_TRUE(g.GetTransform() == Matrix4().identity());
+	EXPECT_TRUE(g.isEmpty());
+}
 
+TEST(Chapter14_tests, A_shape_has_a_parent_attribute) {
+	MockShape s("Shape");
+	EXPECT_TRUE(s.GetParent() == nullptr);
+}
+
+TEST(Chapter14_tests, Adding_a_child_to_a_group) {
+	Group* g = new Group("Group");
+	MockShape* s = new MockShape("Shape");
+	g->AddChild(s);
+	EXPECT_FALSE(g->isEmpty());
+	EXPECT_TRUE(g->ContainsChild(s));
+	EXPECT_TRUE(s->GetParent() == g);
+	EXPECT_TRUE(s->HasParent());
+}
+
+TEST(Chapter14_tests, Intersecting_a_ray_with_an_empty_group) {
+	Group g("Group");
+	Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+	std::vector<Intersection> xs = g.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter14_tests, Intersecting_a_ray_with_a_nonempty_group) {
+	Group g("Group");
+	Sphere s1("Sphere1");
+	Sphere s2("Sphere2");
+	s2.SetTransform(Matrix4().translation(0, 0, -3));
+	Sphere s3("Sphere3");
+	s3.SetTransform(Matrix4().translation(5, 0, 0));
+	g.AddChild(&s1);
+	g.AddChild(&s2);
+	g.AddChild(&s3);
+	Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+	std::vector<Intersection> xs = g.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 4);
+	EXPECT_TRUE((*xs[0].GetObject()) == s2);
+	EXPECT_TRUE((*xs[1].GetObject()) == s2);
+	EXPECT_TRUE((*xs[2].GetObject()) == s1);
+	EXPECT_TRUE((*xs[3].GetObject()) == s1);
+}
+
+TEST(Chapter14_tests, Intersecting_a_transformed_group) {
+	Group g("Group");
+	g.SetTransform(Matrix4().scaling(2, 2, 2));
+	Sphere s("Sphere");
+	s.SetTransform(Matrix4().translation(5, 0, 0));
+	g.AddChild(&s);
+	Ray r(Point(10, 0, -10), Vector(0, 0, 1));
+	std::vector<Intersection> xs = g.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 2);
+}
+
+TEST(Chapter14_tests, Converting_a_point_from_world_to_object_space) {
+	Group g1("Group1");
+	g1.SetTransform(Matrix4().rotation_y(utils::kPI / 2));
+	Group g2("Group2");
+	g2.SetTransform(Matrix4().scaling(2, 2, 2));
+	g1.AddChild(&g2);
+	Sphere s("Sphere");
+	s.SetTransform(Matrix4().translation(5, 0, 0));
+	g2.AddChild(&s);
+	Point p = Shape::world_to_object(&s, Point(-2, 0, -10));
+	EXPECT_TRUE(p == Point(0, 0, -1));
+}
+
+TEST(Chapter14_tests, Converting_a_normal_from_object_to_world_space) {
+	Group g1("Group1");
+	g1.SetTransform(Matrix4().rotation_y(utils::kPI / 2));
+	Group g2("Group2");
+	g2.SetTransform(Matrix4().scaling(1, 2, 3));
+	g1.AddChild(&g2);
+	Sphere s("Sphere");
+	s.SetTransform(Matrix4().translation(5, 0, 0));
+	g2.AddChild(&s);
+	Vector n = Shape::normal_to_world(&s, Vector(sqrt(3) / 3, sqrt(3) / 3, sqrt(3) / 3));
+	EXPECT_TRUE(n == Vector(0.2857f, 0.4286f, -0.8571f));
+}
+
+TEST(Chapter14_tests, Finding_the_normal_on_a_child_object) {
+	Group g1("Group1");
+	g1.SetTransform(Matrix4().rotation_y(utils::kPI / 2));
+	Group g2("Group2");
+	g2.SetTransform(Matrix4().scaling(1, 2, 3));
+	g1.AddChild(&g2);
+	Sphere s("Sphere");
+	s.SetTransform(Matrix4().translation(5, 0, 0));
+	g2.AddChild(&s);
+	Vector n = s.normal_at(Point(1.7321f, 1.1547f, -5.5774f));
+	EXPECT_EQ(n, Vector(0.2857f, 0.4286f, -0.8571f));
 }
 #pragma endregion

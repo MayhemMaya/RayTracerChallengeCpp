@@ -1,5 +1,6 @@
 
 #include "canvas.h"
+#include <stdexcept>
 
 Canvas::Canvas(int width, int height)
   : width_(width), height_(height) {
@@ -18,15 +19,14 @@ std::ostream& operator<<(std::ostream& os, const Canvas& obj) {
 		for (int x = 0; x < obj.width_; x++) {
 			os << obj.PixelAt(x, y) << " ";
 		}
-		os << std::endl;
+		os << "\n";
 	}
   return os;
 }
 
 Color Canvas::PixelAt(int x, int y) const {
   if ((x >= width_) || (y >= height_)) {
-    std::cout << "Canvas index out of range." << std::endl;
-    //exit(0);
+    throw std::invalid_argument("Canvas index out of range.");
   }
   int index = width_ * y + x;
   Color c = pixels_[index];
@@ -35,8 +35,7 @@ Color Canvas::PixelAt(int x, int y) const {
 
 void Canvas::WritePixel(int x, int y, const Color& color) {
   if ((x < 0 || y < 0) || (x >= width_ || y >= height_)) {
-    std::cout << "Canvas index out of range." << std::endl;
-    return;
+    throw std::invalid_argument("Canvas index out of range.");
   }
   int index = width_ * y + x;
   pixels_[index] = color.clamp();
@@ -76,7 +75,7 @@ std::string Canvas::ToPPM() const {
     ppm << line << '\n';
   }
   ppm << "\n";
-  std::cout << "PPM file created successfully." << std::endl;
+  std::cout << "PPM file created successfully.\n";
 
   return ppm.str();
 }

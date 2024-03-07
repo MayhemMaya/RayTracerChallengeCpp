@@ -1,4 +1,5 @@
 #include "mock-tuple.h"
+#include <stdexcept>
 
 MockTuple::MockTuple() : Tuple() {}
 
@@ -10,7 +11,7 @@ MockTuple MockTuple::operator+(const MockTuple& other) const {
       other[2], w_ + other[3]);
   }
   else {
-    std::cout << "Cannot add two Points!" << std::endl;
+    throw std::invalid_argument("Cannot add two Points!");
     return *this;
   }
 }

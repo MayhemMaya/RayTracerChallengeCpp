@@ -21,18 +21,18 @@ Cone::Cone(const std::string& name, const Material& material, const Matrix4& tra
 
 bool Cone::operator==(const Object& object) {
   Cone* other = (Cone*)&object;
-  return(this->GetName() == other->GetName() &&
-    this->GetTransform() == other->GetTransform() &&
-    this->GetObjectType() == other->GetObjectType() &&
-    this->GetMaterial() == other->GetMaterial());
+  return(name_ == other->GetName() &&
+    transform_ == other->GetTransform() &&
+    type_ == other->GetObjectType() &&
+    material_ == other->GetMaterial());
 }
 
 Cone& Cone::operator=(const Object& object) {
   Cone* other = (Cone*)&object;
-  this->SetName(other->GetName());
-  this->SetObjectType(other->GetObjectType());
-  this->SetTransform(other->GetTransform());
-  this->SetMaterial(other->GetMaterial());
+  name_ = other->GetName();
+  type_ = other->GetObjectType();
+  transform_ = other->GetTransform();
+  material_ = other->GetMaterial();
   return *this;
 }
 

@@ -20,18 +20,18 @@ Sphere::Sphere(const std::string& name, const Material& material, const Matrix4&
 
 bool Sphere::operator==(const Object& object) {
   Sphere* other = (Sphere*)&object;
-  return(this->GetName() == other->GetName() &&
-    this->GetTransform() == other->GetTransform() &&
-    this->GetObjectType() == other->GetObjectType() &&
-    this->GetMaterial() == other->GetMaterial());
+  return(name_ == other->GetName() &&
+    transform_ == other->GetTransform() &&
+    type_ == other->GetObjectType() &&
+    material_ == other->GetMaterial());
 }
 
 Sphere& Sphere::operator=(const Object& object) {
   Sphere* other = (Sphere*)&object;
-  this->SetName(other->GetName());
-  this->SetObjectType(other->GetObjectType());
-  this->SetTransform(other->GetTransform());
-  this->SetMaterial(other->GetMaterial());
+  name_ = other->GetName();
+  type_ = other->GetObjectType();
+  transform_ = other->GetTransform();
+  material_ = other->GetMaterial();
   return *this;
 }
 

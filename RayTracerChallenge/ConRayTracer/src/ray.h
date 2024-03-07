@@ -13,6 +13,7 @@ class Ray {
  public:
   Ray();
   Ray(const Point& origin, const Vector& direction);
+  Ray(const utils::RayStruct& ray_struct);
   Point GetOrigin() const;
   Vector GetDirection() const;
   Point position(float time) const;

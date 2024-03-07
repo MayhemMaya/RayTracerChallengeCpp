@@ -161,6 +161,6 @@ std::string Material::format() const {
     << "Shininess: " << shininess_ << "\n"
     << "Reflectivity: " << reflectivity_ << "\n"
     << "Transparency: " << transparency_ << "\n"
-    << "Refractive Index: " << refractive_index_ << std::endl;
+    << "Refractive Index: " << refractive_index_ << "\n";
   return ss.str();
 }

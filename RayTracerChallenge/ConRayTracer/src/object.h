@@ -46,17 +46,21 @@ class Object {
    void SetTransform(const Matrix4& transform);
    ObjectType GetObjectType() const;
    std::string GetObjectTypeName() const;
+   Object* GetParent() const;
+   void SetParent(Object* parent);
+   void RemoveParent();
+   bool HasParent() const;
    void SetObjectType(const ObjectType& type);
-   Matrix4 GetSavedTransformInverse() const;
    virtual Point GetPosition() const;
    virtual bool operator==(const Object& other);
    virtual Object& operator=(const Object& other);
    static int GetCount();
+   static Point world_to_object(const Object* shape, Point point);
 
  protected:
    static int object_count_;
    std::string name_;
    ObjectType type_;
    Matrix4 transform_;
-   Matrix4 saved_transform_inverse_;
+   Object* parent_;
 };

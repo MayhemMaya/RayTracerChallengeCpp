@@ -3,7 +3,11 @@
 #include "matrix3.h"
 #include "matrix2.h"
 
-Matrix3::Matrix3() {}
+Matrix3::Matrix3() : data_{ {
+    {1.0f, 0.0f, 0.0f},
+    {0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f}
+  } } {}
 
 Matrix3::Matrix3(float a11, float a12, float a13,
                  float a21, float a22, float a23,
@@ -35,7 +39,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix3& obj) {
         os << obj(r, c) << ", ";
       else os << obj(r, c);
     }
-    os << "]" << std::endl;
+    os << "]\n";
   }
   return os;
 }

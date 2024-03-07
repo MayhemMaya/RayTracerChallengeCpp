@@ -12,6 +12,9 @@ Ray::Ray() : origin_(Point()), direction_(Vector()) {}
 Ray::Ray(const Point& origin, const Vector& direction)
   : origin_(origin), direction_(direction) {}
 
+Ray::Ray(const utils::RayStruct& ray_struct)
+  : origin_(ray_struct.origin), direction_(ray_struct.direction) {}
+
 Point Ray::GetOrigin() const {
   return origin_;
 }
@@ -67,7 +70,7 @@ Ray& Ray::operator=(const Ray& other) {
 }
 
 std::vector<Intersection> Ray::intersect(Shape* shape) const {
-  Ray local_ray = this->transform(shape->GetSavedTransformInverse());
+  Ray local_ray = this->transform(shape->GetTransform().inverse());
   return shape->local_intersect(local_ray.to_ray_struct());
 }
 

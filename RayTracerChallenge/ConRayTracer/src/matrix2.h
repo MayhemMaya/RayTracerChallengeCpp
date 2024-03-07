@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "utils.h"
+#include <array>
 
 class Matrix2 {
  public:
@@ -15,8 +16,5 @@ class Matrix2 {
   bool operator!=(const Matrix2& other) const;
   float determinant() const;
  private:
-  float data_[2][2] = {
-    {1, 0},
-    {0, 1} 
-  };
+   std::array<std::array<float, 2>, 2> data_;
 };

@@ -6,6 +6,7 @@
 #include "matrix3.h"
 #include "mock-tuple.h"
 #include "point.h"
+#include <array>
 
 class Matrix4 {
  public:
@@ -43,10 +44,5 @@ class Matrix4 {
                    float y_z, float z_x, float z_y);
   Matrix4 view_transform(const Point& from, const Point& to, const Vector& up) const;
  private:
-  float data_[4][4] = {
-    {1, 0, 0, 0},
-    {0, 1, 0, 0},
-    {0, 0, 1, 0},
-    {0, 0, 0, 1}
-  };
+   std::array<std::array<float, 4>, 4> data_;
 };

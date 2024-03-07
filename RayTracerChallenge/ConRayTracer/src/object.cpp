@@ -3,29 +3,33 @@
 int Object::object_count_ = 0;
 
 Object::Object(const std::string& name, const ObjectType& type)
-    : transform_(Matrix4()), name_(name), type_(type), saved_transform_inverse_(transform_.inverse()) {
+    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr) {
       object_count_++;
 }
 
 Object::Object(const std::string& name, const ObjectType& type, const Matrix4& transform)
-  : transform_(transform), name_(name), type_(type), saved_transform_inverse_(transform_.inverse()) {
+  : transform_(transform), name_(name), type_(type), parent_(nullptr) {
   object_count_++;
 }
 
 Object::Object(const std::string& name, const ObjectType& type, const Point& position)
     : transform_(Matrix4().translation(position[0], position[1], position[2])), 
-      name_(name), type_(type), saved_transform_inverse_(transform_.inverse()) {
+      name_(name), type_(type), parent_(nullptr) {
   object_count_++;
 }
 
 Object::~Object() {
   object_count_--;
+  parent_ = nullptr;
+  delete parent_;
 }
 
 void Object::ListDetails() {
+  std::string parent_name = parent_ == nullptr ? "None" : parent_->GetName();
   std::cout << "Name: " << name_ << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
-      << "Transform:\n" << transform_.format() << "\n";
+      << "Transform:\n" << transform_.format() << "\n"
+      << "Parent:\n" << parent_name << "\n";
 }
 
 std::string Object::GetName() const { return name_; }
@@ -36,15 +40,37 @@ Matrix4 Object::GetTransform() const { return transform_; }
 
 void Object::SetTransform(const Matrix4& transform) {
   transform_ = transform_ * transform;
-  saved_transform_inverse_ = transform_.inverse();
 }
 
 void Object::SetObjectType(const ObjectType& type) {
   type_ = type;
 }
 
-Matrix4 Object::GetSavedTransformInverse() const {
-  return saved_transform_inverse_;
+Object* Object::GetParent() const {
+  return parent_;
+}
+
+void Object::SetParent(Object* parent) {
+  if (parent == this) {
+    throw std::invalid_argument("Error: Object's parent cannot be itself.");
+  }
+
+  if (parent == nullptr) {
+    throw std::invalid_argument("Error: Object's parent cannot be null.");
+  }
+
+  parent_ = parent;
+}
+
+void Object::RemoveParent() {
+  if (parent_ == nullptr) {
+    throw std::invalid_argument("Error: No parent to remove from object");
+  }
+  parent_ = nullptr;
+}
+
+bool Object::HasParent() const {
+  return parent_ != nullptr;
 }
 
 Point Object::GetPosition() const {
@@ -74,3 +100,10 @@ Object& Object::operator=(const Object& other) {
 }
 
 int Object::GetCount() { return object_count_; }
+
+Point Object::world_to_object(const Object* shape, Point point) {
+  if (shape->HasParent()) {
+    point = Object::world_to_object(shape->GetParent(), point);
+  }
+  return shape->GetTransform().inverse() * point;
+}

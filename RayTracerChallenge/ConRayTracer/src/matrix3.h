@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "matrix2.h"
+#include<array>
 
 class Matrix3 {
  public:
@@ -20,9 +21,5 @@ class Matrix3 {
   float cofactor(int row, int col) const;
   float determinant() const;
  private:
-  float data_[3][3] = {
-    {1, 0, 0},
-    {0, 1, 0},
-    {0, 0, 1}
-  };
+  std::array<std::array<float, 3>, 3> data_;
 };

@@ -68,12 +68,12 @@ float Camera::GetHalfWidth() const { return half_width_; }
 float Camera::GetHalfHeight() const { return half_height_; }
 
 void Camera::ListDetails() {
-  std::cout << "Name: " << this->GetName() << "\n"
+  std::cout << "Name: " << name_ << "\n"
     << "Type: " << this->GetObjectTypeName() << "\n"
-    << "Transform:\n" << this->GetTransform().format()
-    << "Horizontal Size: " << hsize_ << std::endl
-    << "Vertical Size: " << vsize_ << std::endl
-    << "Field of view: " << field_of_view_ << std::endl;
+    << "Transform:\n" << transform_.format()
+    << "Horizontal Size: " << hsize_ << "\n"
+    << "Vertical Size: " << vsize_ << "\n"
+    << "Field of view: " << field_of_view_ << "\n";
 }
 
 int Camera::GetCount() {
@@ -92,11 +92,11 @@ bool Camera::operator==(const Object& object) const {
 
 Camera& Camera::operator=(const Object& object) {
   Camera* other = (Camera*)&object;
-  this->SetName(other->GetName());
-  this->SetObjectType(other->GetObjectType());
-  this->SetTransform(other->GetTransform());
-  this->SetHorizontalSize(other->GetHorizontalSize());
-  this->SetVerticalSize(other->GetVerticalSize());
-  this->SetFieldOfView(other->GetFieldOfView());
+  name_ = other->GetName();
+  type_ = other->GetObjectType();
+  transform_ = other->GetTransform();
+  hsize_ = other->GetHorizontalSize();
+  vsize_ = other->GetVerticalSize();
+  field_of_view_ = other->GetFieldOfView();
   return *this;
 }
