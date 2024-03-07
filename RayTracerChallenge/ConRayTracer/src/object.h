@@ -43,6 +43,7 @@ class Object {
    std::string GetName() const;
    void SetName(const std::string& name);
    Matrix4 GetTransform() const;
+   Matrix4 GetCachedTransformInverse() const;
    void SetTransform(const Matrix4& transform);
    ObjectType GetObjectType() const;
    std::string GetObjectTypeName() const;
@@ -62,5 +63,6 @@ class Object {
    std::string name_;
    ObjectType type_;
    Matrix4 transform_;
+   Matrix4 cached_transform_inverse_;
    Object* parent_;
 };

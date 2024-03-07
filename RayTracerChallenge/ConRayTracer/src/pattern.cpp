@@ -9,16 +9,21 @@ Pattern::~Pattern() {}
 
 Color Pattern::pattern_at_object(Object* object, const Point& world_point) {
   Point object_point = Object::world_to_object(object, world_point);
-  Point pattern_point = this->transform_.inverse() * object_point;
+  Point pattern_point = this->GetCachedTransformInverse() * object_point;
   Color color = this->pattern_at(pattern_point);
   return color;
 }
 
 void Pattern::SetTransform(const Matrix4& transform) {
   this->transform_ = this->transform_ * transform;
+  this->cached_transform_inverse_ = transform_.inverse();
 }
 Matrix4 Pattern::GetTransform() const {
   return this->transform_;
+}
+
+Matrix4 Pattern::GetCachedTransformInverse() const {
+  return this->cached_transform_inverse_;
 }
 
 std::variant<Color, Pattern*> Pattern::GetA() const {

@@ -70,7 +70,7 @@ Ray& Ray::operator=(const Ray& other) {
 }
 
 std::vector<Intersection> Ray::intersect(Shape* shape) const {
-  Ray local_ray = this->transform(shape->GetTransform().inverse());
+  Ray local_ray = this->transform(shape->GetCachedTransformInverse());
   return shape->local_intersect(local_ray.to_ray_struct());
 }
 

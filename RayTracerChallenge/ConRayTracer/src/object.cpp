@@ -3,18 +3,18 @@
 int Object::object_count_ = 0;
 
 Object::Object(const std::string& name, const ObjectType& type)
-    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr) {
+    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().inverse()) {
       object_count_++;
 }
 
 Object::Object(const std::string& name, const ObjectType& type, const Matrix4& transform)
-  : transform_(transform), name_(name), type_(type), parent_(nullptr) {
+  : transform_(transform), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(transform.inverse()) {
   object_count_++;
 }
 
 Object::Object(const std::string& name, const ObjectType& type, const Point& position)
     : transform_(Matrix4().translation(position[0], position[1], position[2])), 
-      name_(name), type_(type), parent_(nullptr) {
+      name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().translation(position[0], position[1], position[2]).inverse()) {
   object_count_++;
 }
 
@@ -38,8 +38,13 @@ void Object::SetName(const std::string& name) { name_ = name; }
 
 Matrix4 Object::GetTransform() const { return transform_; }
 
+Matrix4 Object::GetCachedTransformInverse() const {
+  return cached_transform_inverse_;
+}
+
 void Object::SetTransform(const Matrix4& transform) {
   transform_ = transform_ * transform;
+  cached_transform_inverse_ = transform_.inverse();
 }
 
 void Object::SetObjectType(const ObjectType& type) {
@@ -105,5 +110,5 @@ Point Object::world_to_object(const Object* shape, Point point) {
   if (shape->HasParent()) {
     point = Object::world_to_object(shape->GetParent(), point);
   }
-  return shape->GetTransform().inverse() * point;
+  return shape->GetCachedTransformInverse() * point;
 }

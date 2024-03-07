@@ -7,7 +7,6 @@
 
 int main() {
 
-	/*
 	int res_x = 200;
 	int res_y = 100;
 
@@ -104,7 +103,6 @@ int main() {
 	Canvas image = Engine::render(camera, world);
 	
 	utils::ExportFile("render_test.ppm", image.ToPPM());
-	*/
 
 	std::cout << "\n\nPress any key to exit...";
 	std::cin.get();

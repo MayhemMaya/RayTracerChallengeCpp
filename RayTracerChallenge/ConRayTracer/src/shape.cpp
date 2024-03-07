@@ -76,7 +76,7 @@ Shape& Shape::operator=(const Object& object) {
 }
 
 Vector Shape::normal_to_world(const Object* shape, Vector normal) {
-  normal = shape->GetTransform().inverse().transpose() * normal;
+  normal = shape->GetCachedTransformInverse().transpose() * normal;
   normal(3, 0); // set w coordinate to 0
   normal = normal.normalize();
 

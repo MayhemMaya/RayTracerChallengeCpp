@@ -218,8 +218,8 @@ Ray ray_for_pixel(const Camera& camera, int px, int py) {
   // using the camera matrix, transform the canvas point and the origin,
   // and then compute the ray's direction vector.
   // (remember that the canvas is at z=-1)
-  Point pixel = camera.GetTransform().inverse() * Point(world_x, world_y, -1.0f);
-  Point origin = camera.GetTransform().inverse() * Point(0, 0, 0);
+  Point pixel = camera.GetCachedTransformInverse() * Point(world_x, world_y, -1.0f);
+  Point origin = camera.GetCachedTransformInverse() * Point(0, 0, 0);
   Vector direction = (pixel - origin).normalize();
   return Ray(origin, direction);
 }

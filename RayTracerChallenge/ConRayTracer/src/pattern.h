@@ -14,6 +14,7 @@ public:
   Color pattern_at_object(Object* object, const Point& world_point);
   void SetTransform(const Matrix4& transform);
   Matrix4 GetTransform() const;
+  Matrix4 GetCachedTransformInverse() const;
   std::variant<Color, Pattern*> GetA() const;
   std::variant<Color, Pattern*> GetB() const;
   bool holdsNestedPattern() const;
@@ -21,4 +22,5 @@ public:
 private:
   std::variant<Color, Pattern*> a_, b_;
   Matrix4 transform_;
+  Matrix4 cached_transform_inverse_;
 };
