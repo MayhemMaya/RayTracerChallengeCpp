@@ -2,9 +2,13 @@
 #include <limits>
 #include <algorithm>
 
+Cylinder::Cylinder()
+  : Shape("cylinder", ObjectType::kCylinder),
+    minimum_(-utils::kINFINITY), maximum_(utils::kINFINITY), closed_(false) {}
+
 Cylinder::Cylinder(const std::string& name, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCylinder),
-    minimum_(minimum), maximum_(maximum), closed_(closed) {}
+  minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
 Cylinder::Cylinder(const std::string& name, const Material& material, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCylinder, material),
@@ -140,4 +144,8 @@ void Cylinder::intersect_caps(const utils::RayStruct& local_ray, std::vector<Int
   if (utils::check_cylinder_cap(local_ray, upper_t)) {
     xs.push_back(Intersection(upper_t, this));
   }
+}
+
+BoundingBox Cylinder::bounds() const {
+  return BoundingBox(Point(-1.0f, minimum_, -1.0f), Point(1.0f, maximum_, 1.0f));;
 }

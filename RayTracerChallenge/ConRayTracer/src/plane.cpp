@@ -3,6 +3,8 @@
 #include "point.h"
 
 
+Plane::Plane() : Shape("plane", ObjectType::kPlane) {}
+
 Plane::Plane(const std::string& name) : Shape(name, ObjectType::kPlane) {}
 
 Plane::Plane(const std::string& name, const Material& material)
@@ -45,4 +47,8 @@ std::vector<Intersection> Plane::local_intersect(const utils::RayStruct& local_r
 Vector Plane::local_normal_at(const Point& local_point) const {
   Vector local_normal = Vector(0, 1, 0);
   return local_normal.normalize();
+}
+
+BoundingBox Plane::bounds() const {
+  return BoundingBox(Point(-utils::kINFINITY, -0.1f, -utils::kINFINITY), Point(utils::kINFINITY, 0.1f, utils::kINFINITY));;
 }

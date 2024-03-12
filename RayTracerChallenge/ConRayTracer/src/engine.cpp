@@ -1,5 +1,6 @@
 #include "engine.h"
 
+
 namespace Engine {
 
 Color lighting(const Material& material, Shape* object,
@@ -164,7 +165,7 @@ Color shade_hit(const World& world, const Computation& comps, int recursive_call
     Color refracted = refracted_color(world, comps, recursive_calls_remaining);
 
     if (comps.object->GetMaterial().GetReflectivity() > 0 &&
-        comps.object->GetMaterial().GetTransparency() > 0) {
+      comps.object->GetMaterial().GetTransparency() > 0) {
       float reflectance = schlick(comps);
       return surface + reflected * reflectance + refracted * (1 - reflectance);
     }

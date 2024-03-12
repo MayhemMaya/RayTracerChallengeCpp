@@ -20,6 +20,7 @@
 #include "camera.h"
 #include "plane.h"
 #include "colors.h"
+#include "color.h"
 #include "pattern.h"
 #include "mock-pattern.h"
 #include "material.h"
@@ -35,3 +36,5 @@
 #include "cylinder.h"
 #include "cone.h"
 #include "group.h"
+#include "hexagon.h"
+#include "materials.h"

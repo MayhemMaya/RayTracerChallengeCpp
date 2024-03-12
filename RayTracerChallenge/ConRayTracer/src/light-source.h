@@ -13,10 +13,8 @@ public:
   //void ListDetails() const override;
   Color GetIntensity() const;
   void SetIntensity(const Color& intensity);
-  static int GetCount();
   bool operator==(const Object& object) override;
   //LightSource& operator=(const Object& other) override;
 protected:
-  static int light_count_;
   Color intensity_;
 };

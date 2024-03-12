@@ -52,14 +52,12 @@ class Object {
    void RemoveParent();
    bool HasParent() const;
    void SetObjectType(const ObjectType& type);
-   virtual Point GetPosition() const;
+   Point GetPosition() const;
    virtual bool operator==(const Object& other);
    virtual Object& operator=(const Object& other);
-   static int GetCount();
    static Point world_to_object(const Object* shape, Point point);
 
  protected:
-   static int object_count_;
    std::string name_;
    ObjectType type_;
    Matrix4 transform_;

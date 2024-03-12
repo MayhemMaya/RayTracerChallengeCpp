@@ -1,25 +1,17 @@
 #include "object.h"
 
-int Object::object_count_ = 0;
 
 Object::Object(const std::string& name, const ObjectType& type)
-    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().inverse()) {
-      object_count_++;
-}
+    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().inverse()) {}
 
 Object::Object(const std::string& name, const ObjectType& type, const Matrix4& transform)
-  : transform_(transform), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(transform.inverse()) {
-  object_count_++;
-}
+  : transform_(transform), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(transform.inverse()) {}
 
 Object::Object(const std::string& name, const ObjectType& type, const Point& position)
     : transform_(Matrix4().translation(position[0], position[1], position[2])), 
-      name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().translation(position[0], position[1], position[2]).inverse()) {
-  object_count_++;
-}
+      name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().translation(position[0], position[1], position[2]).inverse()) {}
 
 Object::~Object() {
-  object_count_--;
   parent_ = nullptr;
   delete parent_;
 }
@@ -94,17 +86,17 @@ std::string Object::GetObjectTypeName() const {
 bool Object::operator==(const Object& other) {
   return(name_ == other.GetName() &&
          transform_ == other.GetTransform() &&
-         type_ == other.GetObjectType());
+         type_ == other.GetObjectType() &&
+         parent_ == other.GetParent());
 }
 
 Object& Object::operator=(const Object& other) {
   name_ = other.GetName();
   type_ = other.GetObjectType();
   transform_ = other.GetTransform();
+  parent_ = other.GetParent();
   return *this;
 }
-
-int Object::GetCount() { return object_count_; }
 
 Point Object::world_to_object(const Object* shape, Point point) {
   if (shape->HasParent()) {

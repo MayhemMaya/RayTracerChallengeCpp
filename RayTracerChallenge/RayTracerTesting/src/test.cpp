@@ -37,6 +37,8 @@
 #include "cylinder.cpp"
 #include "cone.cpp"
 #include "group.cpp"
+#include "materials.cpp"
+#include "bounding-box.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -2219,5 +2221,36 @@ TEST(Chapter14_tests, Finding_the_normal_on_a_child_object) {
 	g2.AddChild(&s);
 	Vector n = s.normal_at(Point(1.7321f, 1.1547f, -5.5774f));
 	EXPECT_EQ(n, Vector(0.2857f, 0.4286f, -0.8571f));
+}
+
+TEST(Chapter14_tests, Comparing_identical_bounds) {
+	BoundingBox b1 = BoundingBox(Point(-1, 0, -1), Point(1, 0, 1));
+	BoundingBox b2 = BoundingBox(Point(-1, 0, -1), Point(1, 0, 1));
+	EXPECT_TRUE(b1.equal(b2, true));
+}
+
+TEST(Chapter14_tests, Merging_two_bounds_yields_the_biggest_bounding_box) {
+	BoundingBox b1 = BoundingBox(Point(-1, 0, -1), Point(1, 0, 1));
+	BoundingBox b2 = BoundingBox(Point(-utils::kINFINITY, -1, 0), Point(utils::kINFINITY, 1, 0));
+	b1.merge(b2);
+	EXPECT_TRUE(b1.equal(BoundingBox(Point(-utils::kINFINITY, -1, -1), Point(utils::kINFINITY, 1, 1)), false));
+}
+
+TEST(Chapter14_tests, Rotation_by_45_degrees_yields_updated_bounds) {
+	BoundingBox b = BoundingBox(Point(-1, -1, -1), Point(1, 1, 1));
+	b.transform(Matrix4().rotation_y(utils::kPI / 4));
+	EXPECT_TRUE(b.equal(BoundingBox(Point(-sqrt(2), -1, -sqrt(2)), Point(sqrt(2), 1, sqrt(2))), true));
+}
+
+TEST(Chapter14_tests, A_child_inherits_a_parents_material) {
+	Group g1("Group1");
+	Material m = Materials::TransparentYellow;
+	g1.SetMaterial(m);
+	Group g2("Group2");
+	g1.AddChild(&g2);
+	Sphere s("Sphere");
+	g2.AddChild(&s);
+	EXPECT_TRUE(g2.GetMaterial() == m);
+	EXPECT_TRUE(s.GetMaterial() == m);
 }
 #pragma endregion

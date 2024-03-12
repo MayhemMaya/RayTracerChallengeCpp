@@ -3,32 +3,21 @@
 #include "material.h"
 #include <stdexcept>
 
-int Shape::shape_count_ = 0;
 
 Shape::Shape(const std::string& name, const ObjectType& type)
-    : Object(name, type), material_(Material()) {
-  shape_count_++;
-}
+    : Object(name, type), material_(Material()) {}
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Matrix4& transform)
-    : Object(name, type, transform), material_(Material()) {
-  shape_count_++;
-}
+    : Object(name, type, transform), material_(Material()) {}
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material)
-    : Object(name, type), material_(material) {
-  shape_count_++;
-}
+    : Object(name, type), material_(material) {}
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material,
                                                    const Matrix4& transform)
-    : Object(name, type, transform), material_(material) {
-  shape_count_++;
-}
+    : Object(name, type, transform), material_(material) {}
 
-Shape::~Shape() {
-  shape_count_--;
-}
+Shape::~Shape() {}
 
 void Shape::ListDetails() {
   std::string parent_name = parent_ == nullptr ? "None" : parent_->GetName();
@@ -50,10 +39,6 @@ Material& Shape::GetMaterial() {
 }
 void Shape::SetMaterial(const Material& material) {
   material_ = material;
-}
-
-int Shape::GetCount() {
-  return shape_count_;
 }
 
 bool Shape::operator==(const Object& object) {
@@ -84,6 +69,5 @@ Vector Shape::normal_to_world(const Object* shape, Vector normal) {
     normal = Shape::normal_to_world(shape->GetParent(), normal);
   }
 
-  std::cout << normal << "\n";
   return normal;
 }

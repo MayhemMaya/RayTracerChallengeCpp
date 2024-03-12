@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <cmath>
 
+Cone::Cone()
+  : Shape("cone", ObjectType::kCone),
+  minimum_(-utils::kINFINITY), maximum_(utils::kINFINITY), closed_(false) {}
+
 Cone::Cone(const std::string& name, float minimum, float maximum, bool closed)
   : Shape(name, ObjectType::kCone),
   minimum_(minimum), maximum_(maximum), closed_(closed) {}
@@ -158,4 +162,8 @@ void Cone::intersect_caps(const utils::RayStruct& local_ray, std::vector<Interse
   if (utils::check_cone_cap(local_ray, upper_t, this->maximum_)) {
     xs.push_back(Intersection(upper_t, this));
   }
+}
+
+BoundingBox Cone::bounds() const {
+  return BoundingBox(Point(minimum_, minimum_, minimum_), Point(maximum_, maximum_, maximum_));;
 }

@@ -2,8 +2,12 @@
 #include "vector.h"
 #include "point.h"
 
+Sphere::Sphere()
+    : Shape("sphere", ObjectType::kSphere) {
+}
+
 Sphere::Sphere(const std::string& name)
-    : Shape(name, ObjectType::kSphere) {
+  : Shape(name, ObjectType::kSphere) {
 }
 
 Sphere::Sphere(const std::string& name, const Material& material)
@@ -64,4 +68,8 @@ Sphere Sphere::glass_sphere(const std::string& name, const Matrix4& transform) {
   Sphere s = Sphere(name, transform);
   s.GetMaterial().SetTransparency(1.0f).SetRefractiveIndex(1.5f);
   return s;
+}
+
+BoundingBox Sphere::bounds() const {
+  return BoundingBox(Point(-1.0f, -1.0f, -1.0f), Point(1.0f, 1.0f, 1.0f));;
 }

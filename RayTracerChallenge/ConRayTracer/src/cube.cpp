@@ -1,5 +1,9 @@
 #include "cube.h"
+#include "utils.h"
 #include <algorithm>
+
+Cube::Cube()
+  : Shape("cube", ObjectType::kCube) {}
 
 Cube::Cube(const std::string& name)
   : Shape(name, ObjectType::kCube) {}
@@ -27,33 +31,14 @@ Cube& Cube::operator=(const Object& object) {
   this->SetObjectType(other->GetObjectType());
   this->SetTransform(other->GetTransform());
   this->SetMaterial(other->GetMaterial());
+  this->SetMaterial(other->GetMaterial());
   return *this;
 }
 
-TimeValuePair check_axis(float axis_origin, float axis_direction) {
-  const auto tmin_numerator = (-1 - axis_origin);
-  const auto tmax_numerator = (1 - axis_origin);
-
-  TimeValuePair pair;
-
-  if (abs(axis_direction) >= utils::kEPSILON) {
-    pair.tmin = tmin_numerator / axis_direction;
-    pair.tmax = tmax_numerator / axis_direction;
-  }
-  else {
-    pair.tmin = tmin_numerator * utils::kINFINITY;
-    pair.tmax = tmax_numerator * utils::kINFINITY;
-  }
-
-  if (pair.tmin > pair.tmax) utils::swap(pair.tmin, pair.tmax);
-
-  return pair;
-}
-
 std::vector<Intersection> Cube::local_intersect(const utils::RayStruct& local_ray) {
-  TimeValuePair x = check_axis(local_ray.origin[0], local_ray.direction[0]);
-  TimeValuePair y = check_axis(local_ray.origin[1], local_ray.direction[1]);
-  TimeValuePair z = check_axis(local_ray.origin[2], local_ray.direction[2]);
+  utils::TimeValuePair x = utils::check_axis(local_ray.origin[0], local_ray.direction[0], -1, 1);
+  utils::TimeValuePair y = utils::check_axis(local_ray.origin[1], local_ray.direction[1], -1, 1);
+  utils::TimeValuePair z = utils::check_axis(local_ray.origin[2], local_ray.direction[2], -1, 1);
 
   const auto tmin = std::max({ x.tmin, y.tmin, z.tmin });
   const auto tmax = std::min({ x.tmax, y.tmax, z.tmax });
@@ -73,4 +58,8 @@ Vector Cube::local_normal_at(const Point& local_point) const {
     return Vector(0, local_point[1], 0);
   }
   return Vector(0, 0, local_point[2]);
+}
+
+BoundingBox Cube::bounds() const {
+  return BoundingBox(Point(-1, -1, -1), Point(1, 1, 1));
 }

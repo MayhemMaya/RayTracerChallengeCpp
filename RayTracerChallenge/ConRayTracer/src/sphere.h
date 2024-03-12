@@ -4,6 +4,7 @@
 
 class Sphere : public Shape {
  public:
+   Sphere();
    Sphere(const std::string& name);
    Sphere(const std::string& name, const Material& material);
    Sphere(const std::string& name, const Matrix4& transform);
@@ -14,4 +15,5 @@ class Sphere : public Shape {
    Vector local_normal_at(const Point& local_point) const override;
    static Sphere glass_sphere(const std::string& name);
    static Sphere glass_sphere(const std::string& name, const Matrix4& transform);
+   BoundingBox bounds() const override final;
 };

@@ -185,6 +185,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\bounding-box.cpp" />
     <ClCompile Include="src\cone.cpp" />
     <ClCompile Include="src\cube.cpp" />
     <ClCompile Include="src\blended-pattern.cpp" />
@@ -198,11 +199,13 @@
     <ClCompile Include="src\environment.cpp" />
     <ClCompile Include="src\gradient-pattern.cpp" />
     <ClCompile Include="src\group.cpp" />
+    <ClCompile Include="src\Hexagon.cpp" />
     <ClCompile Include="src\hit.cpp" />
     <ClCompile Include="src\intersection.cpp" />
     <ClCompile Include="src\light-source.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\materials.cpp" />
     <ClCompile Include="src\matrix2.cpp" />
     <ClCompile Include="src\matrix3.cpp" />
     <ClCompile Include="src\matrix4.cpp" />
@@ -230,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\blended-pattern.h" />
+    <ClInclude Include="src\bounding-box.h" />
     <ClInclude Include="src\checker-pattern.h" />
     <ClInclude Include="src\colors.h" />
     <ClInclude Include="src\cone.h" />
@@ -237,6 +241,8 @@
     <ClInclude Include="src\cylinder.h" />
     <ClInclude Include="src\gradient-pattern.h" />
     <ClInclude Include="src\group.h" />
+    <ClInclude Include="src\Hexagon.h" />
+    <ClInclude Include="src\materials.h" />
     <ClInclude Include="src\mock-pattern.h" />
     <ClInclude Include="src\mock-shape.h" />
     <ClInclude Include="src\camera.h" />

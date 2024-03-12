@@ -17,13 +17,18 @@ struct RayStruct {
   Point origin;
   Vector direction;
 };
+
+struct TimeValuePair {
+  float tmin, tmax;
+};
+
 // Had to adjust the epsilon value here from 0.0001f to 0.001f due to acne appearing on the image when calculating shadows using is_shadowed()
 // Unit tests may be affected.
 static float kEPSILON = 0.001f;
 static double kPI = 3.141592653589793;
 static int kRECURSION_DEPTH = 5;
 static bool kUSE_ALL_LIGHTS = false;
-static float kINFINITY = std::numeric_limits<float>::infinity();
+static double kINFINITY = std::numeric_limits<double>::infinity();
 bool equal(float a, float b);
 float clamp(float value, float min, float max);
 std::vector<std::string> split_lines(const std::string& str);
@@ -39,6 +44,7 @@ void ClearScreen();
 bool at_least_one_true(std::vector<bool> booleans);
 bool check_cylinder_cap(const RayStruct& local_ray, const float& t);
 bool check_cone_cap(const RayStruct& local_ray, const float& t, const float& y);
+TimeValuePair check_axis(float axis_origin, float axis_direction, float minimum, float maximum);
 
 template <typename Base, typename T>
 

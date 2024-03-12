@@ -4,6 +4,7 @@
 
 class Cone : public Shape {
 public:
+  Cone();
   Cone(const std::string& name, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cone(const std::string& name, const Material& material, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
   Cone(const std::string& name, const Matrix4& transform, float minimum = -utils::kINFINITY, float maximum = utils::kINFINITY, bool closed = false);
@@ -18,6 +19,7 @@ public:
   void SetMinimum(float minimum);
   void SetMaximum(float maximum);
   void SetClosed(bool closed);
+  BoundingBox bounds() const override final;
 
 private:
   float minimum_, maximum_;

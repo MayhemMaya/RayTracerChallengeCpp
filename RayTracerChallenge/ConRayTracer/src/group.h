@@ -3,12 +3,15 @@
 #include "shape.h"
 
 struct GroupChild {
-  Shape* child;
+  Shape* object;
   Matrix4 transform;
+  Matrix4 transform_inverse;
+  Material original_mat;
 };
 
 class Group : public Shape {
 public:
+  Group();
   Group(const std::string& name);
   Group(const std::string& name, const std::vector<Shape*>& children);
   Group(const std::string& name, const std::vector<Shape*>& children, const Material& material);
@@ -26,7 +29,11 @@ public:
   Group& operator=(const Object& object) override;*/
   std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) override;
   Vector local_normal_at(const Point& local_point) const override;
+  BoundingBox bounds() const override final;
 
 private:
   std::vector<GroupChild> children_;
+  BoundingBox bounds_;
+  void extend_bounds(Shape* shape);
+  bool intersects_bounds(const utils::RayStruct& ray);
 };

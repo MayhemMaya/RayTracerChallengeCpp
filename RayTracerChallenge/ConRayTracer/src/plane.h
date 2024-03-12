@@ -4,6 +4,7 @@
 
 class Plane : public Shape {
  public:
+  Plane();
   Plane(const std::string& name);
   Plane(const std::string& name, const Material& material);
   Plane(const std::string& name, const Matrix4& transform);
@@ -12,4 +13,5 @@ class Plane : public Shape {
   Plane& operator=(const Object& other) override;
   std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) override;
   Vector local_normal_at(const Point& local_point) const override;
+  BoundingBox bounds() const override final;
 };

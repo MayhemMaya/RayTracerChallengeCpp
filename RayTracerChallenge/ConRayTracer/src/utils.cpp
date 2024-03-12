@@ -103,4 +103,24 @@ bool check_cone_cap(const RayStruct& local_ray, const float& t, const float& y) 
   return (x * x) + (z * z) <= abs(y);
 }
 
+TimeValuePair check_axis(float axis_origin, float axis_direction, float minimum, float maximum) {
+  const auto tmin_numerator = (minimum - axis_origin);
+  const auto tmax_numerator = (maximum - axis_origin);
+
+  TimeValuePair pair;
+
+  if (abs(axis_direction) >= utils::kEPSILON) {
+    pair.tmin = tmin_numerator / axis_direction;
+    pair.tmax = tmax_numerator / axis_direction;
+  }
+  else {
+    pair.tmin = tmin_numerator * utils::kINFINITY;
+    pair.tmax = tmax_numerator * utils::kINFINITY;
+  }
+
+  if (pair.tmin > pair.tmax) utils::swap(pair.tmin, pair.tmax);
+
+  return pair;
+}
+
 } // namespace utils

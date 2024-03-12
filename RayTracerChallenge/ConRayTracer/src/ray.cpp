@@ -2,6 +2,7 @@
 #include <vector>
 #include "ray.h"
 #include "sphere.h"
+#include "cube.h"
 #include "point.h"
 #include "vector.h"
 #include "utils.h"
@@ -44,6 +45,8 @@ std::vector<float> Ray::intersect(const Sphere& sphere) const {
   return { t1, t2 };
 }
 */
+
+
 
 std::vector<Intersection> Ray::intersect(const World& world) const {
   std::vector<Intersection> intersections;
