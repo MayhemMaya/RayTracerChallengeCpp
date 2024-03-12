@@ -67,10 +67,13 @@ float Camera::GetPixelSize() const { return pixel_size_; }
 float Camera::GetHalfWidth() const { return half_width_; }
 float Camera::GetHalfHeight() const { return half_height_; }
 
-void Camera::ListDetails() {
+void Camera::ListDetails() const {
+  std::string parent_name = parent_ == nullptr ? "None" : parent_->GetName();
   std::cout << "Name: " << name_ << "\n"
     << "Type: " << this->GetObjectTypeName() << "\n"
+    << "ID: " << id_ << "\n"
     << "Transform:\n" << transform_.format()
+    << "Parent: " << parent_name << "\n"
     << "Horizontal Size: " << hsize_ << "\n"
     << "Vertical Size: " << vsize_ << "\n"
     << "Field of view: " << field_of_view_ << "\n";
@@ -85,6 +88,8 @@ bool Camera::operator==(const Object& object) const {
   return(this->GetName() == other->GetName() &&
     this->GetTransform() == other->GetTransform() &&
     this->GetObjectType() == other->GetObjectType() &&
+    parent_ == other->GetParent() &&
+    id_ == other->GetID() &&
     hsize_ == other->GetHorizontalSize() &&
     vsize_ == other->GetVerticalSize() &&
     utils::equal(field_of_view_, other->GetFieldOfView()));
@@ -95,6 +100,7 @@ Camera& Camera::operator=(const Object& object) {
   name_ = other->GetName();
   type_ = other->GetObjectType();
   transform_ = other->GetTransform();
+  parent_ = other->GetParent();
   hsize_ = other->GetHorizontalSize();
   vsize_ = other->GetVerticalSize();
   field_of_view_ = other->GetFieldOfView();

@@ -151,3 +151,13 @@ bool Group::intersects_bounds(const utils::RayStruct& ray) {
 
   return tmin < tmax;
 }
+
+void Group::ListDetails() const {
+  std::string parent_name = parent_ == nullptr ? "None" : parent_->GetName();
+  std::cout << "Name: " << name_ << "\n"
+    << "Type: " << this->GetObjectTypeName() << "\n"
+    << "ID: " << this->GetID() << "\n"
+    << "Transform:\n" << transform_.format()
+    << "Parent: " << parent_name << "\n"
+    << "Children Count: " << children_.size() << "\n";
+}

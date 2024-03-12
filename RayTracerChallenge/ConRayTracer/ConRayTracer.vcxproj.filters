@@ -291,5 +291,8 @@
     <ClInclude Include="src\Hexagon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

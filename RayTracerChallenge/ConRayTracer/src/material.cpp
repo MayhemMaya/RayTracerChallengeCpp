@@ -151,16 +151,3 @@ Material& Material::operator=(const Material& other) {
   pattern_ = other.pattern_;
   return *this;
 }
-
-std::string Material::format() const {
-  std::stringstream ss;
-  ss << "Color: " << color_ << "\n"
-    << "Ambient: " << ambient_ << "\n"
-    << "Diffuse: " << diffuse_ << "\n"
-    << "Specular: " << specular_ << "\n"
-    << "Shininess: " << shininess_ << "\n"
-    << "Reflectivity: " << reflectivity_ << "\n"
-    << "Transparency: " << transparency_ << "\n"
-    << "Refractive Index: " << refractive_index_ << "\n";
-  return ss.str();
-}

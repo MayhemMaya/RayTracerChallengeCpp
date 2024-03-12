@@ -16,12 +16,14 @@ Plane::Plane(const std::string& name, const Matrix4& transform)
 Plane::Plane(const std::string& name, const Material& material, const Matrix4& transform)
   : Shape(name, ObjectType::kPlane, material, transform) {}
 
-bool Plane::operator==(const Object& object) {
+bool Plane::operator==(const Object& object) const {
   Plane* other = (Plane*)&object;
   return(name_ == other->GetName() &&
     transform_ == other->GetTransform() &&
     type_ == other->GetObjectType() &&
-    material_ == other->GetMaterial());
+    id_ == other->GetID() &&
+    material_ == other->GetMaterial() &&
+    parent_ == other->GetParent());
 }
 
 Plane& Plane::operator=(const Object& object) {
@@ -30,6 +32,7 @@ Plane& Plane::operator=(const Object& object) {
   type_ = other->GetObjectType();
   transform_ = other->GetTransform();
   material_ = other->GetMaterial();
+  parent_ = other->GetParent();
   return *this;
 }
 

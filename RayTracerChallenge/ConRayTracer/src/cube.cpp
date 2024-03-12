@@ -17,21 +17,23 @@ Cube::Cube(const std::string& name, const Matrix4& transform)
 Cube::Cube(const std::string& name, const Material& material, const Matrix4& transform)
   : Shape(name, ObjectType::kCube, material, transform) {}
 
-bool Cube::operator==(const Object& object) {
+bool Cube::operator==(const Object& object) const {
   Cube* other = (Cube*)&object;
-  return(this->GetName() == other->GetName() &&
-    this->GetTransform() == other->GetTransform() &&
-    this->GetObjectType() == other->GetObjectType() &&
-    this->GetMaterial() == other->GetMaterial());
+  return(name_ == other->GetName() &&
+    transform_ == other->GetTransform() &&
+    type_ == other->GetObjectType() &&
+    parent_ == other->GetParent() &&
+    id_ == other->GetID() &&
+    material_ == other->GetMaterial());
 }
 
 Cube& Cube::operator=(const Object& object) {
   Cube* other = (Cube*)&object;
-  this->SetName(other->GetName());
-  this->SetObjectType(other->GetObjectType());
-  this->SetTransform(other->GetTransform());
-  this->SetMaterial(other->GetMaterial());
-  this->SetMaterial(other->GetMaterial());
+  name_ = other->GetName();
+  type_ = other->GetObjectType();
+  transform_ = other->GetTransform();
+  material_ = other->GetMaterial();
+  parent_ = other->GetParent();
   return *this;
 }
 

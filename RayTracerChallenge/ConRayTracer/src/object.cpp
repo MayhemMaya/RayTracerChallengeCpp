@@ -1,27 +1,30 @@
 #include "object.h"
 
 
+std::atomic<uint64_t> Object::ID = 0;
+
 Object::Object(const std::string& name, const ObjectType& type)
-    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().inverse()) {}
+    : transform_(Matrix4()), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().inverse()), id_(ID++) {}
 
 Object::Object(const std::string& name, const ObjectType& type, const Matrix4& transform)
-  : transform_(transform), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(transform.inverse()) {}
+  : transform_(transform), name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(transform.inverse()), id_(ID++) {}
 
 Object::Object(const std::string& name, const ObjectType& type, const Point& position)
     : transform_(Matrix4().translation(position[0], position[1], position[2])), 
-      name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().translation(position[0], position[1], position[2]).inverse()) {}
+      name_(name), type_(type), parent_(nullptr), cached_transform_inverse_(Matrix4().translation(position[0], position[1], position[2]).inverse()), id_(ID++) {}
 
 Object::~Object() {
   parent_ = nullptr;
   delete parent_;
 }
 
-void Object::ListDetails() {
+void Object::ListDetails() const {
   std::string parent_name = parent_ == nullptr ? "None" : parent_->GetName();
   std::cout << "Name: " << name_ << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
+      << "ID: " << this->GetID() << "\n"
       << "Transform:\n" << transform_.format() << "\n"
-      << "Parent:\n" << parent_name << "\n";
+      << "Parent: " << parent_name << "\n";
 }
 
 std::string Object::GetName() const { return name_; }
@@ -83,11 +86,19 @@ std::string Object::GetObjectTypeName() const {
   return typeMap[type_];
 }
 
-bool Object::operator==(const Object& other) {
+bool Object::operator==(const Object& other) const {
   return(name_ == other.GetName() &&
          transform_ == other.GetTransform() &&
          type_ == other.GetObjectType() &&
-         parent_ == other.GetParent());
+         parent_ == other.GetParent() &&
+         id_ == other.GetID());
+}
+
+bool Object::compareWithoutID(const Object& other) const {
+  return(name_ == other.GetName() &&
+    transform_ == other.GetTransform() &&
+    type_ == other.GetObjectType() &&
+    parent_ == other.GetParent());
 }
 
 Object& Object::operator=(const Object& other) {
@@ -103,4 +114,8 @@ Point Object::world_to_object(const Object* shape, Point point) {
     point = Object::world_to_object(shape->GetParent(), point);
   }
   return shape->GetCachedTransformInverse() * point;
+}
+
+uint64_t Object::GetID() const {
+  return id_;
 }

@@ -38,7 +38,6 @@ class Material {
    Material& SetPattern(Pattern* pattern);
    bool operator==(const Material& other) const;
    Material& operator=(const Material& other);
-   std::string format() const;
  private:
   Color color_;
   float ambient_;

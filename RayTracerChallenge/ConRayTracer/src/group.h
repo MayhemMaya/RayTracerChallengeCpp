@@ -30,6 +30,7 @@ public:
   std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) override;
   Vector local_normal_at(const Point& local_point) const override;
   BoundingBox bounds() const override final;
+  void ListDetails() const override final;
 
 private:
   std::vector<GroupChild> children_;

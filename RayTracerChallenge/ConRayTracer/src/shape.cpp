@@ -19,12 +19,12 @@ Shape::Shape(const std::string& name, const ObjectType& type, const Material& ma
 
 Shape::~Shape() {}
 
-void Shape::ListDetails() {
+void Shape::ListDetails() const {
   std::string parent_name = parent_ == nullptr ? "None" : parent_->GetName();
   std::cout << "Name: " << name_ << "\n"
       << "Type: " << this->GetObjectTypeName() << "\n"
+      << "ID: " << this->GetID() << "\n"
       << "Transform:\n" << transform_.format()
-      << "Material:\n" << material_.format()
       << "Parent: " << parent_name << "\n\n";
 }
 
@@ -41,11 +41,12 @@ void Shape::SetMaterial(const Material& material) {
   material_ = material;
 }
 
-bool Shape::operator==(const Object& object) {
+bool Shape::operator==(const Object& object) const {
   Shape* other = (Shape*)&object;
   return(name_ == other->GetName() &&
          transform_ == other->GetTransform() &&
          type_ == other->GetObjectType() && 
+         id_ == other->GetID() && 
          material_ == other->GetMaterial() &&
          parent_ == other->GetParent());
 }

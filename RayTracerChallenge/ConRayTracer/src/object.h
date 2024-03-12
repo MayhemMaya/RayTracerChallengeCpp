@@ -5,6 +5,7 @@
 #include "point.h"
 #include "utils.h"
 #include <string>
+#include <atomic>
 #include <map>
 
 static enum class ObjectType {
@@ -39,7 +40,7 @@ class Object {
    Object(const std::string& name, const ObjectType& type, const Matrix4& transform);
    Object(const std::string& name, const ObjectType& type, const Point& position);
    virtual ~Object() = 0;
-   virtual void ListDetails();
+   virtual void ListDetails() const;
    std::string GetName() const;
    void SetName(const std::string& name);
    Matrix4 GetTransform() const;
@@ -53,12 +54,17 @@ class Object {
    bool HasParent() const;
    void SetObjectType(const ObjectType& type);
    Point GetPosition() const;
-   virtual bool operator==(const Object& other);
+   virtual bool operator==(const Object& other) const;
+   bool compareWithoutID(const Object& other) const;
    virtual Object& operator=(const Object& other);
    static Point world_to_object(const Object* shape, Point point);
+   uint64_t GetID() const;
+private:
+   static std::atomic<uint64_t> ID;
 
  protected:
    std::string name_;
+   uint64_t id_;
    ObjectType type_;
    Matrix4 transform_;
    Matrix4 cached_transform_inverse_;

@@ -273,6 +273,7 @@
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\sphere.h" />
     <ClInclude Include="src\stripe-pattern.h" />
+    <ClInclude Include="src\triangle.h" />
     <ClInclude Include="src\tuple.h" />
     <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\vector.h" />

@@ -5,7 +5,7 @@
 class MockShape : public Shape {
  public:
    MockShape(const std::string& name);
-   bool operator==(const Object& object) override;
+   bool operator==(const Object& object) const override;
    MockShape& operator=(const Object& other) override;
    utils::RayStruct GetSavedRay() const;
    void SetSavedRay(const Point& origin, const Vector& direction);

@@ -6,7 +6,7 @@ PointLight::PointLight(const std::string& name, const Point& position, const Col
     : LightSource(name, ObjectType::kPointLight, position, intensity) {
 }
 
-bool PointLight::operator==(const Object& object) {
+bool PointLight::operator==(const Object& object) const {
   PointLight* other = (PointLight*)&object;
   return(this->GetName() == other->GetName() &&
     this->GetTransform() == other->GetTransform() &&

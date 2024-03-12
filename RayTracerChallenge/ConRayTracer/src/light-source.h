@@ -10,11 +10,11 @@ public:
   LightSource(const std::string& name, const ObjectType& type, const Point& position,
                                                        const Color& intensity);
   virtual ~LightSource() = 0;
-  //void ListDetails() const override;
+  void ListDetails() const override final;
   Color GetIntensity() const;
   void SetIntensity(const Color& intensity);
-  bool operator==(const Object& object) override;
-  //LightSource& operator=(const Object& other) override;
+  bool operator==(const Object& object) const override;
+  LightSource& operator=(const Object& other) override;
 protected:
   Color intensity_;
 };

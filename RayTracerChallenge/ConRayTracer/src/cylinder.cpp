@@ -22,12 +22,17 @@ Cylinder::Cylinder(const std::string& name, const Material& material, const Matr
   : Shape(name, ObjectType::kCylinder, material, transform),
     minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
-bool Cylinder::operator==(const Object& object) {
+bool Cylinder::operator==(const Object& object) const {
   Cylinder* other = (Cylinder*)&object;
   return(name_ == other->GetName() &&
     transform_ == other->GetTransform() &&
     type_ == other->GetObjectType() &&
-    material_ == other->GetMaterial());
+    parent_ == other->GetParent() &&
+    id_ == other->GetID() &&
+    material_ == other->GetMaterial() &&
+    minimum_ == other->minimum_ &&
+    maximum_ == other->maximum_ &&
+    closed_ == other->closed_);
 }
 
 Cylinder& Cylinder::operator=(const Object& object) {
@@ -36,6 +41,10 @@ Cylinder& Cylinder::operator=(const Object& object) {
   type_ = other->GetObjectType();
   transform_ = other->GetTransform();
   material_ = other->GetMaterial();
+  parent_ = other->GetParent();
+  minimum_ = other->minimum_;
+  maximum_ = other->maximum_;
+  closed_ = other->closed_;
   return *this;
 }
 

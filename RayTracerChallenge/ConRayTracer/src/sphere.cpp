@@ -22,12 +22,14 @@ Sphere::Sphere(const std::string& name, const Material& material, const Matrix4&
     : Shape(name, ObjectType::kSphere, material, transform) {
 }
 
-bool Sphere::operator==(const Object& object) {
+bool Sphere::operator==(const Object& object) const {
   Sphere* other = (Sphere*)&object;
   return(name_ == other->GetName() &&
     transform_ == other->GetTransform() &&
     type_ == other->GetObjectType() &&
-    material_ == other->GetMaterial());
+    id_ == other->GetID() &&
+    material_ == other->GetMaterial() &&
+    parent_ == other->GetParent());
 }
 
 Sphere& Sphere::operator=(const Object& object) {
@@ -36,6 +38,7 @@ Sphere& Sphere::operator=(const Object& object) {
   type_ = other->GetObjectType();
   transform_ = other->GetTransform();
   material_ = other->GetMaterial();
+  parent_ = other->GetParent();
   return *this;
 }
 

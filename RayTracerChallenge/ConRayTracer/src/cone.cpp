@@ -23,12 +23,17 @@ Cone::Cone(const std::string& name, const Material& material, const Matrix4& tra
   : Shape(name, ObjectType::kCone, material, transform),
   minimum_(minimum), maximum_(maximum), closed_(closed) {}
 
-bool Cone::operator==(const Object& object) {
+bool Cone::operator==(const Object& object) const {
   Cone* other = (Cone*)&object;
   return(name_ == other->GetName() &&
     transform_ == other->GetTransform() &&
     type_ == other->GetObjectType() &&
-    material_ == other->GetMaterial());
+    parent_ == other->GetParent() &&
+    id_ == other->GetID() &&
+    material_ == other->GetMaterial() &&
+    minimum_ == other->minimum_ &&
+    maximum_ == other->maximum_ &&
+    closed_ == other->closed_);
 }
 
 Cone& Cone::operator=(const Object& object) {
@@ -37,6 +42,10 @@ Cone& Cone::operator=(const Object& object) {
   type_ = other->GetObjectType();
   transform_ = other->GetTransform();
   material_ = other->GetMaterial();
+  parent_ = other->GetParent();
+  minimum_ = other->minimum_;
+  maximum_ = other->maximum_;
+  closed_ = other->closed_;
   return *this;
 }
 
@@ -67,7 +76,7 @@ std::vector<Intersection> Cone::local_intersect(const utils::RayStruct& local_ra
   // In general, the discriminant of the quadratic equation should be non-negative if there are real solutions, 
   // and negative if there are complex solutions. However, due to floating-point roundoff errors, the discriminant 
   // may sometimes become slightly negative even when there are real solutions, leading to incorrect results.
-  // Here, rel_eps is a small relative epsilon based on the magnitudes of the coefficients, making it more robust to0
+  // Here, rel_eps is a small relative epsilon based on the magnitudes of the coefficients, making it more robust to
   // different combinations of coefficients
   const float eps = 0.000001f;
   const auto rel_eps = eps * std::max<double>({ abs(a), abs(b), abs(c) });

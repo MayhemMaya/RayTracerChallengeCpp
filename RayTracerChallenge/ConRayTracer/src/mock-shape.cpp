@@ -3,20 +3,23 @@
 MockShape::MockShape(const std::string& name) : Shape(name, ObjectType::kShape) {
 }
 
-bool MockShape::operator==(const Object& object) {
+bool MockShape::operator==(const Object& object) const {
   MockShape* other = (MockShape*)&object;
-  return(this->GetName() == other->GetName() &&
-    this->GetTransform() == other->GetTransform() &&
-    this->GetObjectType() == other->GetObjectType() &&
-    this->GetMaterial() == other->GetMaterial());
+  return(name_ == other->GetName() &&
+    transform_ == other->GetTransform() &&
+    type_ == other->GetObjectType() &&
+    id_ == other->GetID() &&
+    material_ == other->GetMaterial() &&
+    parent_ == other->GetParent());
 }
 
 MockShape& MockShape::operator=(const Object& object) {
   MockShape* other = (MockShape*)&object;
-  this->SetName(other->GetName());
-  this->SetObjectType(other->GetObjectType());
-  this->SetTransform(other->GetTransform());
-  this->SetMaterial(other->GetMaterial());
+  name_ = other->GetName();
+  type_ = other->GetObjectType();
+  transform_ = other->GetTransform();
+  material_ = other->GetMaterial();
+  parent_ = other->GetParent();
   return *this;
 }
 

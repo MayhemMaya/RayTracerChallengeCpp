@@ -113,6 +113,7 @@ void HexagonScene(int res_x, int res_y) {
 	Hexagon hex = Hexagon("hex", blue_mat);
 
 	PointLight light("PointLight", Point(0.0f, 5.0f, -5.0f), Colors::White);
+	PointLight light2("PointLight", Point(0.0f, 5.0f, -5.0f), Colors::White);
 
 	Camera camera("Camera", res_x, res_y, utils::kPI / 3.0f);
 	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 2.0f, -2.5f),
@@ -123,9 +124,9 @@ void HexagonScene(int res_x, int res_y) {
 	world.AddObject(&hex);
 	world.AddObject(&camera);
 
-	Canvas image = Engine::render(camera, world);
+	//Canvas image = Engine::render(camera, world);
 
-	utils::ExportFile("hexagon.ppm", image.ToPPM());
+	//utils::ExportFile("hexagon.ppm", image.ToPPM());
 }
 
 int main() {

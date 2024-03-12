@@ -133,7 +133,7 @@ bool World::ContainsCamera() const {
 
 bool World::ContainsObject(Object* other) const {
   for (auto& object : objects_) {
-    if ((*object) == (*other)) {
+    if (object->compareWithoutID(*other)) {
       return true;
     }
   }
