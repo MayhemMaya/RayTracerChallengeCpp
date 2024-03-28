@@ -106,7 +106,7 @@ Computation prepare_computations(const Intersection& intersection, const Ray& ra
 Computation prepare_computations(const Intersection& intersection, const Ray& ray, const std::vector<Intersection>& intersections) {
   Point comps_point = ray.position(intersection.GetTime());
   Shape* intersection_object = (Shape*)intersection.GetObject();
-  Vector comps_normalv = intersection_object->normal_at(comps_point);
+  Vector comps_normalv = intersection_object->normal_at(comps_point, intersection);
   Computation comps = Computation(
     intersection.GetTime(),                           // comps.time
     intersection_object,                              // comps.object

@@ -211,6 +211,7 @@
     <ClCompile Include="src\matrix4.cpp" />
     <ClCompile Include="src\mock-pattern.cpp" />
     <ClCompile Include="src\mock-shape.cpp" />
+    <ClCompile Include="src\obj-parser.cpp" />
     <ClCompile Include="src\pattern.cpp" />
     <ClCompile Include="src\plane.cpp" />
     <ClCompile Include="src\radial-gradient-pattern.cpp" />
@@ -224,8 +225,10 @@
     <ClCompile Include="src\point.cpp" />
     <ClCompile Include="src\projectile.cpp" />
     <ClCompile Include="src\ray.cpp" />
+    <ClCompile Include="src\smooth-triangle.cpp" />
     <ClCompile Include="src\sphere.cpp" />
     <ClCompile Include="src\stripe-pattern.cpp" />
+    <ClCompile Include="src\triangle.cpp" />
     <ClCompile Include="src\tuple.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\vector.cpp" />
@@ -257,6 +260,7 @@
     <ClInclude Include="src\matrix2.h" />
     <ClInclude Include="src\matrix3.h" />
     <ClInclude Include="src\matrix4.h" />
+    <ClInclude Include="src\obj-parser.h" />
     <ClInclude Include="src\pattern.h" />
     <ClInclude Include="src\plane.h" />
     <ClInclude Include="src\radial-gradient-pattern.h" />
@@ -271,6 +275,7 @@
     <ClInclude Include="src\point.h" />
     <ClInclude Include="src\projectile.h" />
     <ClInclude Include="src\ray.h" />
+    <ClInclude Include="src\smooth-triangle.h" />
     <ClInclude Include="src\sphere.h" />
     <ClInclude Include="src\stripe-pattern.h" />
     <ClInclude Include="src\triangle.h" />

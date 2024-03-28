@@ -12,6 +12,6 @@ public:
   bool operator==(const Object& object) const override;
   Cube& operator=(const Object& object) override;
   std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) override;
-  Vector local_normal_at(const Point& local_point) const override;
+  Vector local_normal_at(const Point& local_point, const Intersection& hit = Intersection()) const override;
   BoundingBox bounds() const override final;
 };

@@ -86,12 +86,6 @@ void World::ListObjects(const ObjectType& type) const {
 }
 
 void World::AddObject(Object* other) {
-  for (auto& object : objects_) {
-    if (object->GetName() == other->GetName()) {
-      throw std::invalid_argument("Error: Cannot add object to world. An object with the name '"
-          + other->GetName() + "' already exists.\n");
-    }
-  }
   objects_.push_back(other);
   hasLightSource_ = check_for_light_source(objects_);
 }

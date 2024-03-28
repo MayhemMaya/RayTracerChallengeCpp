@@ -45,7 +45,7 @@ int Canvas::MaxValuesPerLine() const {
   return width_ * 3;
 }
 
-std::string Canvas::ToPPM() const {
+std::string Canvas::ExportAsPPM(const std::string& file_name) const {
   std::stringstream ppm;
   // Create PPM header
   ppm << "P3\n";
@@ -75,7 +75,16 @@ std::string Canvas::ToPPM() const {
     ppm << line << '\n';
   }
   ppm << "\n";
-  std::cout << "PPM file created successfully.\n";
 
+  utils::FileNameCheck check = utils::check_file_name(file_name, utils::FileExtensions::PPM);
+  if (check.err.occured) {
+    std::cout << check.err.msg << "\n";
+    return check.err.msg;
+  }
+
+  std::ofstream file(check.file_name);
+  file << ppm.str();
+  file.close();
+  std::cout << "Exported file: " << "'" << file_name << "'\n";
   return ppm.str();
 }

@@ -28,9 +28,9 @@ void Shape::ListDetails() const {
       << "Parent: " << parent_name << "\n\n";
 }
 
-Vector Shape::normal_at(const Point& point) const {
+Vector Shape::normal_at(const Point& point, const Intersection& hit) const {
   Point local_point = Shape::world_to_object(this, point);
-  Vector local_normal = this->local_normal_at(local_point);
+  Vector local_normal = this->local_normal_at(local_point, hit);
   return Shape::normal_to_world(this, local_normal);
 }
 

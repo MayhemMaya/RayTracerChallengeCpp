@@ -9,7 +9,7 @@ class Camera : public Object {
  public:
    Camera(const std::string& name, int hsize, int vsize, float field_of_view);
    Camera(const std::string& name, int hsize, int vsize, float field_of_view, const Matrix4& transform);
-   ~Camera();
+   ~Camera() override;
    int GetHorizontalSize() const;
    void SetHorizontalSize(int hsize);
    int GetVerticalSize() const;

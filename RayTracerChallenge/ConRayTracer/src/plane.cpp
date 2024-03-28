@@ -47,7 +47,7 @@ std::vector<Intersection> Plane::local_intersect(const utils::RayStruct& local_r
   return { Intersection(t, this) };
 }
 
-Vector Plane::local_normal_at(const Point& local_point) const {
+Vector Plane::local_normal_at(const Point& local_point, const Intersection& hit) const {
   Vector local_normal = Vector(0, 1, 0);
   return local_normal.normalize();
 }

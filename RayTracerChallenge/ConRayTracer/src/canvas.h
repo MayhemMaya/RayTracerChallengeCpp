@@ -10,7 +10,7 @@ class Canvas {
   int GetHeight() const;
   Color PixelAt(int x, int y) const;
   void WritePixel(int x, int y, const Color& color);
-  std::string ToPPM() const;
+  std::string ExportAsPPM(const std::string& file_name) const;
 
  private:
   int MaxValuesPerLine() const;

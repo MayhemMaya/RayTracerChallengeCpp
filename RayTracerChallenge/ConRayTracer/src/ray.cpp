@@ -78,8 +78,5 @@ std::vector<Intersection> Ray::intersect(Shape* shape) const {
 }
 
 utils::RayStruct Ray::to_ray_struct() const {
-  utils::RayStruct ray_struct;
-  ray_struct.origin = this->GetOrigin();
-  ray_struct.direction = this->GetDirection();
-  return ray_struct;
+  return { this->GetOrigin(), this->GetDirection() };
 }

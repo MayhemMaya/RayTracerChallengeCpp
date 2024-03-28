@@ -56,7 +56,7 @@ std::vector<Intersection> Sphere::local_intersect(const utils::RayStruct& local_
   return { Intersection(t1, this), Intersection(t2, this) };
 }
 
-Vector Sphere::local_normal_at(const Point& local_point) const {
+Vector Sphere::local_normal_at(const Point& local_point, const Intersection& hit) const {
   Vector local_normal = local_point - Point(0, 0, 0);
   return local_normal.normalize();
 }

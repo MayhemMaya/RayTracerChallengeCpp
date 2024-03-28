@@ -9,7 +9,7 @@ class LightSource : public Object {
 public:
   LightSource(const std::string& name, const ObjectType& type, const Point& position,
                                                        const Color& intensity);
-  virtual ~LightSource() = 0;
+  virtual ~LightSource() override = 0;
   void ListDetails() const override final;
   Color GetIntensity() const;
   void SetIntensity(const Color& intensity);

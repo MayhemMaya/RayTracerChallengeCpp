@@ -31,8 +31,8 @@ Group::Group(const std::string& name, const std::vector<Shape*>& children, const
 
 Group::~Group() {
   for (int i = 0; i < children_.size(); i++) {
-    children_[i].object = nullptr;
-    delete children_[i].object;
+    children_[i] = nullptr; 
+    delete children_[i];
   }
 }
 
@@ -43,17 +43,19 @@ Group::~Group() {
 //    this->GetObjectType() == other->GetObjectType() &&
 //    this->GetMaterial() == other->GetMaterial());
 //}
-//
+
 //Group& Group::operator=(const Object& object) {
 //  Group* other = (Group*)&object;
-//  this->SetName(other->GetName());
-//  this->SetObjectType(other->GetObjectType());
-//  this->SetTransform(other->GetTransform());
-//  this->SetMaterial(other->GetMaterial());
+//  name_ = other->GetName();
+//  type_ = other->GetObjectType();
+//  transform_ = other->GetTransform();
+//  material_ = other->GetMaterial();
+//  parent_ = other->GetParent();
+//
 //  return *this;
 //}
 
-std::vector<GroupChild> Group::GetChildren() const {
+std::vector<Shape*> Group::GetChildren() const {
   return children_;
 }
 
@@ -63,14 +65,11 @@ void Group::AddChild(Shape* child) {
   }
 
   child->SetParent(this);
-  GroupChild gc;
-  gc.object = child;
-  gc.transform = this->GetTransform() * child->GetTransform();
-  gc.transform_inverse = gc.transform.inverse();
-  gc.original_mat = child->GetMaterial();
+  Matrix4 child_transform = this->GetTransform() * child->GetTransform();
+  transform_inverses_.push_back(child_transform.inverse());
   child->SetMaterial(this->GetMaterial());
   this->extend_bounds(child);
-  children_.push_back(gc);
+  children_.push_back(child);
 }
 
 void Group::AddChildren(const std::vector<Shape*>& children) {
@@ -93,7 +92,16 @@ bool Group::isEmpty() const {
 
 bool Group::ContainsChild(Shape* other) const {
   for (auto& child : children_) {
-    if ((*child.object) == (*other)) {
+    if ((*child) == (*other)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Group::ContainsChildWithName(const std::string& name) const {
+  for (auto& child : children_) {
+    if ((*child).GetName() == name) {
       return true;
     }
   }
@@ -102,11 +110,11 @@ bool Group::ContainsChild(Shape* other) const {
 
 void Group::RemoveChild(Shape* child) {
   for (int i = 0; i < children_.size(); i++) {
-    if ((*children_[i].object) == (*child)) {
-      children_[i].object->RemoveParent();
-      children_[i].object->SetMaterial(children_[i].original_mat);
-      children_[i].object = nullptr;
+    if ((*children_[i]) == (*child)) {
+      children_[i]->RemoveParent();
+      children_[i] = nullptr;
       children_.erase(children_.begin() + i);
+      transform_inverses_.erase(transform_inverses_.begin() + i);
     }
   }
 }
@@ -117,16 +125,16 @@ std::vector<Intersection> Group::local_intersect(const utils::RayStruct& local_r
   }
 
   std::vector<Intersection> xs;
-  for (auto& child : children_) {
+  for (int i = 0; i < children_.size(); i++) {
     Ray local(local_ray);
-    Ray transformedRay = local.transform(child.transform_inverse);
-    std::vector<Intersection> child_intersections = child.object->local_intersect(transformedRay.to_ray_struct());
+    Ray transformedRay = local.transform(transform_inverses_[i]);
+    std::vector<Intersection> child_intersections = children_[i]->local_intersect(transformedRay.to_ray_struct());
     xs.insert(xs.end(), child_intersections.begin(), child_intersections.end());
   }
   return Intersection::intersections(xs);
 }
 
-Vector Group::local_normal_at(const Point& local_point) const {
+Vector Group::local_normal_at(const Point& local_point, const Intersection& hit) const {
   throw std::invalid_argument("Error: Group local_normal_at cannot be called.");
 }
 
@@ -139,15 +147,16 @@ void Group::extend_bounds(Shape* shape) {
 }
 
 bool Group::intersects_bounds(const utils::RayStruct& ray) {
-  utils::TimeValuePair x = utils::check_axis(ray.origin[0], ray.direction[0],
+  // using structured bindings here now.
+  const auto [x_tmin, x_tmax] = utils::check_axis(ray.origin[0], ray.direction[0],
                                     bounds_.GetMinimum()[0], bounds_.GetMaximum()[0]);
-  utils::TimeValuePair y = utils::check_axis(ray.origin[1], ray.direction[1],
+  const auto [y_tmin, y_tmax] = utils::check_axis(ray.origin[1], ray.direction[1],
                                     bounds_.GetMinimum()[1], bounds_.GetMaximum()[1]);
-  utils::TimeValuePair z = utils::check_axis(ray.origin[2], ray.direction[2],
+  const auto [z_tmin, z_tmax] = utils::check_axis(ray.origin[2], ray.direction[2],
                                     bounds_.GetMinimum()[2], bounds_.GetMaximum()[2]);
 
-  auto tmin = std::max({ x.tmin, y.tmin, z.tmin });
-  auto tmax = std::min({ x.tmax, y.tmax, z.tmax });
+  const auto tmin = std::max({ x_tmin, y_tmin, z_tmin });
+  const auto tmax = std::min({ x_tmax, y_tmax, z_tmax });
 
   return tmin < tmax;
 }
@@ -160,4 +169,26 @@ void Group::ListDetails() const {
     << "Transform:\n" << transform_.format()
     << "Parent: " << parent_name << "\n"
     << "Children Count: " << children_.size() << "\n";
+}
+
+void Group::SetMaterial(const Material& material) {
+  material_ = material;
+
+  if (children_.size() > 0) {
+    for (auto& child : children_) {
+      child->SetMaterial(this->GetMaterial());
+    }
+  }
+}
+
+void Group::SetTransform(const Matrix4& transform) {
+  transform_ = transform_ * transform;
+  cached_transform_inverse_ = transform_.inverse();
+
+  if (children_.size() > 0) {
+    for (int i = 0; i < children_.size(); i++) {
+      Matrix4 child_transform = this->GetTransform() * children_[i]->GetTransform();
+      transform_inverses_[i] = child_transform.inverse();
+    }
+  }
 }

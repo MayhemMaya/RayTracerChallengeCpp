@@ -10,7 +10,7 @@ class MockShape : public Shape {
    utils::RayStruct GetSavedRay() const;
    void SetSavedRay(const Point& origin, const Vector& direction);
    std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) override;
-   Vector local_normal_at(const Point& local_point) const override;
+   Vector local_normal_at(const Point& local_point, const Intersection& hit = Intersection()) const override;
    BoundingBox bounds() const override final;
  private:
    utils::RayStruct saved_ray_;

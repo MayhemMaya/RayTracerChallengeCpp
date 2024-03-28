@@ -101,7 +101,7 @@ std::vector<Intersection> Cylinder::local_intersect(const utils::RayStruct& loca
   return xs;
 }
 
-Vector Cylinder::local_normal_at(const Point& local_point) const {
+Vector Cylinder::local_normal_at(const Point& local_point, const Intersection& hit) const {
   // compute the square of the distance from the y axis
   const auto dist = pow(local_point[0], 2) + pow(local_point[2], 2);
 

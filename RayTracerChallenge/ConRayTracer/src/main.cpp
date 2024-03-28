@@ -98,7 +98,7 @@ void SpheresScene(int res_x, int res_y) {
 
 	Canvas image = Engine::render(camera, world);
 
-	utils::ExportFile("spheres.ppm", image.ToPPM());
+	image.ExportAsPPM("renders\\spheres.ppm");
 }
 
 void HexagonScene(int res_x, int res_y) {
@@ -113,7 +113,6 @@ void HexagonScene(int res_x, int res_y) {
 	Hexagon hex = Hexagon("hex", blue_mat);
 
 	PointLight light("PointLight", Point(0.0f, 5.0f, -5.0f), Colors::White);
-	PointLight light2("PointLight", Point(0.0f, 5.0f, -5.0f), Colors::White);
 
 	Camera camera("Camera", res_x, res_y, utils::kPI / 3.0f);
 	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 2.0f, -2.5f),
@@ -124,18 +123,70 @@ void HexagonScene(int res_x, int res_y) {
 	world.AddObject(&hex);
 	world.AddObject(&camera);
 
-	//Canvas image = Engine::render(camera, world);
+	Canvas image = Engine::render(camera, world);
 
-	//utils::ExportFile("hexagon.ppm", image.ToPPM());
+	image.ExportAsPPM("renders\\hexagon.ppm");
+}
+
+void ObjTeapotScene(int res_x, int res_y) {
+
+	World world = World(WorldType::EMPTY);
+
+	Material teapot_mat;
+	teapot_mat.SetColor(Colors::Purple);
+
+	CheckerPattern checker = CheckerPattern(Color(0.8, 0.8, 0.8), Color(0.7, 0.7, 0.7));
+	checker.SetTransform(Matrix4().scaling(0.125, 0.125, 0.125));
+
+	Material checker_mat;
+	checker_mat.SetPattern(&checker);
+	//checker_mat.SetSpecular(1.0f);
+	//checker_mat.SetReflectivity(0.25f);
+
+	Plane floor("floor", Matrix4().scaling(10.0f, 1.0f, 10.0f));
+	floor.SetMaterial(checker_mat);
+
+	Plane back_wall("back_wall", Matrix4().translation(0, 0, -15).scaling(10.0f, 10.0f, 1.0f).rotation_x(utils::radians(90)));
+	back_wall.SetMaterial(checker_mat);
+
+	/*ObjParser Teapot_low_parser = ObjParser("obj_files\\teapot_low.obj", ShadingType::SMOOTH);
+	Group* teapot_low = new Group("teapot_low_poly");
+	teapot_low->SetTransform(Matrix4().scaling(0.5, 0.5, 0.5).rotation_x(utils::radians(-45)));
+	teapot_low->SetMaterial(teapot_mat);
+	Teapot_low_parser.ConvertToSceneGroup(teapot_low);*/
+
+	ObjParser Teapot_high_parser = ObjParser("obj_files\\teapot_high.obj", ShadingType::SMOOTH);
+	Group* teapot_high = new Group("teapot_high_poly");
+	teapot_high->SetTransform(Matrix4().scaling(0.5, 0.5, 0.5).rotation_x(utils::radians(-45)));
+	teapot_high->SetMaterial(teapot_mat);
+	Teapot_high_parser.ConvertToSceneGroup(teapot_high);
+
+	PointLight light("PointLight", Point(-2.0f, 4.0f, 4.0f), Colors::White);
+
+	Camera camera("Camera", res_x, res_y, utils::kPI / 3.0f);
+	camera.SetTransform(Matrix4().view_transform(Point(0.0f, 5.0f, 9.0f),
+		Point(0.0f, 1.5f, 0.0f),
+		Vector(0.0f, 1.0f, 0.0f)));
+
+	world.AddObject(&light);
+	world.AddObject(&floor);
+	world.AddObject(&back_wall);
+	world.AddObject(teapot_high);
+	world.AddObject(&camera);
+
+	Canvas image = Engine::render(camera, world);
+
+	image.ExportAsPPM("renders\\teapot.ppm");
 }
 
 int main() {
 
-	int res_x = 400;
-	int res_y = 200;
+	int res_x = 200;
+	int res_y = 100;
 
 	//SpheresScene(res_x, res_y);
-	HexagonScene(res_x, res_y);
+	//HexagonScene(res_x, res_y);
+	ObjTeapotScene(res_x, res_y);
 
 	std::cout << "\n\nPress any key to exit...";
 	std::cin.get();

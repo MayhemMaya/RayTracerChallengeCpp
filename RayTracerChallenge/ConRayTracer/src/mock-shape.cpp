@@ -38,7 +38,7 @@ std::vector<Intersection> MockShape::local_intersect(const utils::RayStruct& loc
   return intersections;
 }
 
-Vector MockShape::local_normal_at(const Point& local_point) const {
+Vector MockShape::local_normal_at(const Point& local_point, const Intersection& hit) const {
   return Vector(local_point[0], local_point[1], local_point[2]);
 }
 

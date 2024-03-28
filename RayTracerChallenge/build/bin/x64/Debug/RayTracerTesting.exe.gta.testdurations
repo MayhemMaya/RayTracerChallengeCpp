@@ -146,7 +146,7 @@
     <TestDuration Test="IntersectionTest.Shading_an_intersection" Duration="1" />
     <TestDuration Test="IntersectionTest.Shading_an_intersection_from_the_inside" Duration="1" />
     <TestDuration Test="WorldTest.The_color_when_a_ray_misses" Duration="2" />
-    <TestDuration Test="UtilsTests.SwapIntersectionValues" Duration="2" />
+    <TestDuration Test="UtilsTests.SwapIntersectionValues" Duration="1" />
     <TestDuration Test="WorldTest.The_color_when_a_ray_hits" Duration="4" />
     <TestDuration Test="WorldTest.The_color_with_an_intersection_behind_the_ray" Duration="3" />
     <TestDuration Test="ViewTransformTest.The_transformation_matrix_for_the_default_orientation" Duration="1" />
@@ -217,7 +217,7 @@
     <TestDuration Test="Chapter3_tests.Calculating_the_determinant_of_a_4x4_matrix" Duration="1" />
     <TestDuration Test="Chapter3_tests.Testing_an_invertible_matrix_for_invertibility" Duration="1" />
     <TestDuration Test="Chapter3_tests.Testing_an_noninvertible_matrix_for_invertibility" Duration="1" />
-    <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_a_matrix" Duration="1" />
+    <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_a_matrix" Duration="2" />
     <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_another_matrix" Duration="1" />
     <TestDuration Test="Chapter3_tests.Calculating_the_inverse_of_a_third_matrix" Duration="1" />
     <TestDuration Test="Chapter3_tests.Multiplying_a_product_by_its_inverse" Duration="1" />
@@ -275,12 +275,12 @@
     <TestDuration Test="Chapter6_tests.A_sphere_may_be_assigned_a_material" Duration="1" />
     <TestDuration Test="Chapter6_tests.Lighting_with_the_eye_between_the_light_and_the_surface" Duration="1" />
     <TestDuration Test="Chapter6_tests.Lighting_with_the_eye_between_light_and_surface_eye_offset_45_degrees" Duration="2" />
-    <TestDuration Test="Chapter6_tests.Lighting_with_eye_opposite_surface_light_offset_45_degrees" Duration="1" />
-    <TestDuration Test="Chapter6_tests.Lighting_with_eye_in_the_path_of_the_reflection_vector" Duration="2" />
-    <TestDuration Test="Chapter6_tests.Lighting_with_the_light_behind_the_surface" Duration="1" />
+    <TestDuration Test="Chapter6_tests.Lighting_with_eye_opposite_surface_light_offset_45_degrees" Duration="2" />
+    <TestDuration Test="Chapter6_tests.Lighting_with_eye_in_the_path_of_the_reflection_vector" Duration="1" />
+    <TestDuration Test="Chapter6_tests.Lighting_with_the_light_behind_the_surface" Duration="2" />
     <TestDuration Test="Chapter7_tests.Creating_a_world" Duration="1" />
-    <TestDuration Test="Chapter7_tests.The_default_world" Duration="5" />
-    <TestDuration Test="Chapter7_tests.Intersect_a_world_with_a_ray" Duration="3" />
+    <TestDuration Test="Chapter7_tests.The_default_world" Duration="4" />
+    <TestDuration Test="Chapter7_tests.Intersect_a_world_with_a_ray" Duration="2" />
     <TestDuration Test="Chapter7_tests.Precomputing_the_state_of_an_intersection" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_outside" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_hit_when_a_intersection_occurs_on_the_inside" Duration="1" />
@@ -296,9 +296,9 @@
     <TestDuration Test="Chapter7_tests.Constructing_a_camera" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_horizontal_canvas" Duration="1" />
     <TestDuration Test="Chapter7_tests.The_pixel_size_for_a_vertical_canvas" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="2" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_the_center_of_the_canvas" Duration="1" />
     <TestDuration Test="Chapter7_tests.Constructing_a_ray_through_a_corner_of_the_canvas" Duration="1" />
-    <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="2" />
+    <TestDuration Test="Chapter7_tests.Constructing_a_ray_when_the_camera_is_transformed" Duration="1" />
     <TestDuration Test="Chapter7_tests.Rendering_a_world_with_a_camera" Duration="5" />
     <TestDuration Test="Chapter8_tests.Lighting_with_the_surface_in_shadow" Duration="2" />
     <TestDuration Test="Chapter8_tests.There_is_no_shadow_when_nothing_is_collinear_with_point_and_light" Duration="2" />
@@ -308,13 +308,13 @@
     <TestDuration Test="Chapter8_tests.shade_hit_is_given_an_intersection_in_shadow" Duration="2" />
     <TestDuration Test="Chapter8_tests.The_hit_should_offset_the_point" Duration="1" />
     <TestDuration Test="Chapter9_tests.The_default_transformation" Duration="1" />
-    <TestDuration Test="Chapter9_tests.Assigning_a_transformation" Duration="2" />
+    <TestDuration Test="Chapter9_tests.Assigning_a_transformation" Duration="1" />
     <TestDuration Test="Chapter9_tests.The_default_material" Duration="1" />
     <TestDuration Test="Chapter9_tests.Assigning_a_material" Duration="1" />
     <TestDuration Test="Chapter9_tests.Intersecting_a_scaled_shape_with_a_ray" Duration="2" />
     <TestDuration Test="Chapter9_tests.Intersecting_a_translated_shape_with_a_ray" Duration="1" />
-    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_translated_shape" Duration="2" />
-    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_transformed_shape" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_translated_shape" Duration="1" />
+    <TestDuration Test="Chapter9_tests.Computing_the_normal_on_a_transformed_shape" Duration="2" />
     <TestDuration Test="Chapter9_tests.A_sphere_is_a_shape" Duration="1" />
     <TestDuration Test="Chapter9_tests.A_sphere_is_not_a_tuple" Duration="1" />
     <TestDuration Test="Chapter9_tests.A_ray_intersects_a_sphere_at_two_points" Duration="1" />
@@ -361,7 +361,7 @@
     <TestDuration Test="Chapter10_tests.A_pattern_on_a_material_is_optional" Duration="1" />
     <TestDuration Test="Chapter10_tests.A_material_can_be_given_a_pattern" Duration="1" />
     <TestDuration Test="Chapter10_tests.Stripes_with_an_object_transformation" Duration="1" />
-    <TestDuration Test="Chapter10_tests.Stripes_with_a_pattern_transformation" Duration="1" />
+    <TestDuration Test="Chapter10_tests.Stripes_with_a_pattern_transformation" Duration="2" />
     <TestDuration Test="Chapter10_tests.Stripes_with_both_an_object_and_a_pattern_transformation" Duration="2" />
     <TestDuration Test="Chapter10_tests.The_default_pattern_transformation" Duration="1" />
     <TestDuration Test="Chapter10_tests.Assigning_a_pattern_transformation" Duration="1" />
@@ -384,16 +384,16 @@
     <TestDuration Test="Chapter4_tests.Chained_function_transformations_must_be_applied_in_reverse_order" Duration="1" />
     <TestDuration Test="Chapter11_tests.Finding_n1_and_n2_at_various_intersections" Duration="4" />
     <TestDuration Test="Chapter2_tests.Colors_are_red_green_blue_tuples" Duration="1" />
-    <TestDuration Test="Chapter11_tests.The_under_point_is_offset_below_the_surface" Duration="2" />
-    <TestDuration Test="Chapter11_tests.The_refracted_color_with_an_opaque_surface" Duration="2" />
+    <TestDuration Test="Chapter11_tests.The_under_point_is_offset_below_the_surface" Duration="1" />
+    <TestDuration Test="Chapter11_tests.The_refracted_color_with_an_opaque_surface" Duration="3" />
     <TestDuration Test="Chapter11_tests.The_refracted_color_at_the_maximum_recursive_depth" Duration="2" />
     <TestDuration Test="Chapter11_tests.The_refracted_color_under_total_internal_reflection" Duration="2" />
-    <TestDuration Test="Chapter11_tests.The_refracted_color_with_a_refracted_ray" Duration="3" />
+    <TestDuration Test="Chapter11_tests.The_refracted_color_with_a_refracted_ray" Duration="2" />
     <TestDuration Test="Chapter11_tests.The_shade_hit_function_with_a_transparent_material" Duration="3" />
     <TestDuration Test="Chapter11_tests.The_schlick_approximation_under_total_internal_reflection" Duration="1" />
     <TestDuration Test="Chapter11_tests.The_schlick_approximation_with_a_perpendicular_viewing_angle" Duration="1" />
     <TestDuration Test="Chapter11_tests.The_schlick_approximation_with_a_small_angle_and_n2_greater_than_n1" Duration="1" />
-    <TestDuration Test="Chapter11_tests.The_shade_hit_function_with_a_reflective_transparent_material" Duration="4" />
+    <TestDuration Test="Chapter11_tests.The_shade_hit_function_with_a_reflective_transparent_material" Duration="3" />
     <TestDuration Test="UtilsTests.VectorOfBoolsWhenOneBoolIsTrue" Duration="1" />
     <TestDuration Test="UtilsTests.VectorOfBoolsWhenManyBoolsAreTrue" Duration="1" />
     <TestDuration Test="UtilsTests.VectorOfBoolsWhenNoBoolsAreTrue" Duration="1" />
@@ -401,17 +401,17 @@
     <TestDuration Test="UtilsTests.VectorOfBoolsWhenManyBoolsAreFalse" Duration="1" />
     <TestDuration Test="UtilsTests.VectorOfBoolsWhenNoBoolsAreFalse" Duration="1" />
     <TestDuration Test="Chapter12_tests.A_ray_intersects_a_cube" Duration="5" />
-    <TestDuration Test="Chapter12_tests.A_ray_misses_a_cube" Duration="5" />
-    <TestDuration Test="Chapter12_tests.The_normal_on_the_surface_of_a_cube" Duration="5" />
+    <TestDuration Test="Chapter12_tests.A_ray_misses_a_cube" Duration="4" />
+    <TestDuration Test="Chapter12_tests.The_normal_on_the_surface_of_a_cube" Duration="6" />
     <TestDuration Test="Chapter13_tests.A_ray_misses_a_cylinder" Duration="2" />
     <TestDuration Test="Chapter13_tests.A_ray_strikes_a_cylinder" Duration="2" />
-    <TestDuration Test="Chapter13_tests.Normal_vector_on_a_cylinder" Duration="2" />
+    <TestDuration Test="Chapter13_tests.Normal_vector_on_a_cylinder" Duration="3" />
     <TestDuration Test="Chapter13_tests.The_default_minimum_and_maximum_for_a_cylinder" Duration="1" />
     <TestDuration Test="Chapter13_tests.Intersecting_a_constrained_cylinder" Duration="4" />
     <TestDuration Test="Chapter13_tests.The_default_closed_value_for_a_cylinder" Duration="1" />
     <TestDuration Test="Chapter13_tests.Intersecting_the_caps_of_a_closed_cylinder" Duration="3" />
     <TestDuration Test="Chapter13_tests.The_normal_vector_on_a_cylinders_end_caps" Duration="4" />
-    <TestDuration Test="Chapter13_tests.Intersecting_a_cone_with_a_ray" Duration="3" />
+    <TestDuration Test="Chapter13_tests.Intersecting_a_cone_with_a_ray" Duration="2" />
     <TestDuration Test="Chapter13_tests.Intersecting_a_cone_with_a_ray_parallel_to_one_of_its_halves" Duration="1" />
     <TestDuration Test="Chapter13_tests.Intersecting_a_cones_end_caps" Duration="1" />
     <TestDuration Test="Chapter13_tests.Computing_the_normal_vector_on_a_cone" Duration="1" />
@@ -423,7 +423,7 @@
     <TestDuration Test="Chapter14_tests.Intersecting_a_ray_with_a_nonempty_group" Duration="6" />
     <TestDuration Test="Chapter14_tests.Adding_a_null_child_to_a_group" Duration="2" />
     <TestDuration Test="Chapter14_tests.Intersecting_a_transformeds_group" Duration="3" />
-    <TestDuration Test="Chapter14_tests.Intersecting_a_transformed_group" Duration="3" />
+    <TestDuration Test="Chapter14_tests.Intersecting_a_transformed_group" Duration="4" />
     <TestDuration Test="Chapter14_tests.Converting_a_point_from_world_to_object_space" Duration="6" />
     <TestDuration Test="Chapter14_tests.Converting_a_point_from_world_to_object_space_with_parented_objects" Duration="6" />
     <TestDuration Test="Chapter14_tests.Converting_a_point_from_world_to_object_space_with_nonparented_objects" Duration="1" />
@@ -434,8 +434,53 @@
     <TestDuration Test="Chapter14_tests.Comparing_identical_bounds" Duration="1" />
     <TestDuration Test="Chapter14_tests.Merging_two_bounds_yields_the_biggest_bounding_box" Duration="1" />
     <TestDuration Test="Chapter14_tests.Rotation_by_45_degrees_yields_updated_bounds" Duration="1" />
-    <TestDuration Test="Chapter14_tests.A_child_inherits_a_parents_material" Duration="4" />
+    <TestDuration Test="Chapter14_tests.A_child_inherits_a_parents_material" Duration="3" />
     <TestDuration Test="Chapter14_tests.A_child_inherits_a_parents_material_1" Duration="3" />
     <TestDuration Test="Chapter14_tests.A_child_inherits_a_parents_material_2" Duration="4" />
+    <TestDuration Test="Chapter15_tests.Constructing_a_triangle" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Finding_the_normal_on_a_triangle" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Intersecting_a_ray_parallel_to_a_triangle" Duration="1" />
+    <TestDuration Test="Chapter15_tests.A_ray_misses_the_p1_p3_edge" Duration="1" />
+    <TestDuration Test="Chapter15_tests.A_ray_misses_the_p1_p2_edge" Duration="1" />
+    <TestDuration Test="Chapter15_tests.A_ray_misses_the_p2_p3_edge" Duration="1" />
+    <TestDuration Test="Chapter15_tests.A_ray_strikes_a_triangle" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_all_whitespace_removes_any_whitespace" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_all_whitespace_removes_any_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_leading_whitespace_removes_only_leading_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_all_whitespace_removes_absolutely_any_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_trailing_whitespace_removes_only_trailing_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_leading_and_trailing_whitespace_removes_only_leading_and_trailing_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="UtilsTests.checking_a_file_name_without_a_period" Duration="1" />
+    <TestDuration Test="UtilsTests.checking_a_file_name_with_a_period_and_invalid_extension" Duration="1" />
+    <TestDuration Test="UtilsTests.checking_a_file_name_with_a_period_and_valid_extension" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Parser_ignores_unrecognized_lines" Duration="1" />
+    <TestDuration Test="UtilsTests.splittng_a_string" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Parser_creates_array_of_vertex_records" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_empty_string_to_an_integer_throws" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_string_word_to_an_integer_throws" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_an_empty_string_to_an_number_throws" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_string_word_to_an_number_throws" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_string_to_an_integer" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_string_to_a_positive_integer" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_string_to_a_positive_float" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Parsing_vertex_records" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Parsing_triangle_faces" Duration="4" />
+    <TestDuration Test="Chapter14_tests.A_childs_material_reverts_back_when_removed_from_a_group" Duration="3" />
+    <TestDuration Test="Chapter15_tests.Triangulating_polygons" Duration="6" />
+    <TestDuration Test="Chapter15_tests.Triangles_in_groups" Duration="5" />
+    <TestDuration Test="Chapter15_tests.Converting_a_OBJ_file_to_a_group" Duration="7" />
+    <TestDuration Test="UtilsTests.splittng_a_string_with_a_non_existent_delimiter" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_an_empty_string_to_an_number_return_unknown" Duration="1" />
+    <TestDuration Test="UtilsTests.converting_a_string_word_to_an_number_returns_unknown" Duration="1" />
+    <TestDuration Test="UtilsTests.remove_extra_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="UtilsTests.create_equal_whitespace_in_a_string" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Parsing_a_large_OBJ_file" Duration="342" />
+    <TestDuration Test="Chapter15_tests.Constructing_a_smooth_triangle" Duration="1" />
+    <TestDuration Test="Chapter15_tests.An_intersection_encapsulates_u_and_v" Duration="1" />
+    <TestDuration Test="Chapter15_tests.An_intersection_with_a_smooth_triangle_stores_u_and_v" Duration="1" />
+    <TestDuration Test="Chapter15_tests.A_smooth_triangle_uses_u_and_v_to_interpolate_the_normal" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Preparing_the_normal_on_a_smooth_triangle" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Parsing_vertex_normal_records" Duration="1" />
+    <TestDuration Test="Chapter15_tests.Faces_with_normals" Duration="4" />
   </TestDurations>
 </GtaTestDurations>

@@ -18,7 +18,8 @@ static enum class ObjectType {
   kCube,
   kCylinder,
   kCone,
-  kGroup
+  kGroup,
+  kTriangle
 };
 
 static std::map<ObjectType, std::string> typeMap {
@@ -32,6 +33,7 @@ static std::map<ObjectType, std::string> typeMap {
   {ObjectType::kCylinder, "kCube"},
   {ObjectType::kCone, "kCone"},
   {ObjectType::kGroup, "kGroup"},
+  {ObjectType::kTriangle, "kTriangle"},
 };
 
 class Object {
@@ -45,7 +47,7 @@ class Object {
    void SetName(const std::string& name);
    Matrix4 GetTransform() const;
    Matrix4 GetCachedTransformInverse() const;
-   void SetTransform(const Matrix4& transform);
+   virtual void SetTransform(const Matrix4& transform);
    ObjectType GetObjectType() const;
    std::string GetObjectTypeName() const;
    Object* GetParent() const;

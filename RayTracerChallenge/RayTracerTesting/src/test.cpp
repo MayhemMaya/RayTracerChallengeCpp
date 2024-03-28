@@ -39,6 +39,9 @@
 #include "group.cpp"
 #include "materials.cpp"
 #include "bounding-box.cpp"
+#include "triangle.cpp"
+#include "obj-parser.cpp"
+#include "smooth-triangle.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -108,6 +111,113 @@ TEST(UtilsTests, VectorOfBoolsWhenManyBoolsAreTrue) {
 TEST(UtilsTests, VectorOfBoolsWhenNoBoolsAreTrue) {
 	std::vector<bool> bools = { false, false, false };
 	EXPECT_FALSE(utils::at_least_one_true(bools));
+}
+
+TEST(UtilsTests, remove_all_whitespace_removes_absolutely_any_whitespace_in_a_string) {
+	std::string str1 = "H e l l o";
+	std::string str2 = "    Hello    ";
+	EXPECT_EQ(utils::remove_all_whitespace(str1), "Hello");
+	EXPECT_EQ(utils::remove_all_whitespace(str2), "Hello");
+}
+
+TEST(UtilsTests, remove_leading_whitespace_removes_only_leading_whitespace_in_a_string) {
+	std::string str1 = "    H e l l o";
+	std::string str2 = "    Hello    ";
+	EXPECT_EQ(utils::remove_leading_whitespace(str1), "H e l l o");
+	EXPECT_EQ(utils::remove_leading_whitespace(str2), "Hello    ");
+}
+
+TEST(UtilsTests, remove_trailing_whitespace_removes_only_trailing_whitespace_in_a_string) {
+	std::string str1 = "H e l l o    ";
+	std::string str2 = "    Hello    ";
+	EXPECT_EQ(utils::remove_trailing_whitespace(str1), "H e l l o");
+	EXPECT_EQ(utils::remove_trailing_whitespace(str2), "    Hello");
+}
+
+TEST(UtilsTests, remove_leading_and_trailing_whitespace_removes_only_leading_and_trailing_whitespace_in_a_string) {
+	std::string str1 = "    H e l l o    ";
+	std::string str2 = "    Hello    ";
+	EXPECT_EQ(utils::remove_leading_and_trailing_whitespace(str1), "H e l l o");
+	EXPECT_EQ(utils::remove_leading_and_trailing_whitespace(str2), "Hello");
+}
+
+TEST(UtilsTests, create_equal_whitespace_in_a_string) {
+	std::string str = "H  e   l   l     o";
+	EXPECT_EQ(utils::create_equal_whitespace(str), "H e l l o");
+}
+
+TEST(UtilsTests, checking_a_file_name_without_a_period) {
+	std::string file_name = "test";
+	utils::FileNameCheck actual_check = utils::check_file_name(file_name, utils::FileExtensions::PPM);
+	EXPECT_EQ(actual_check.file_name, "");
+	EXPECT_TRUE(actual_check.err.occured);
+	EXPECT_EQ(actual_check.err.msg, "Error: Filename 'test' does not contain period '.' or required extension.");
+}
+
+TEST(UtilsTests, checking_a_file_name_with_a_period_and_invalid_extension) {
+	std::string file_name = "test.txt";
+	utils::FileNameCheck actual_check = utils::check_file_name(file_name, utils::FileExtensions::PPM);
+	EXPECT_EQ(actual_check.file_name, "");
+	EXPECT_TRUE(actual_check.err.occured);
+	EXPECT_EQ(actual_check.err.msg, "Error: Filename 'test.txt' does not contain correct extension '.ppm'.");
+}
+
+TEST(UtilsTests, checking_a_file_name_with_a_period_and_valid_extension) {
+	std::string file_name = "test.ppm";
+	utils::FileNameCheck actual_check = utils::check_file_name(file_name, utils::FileExtensions::PPM);
+	EXPECT_EQ(actual_check.file_name, "test.ppm");
+	EXPECT_FALSE(actual_check.err.occured);
+	EXPECT_EQ(actual_check.err.msg, "");
+}
+
+TEST(UtilsTests, splittng_a_string) {
+	std::string sentence = "The quick brown fox";
+	std::vector<std::string> expected_segments = { "The", "quick", "brown", "fox" };
+	utils::SplitStringResult split_result = utils::split_string(sentence, ' ');
+	ASSERT_EQ(split_result.segments.size(), expected_segments.size());
+	ASSERT_FALSE(split_result.failed);
+
+	for (int idx = 0; idx < expected_segments.size(); idx++)
+	{
+		SCOPED_TRACE(idx); //write to the console in which iteration the error occurred
+		ASSERT_EQ(split_result.segments[idx], expected_segments[idx]);
+	}
+}
+
+TEST(UtilsTests, splittng_a_string_with_a_non_existent_delimiter) {
+	std::string sentence = "The-quick-brown-fox";
+	std::vector<std::string> expected_segments = { "The", "quick", "brown", "fox" };
+	utils::SplitStringResult split_result = utils::split_string(sentence, ' ');
+	ASSERT_EQ(split_result.segments.size(), 0);
+	ASSERT_TRUE(split_result.failed);
+}
+
+TEST(UtilsTests, converting_an_empty_string_to_an_number_return_unknown) {
+	std::string str = "";
+	utils::Number num = utils::string_to_number(str);
+	EXPECT_EQ(num.type, utils::NumberType::UNKNOWN);
+}
+
+TEST(UtilsTests, converting_a_string_word_to_an_number_returns_unknown) {
+	std::string str = "dog";
+	utils::Number num = utils::string_to_number(str);
+	EXPECT_EQ(num.type, utils::NumberType::UNKNOWN);
+}
+
+TEST(UtilsTests, converting_a_string_to_a_positive_integer) {
+	std::string str = "45";
+	utils::Number num = utils::string_to_number(str);
+	EXPECT_EQ(num.type, utils::NumberType::INT);
+	EXPECT_EQ(num.int_value, 45);
+	EXPECT_EQ(num.float_value, 0.0f);
+}
+
+TEST(UtilsTests, converting_a_string_to_a_positive_float) {
+	std::string str = "4.5000";
+	utils::Number num = utils::string_to_number(str);
+	EXPECT_EQ(num.type, utils::NumberType::FLOAT);
+	EXPECT_EQ(num.int_value, 0);
+	EXPECT_EQ(num.float_value, 4.5f);
 }
 #pragma endregion
 
@@ -296,7 +406,7 @@ TEST(Chapter2_tests, Writing_pixels_to_a_canvas) {
 
 TEST(Chapter2_tests, Constructing_the_PPM_header) {
 	Canvas c(5, 3);
-	std::string ppm = c.ToPPM();
+	std::string ppm = c.ExportAsPPM("test.ppm");
 	std::vector<std::string> ppm_lines = utils::split_lines(ppm);
 	EXPECT_EQ(ppm_lines[0], "P3");
 	EXPECT_EQ(ppm_lines[1], "5 3");
@@ -311,7 +421,7 @@ TEST(Chapter2_tests, Constructing_the_PPM_pixel_data) {
 	c.WritePixel(0, 0, c1);
 	c.WritePixel(2, 1, c2);
 	c.WritePixel(4, 2, c3);
-	std::string ppm = c.ToPPM();
+	std::string ppm = c.ExportAsPPM("test.ppm");
 	std::vector<std::string> ppm_lines = utils::split_lines(ppm);
 	EXPECT_EQ(ppm_lines[3], "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
 	EXPECT_EQ(ppm_lines[4], "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
@@ -325,7 +435,7 @@ TEST(Chapter2_tests, Splitting_long_lines_in_PPM_files) {
 			c.WritePixel(x, y, Color(1, 0.8f, 0.6f));
 		}
 	}
-	std::string ppm = c.ToPPM();
+	std::string ppm = c.ExportAsPPM("test.ppm");
 	std::vector<std::string> ppm_lines = utils::split_lines(ppm);
 	EXPECT_EQ(ppm_lines[3], "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
 	EXPECT_EQ(ppm_lines[4], "153 255 204 153 255 204 153 255 204 153 255 204 153");
@@ -335,7 +445,7 @@ TEST(Chapter2_tests, Splitting_long_lines_in_PPM_files) {
 
 TEST(Chapter2_tests, PPM_files_are_terminated_by_a_newline_character) {
 	Canvas c(5, 3);
-	std::string ppm = c.ToPPM();
+	std::string ppm = c.ExportAsPPM("test.ppm");
 	EXPECT_EQ(ppm[ppm.size() - 1], '\n');
 }
 #pragma endregion
@@ -2252,5 +2362,255 @@ TEST(Chapter14_tests, A_child_inherits_a_parents_material) {
 	g2.AddChild(&s);
 	EXPECT_TRUE(g2.GetMaterial() == m);
 	EXPECT_TRUE(s.GetMaterial() == m);
+}
+#pragma endregion
+
+#pragma region Chapter15Tests
+TEST(Chapter15_tests, Constructing_a_triangle) {
+	Point p1(0, 1, 0);
+	Point p2(-1, 0, 0);
+	Point p3(1, 0, 0);
+	Triangle t(p1, p2, p3);
+
+	EXPECT_EQ(t.GetP1(), p1);
+	EXPECT_EQ(t.GetP2(), p2);
+	EXPECT_EQ(t.GetP3(), p3);
+	EXPECT_EQ(t.GetE1(), Vector(-1, -1, 0));
+	EXPECT_EQ(t.GetE2(), Vector(1, -1, 0));
+	EXPECT_EQ(t.GetNormal(), Vector(0, 0, -1));
+}
+
+TEST(Chapter15_tests, Finding_the_normal_on_a_triangle) {
+	Triangle t(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+
+	Vector n1 = t.local_normal_at(Point(0, 0.5f, 0));
+	Vector n2 = t.local_normal_at(Point(-0.5f, 0.75f, 0));
+	Vector n3 = t.local_normal_at(Point(0.5f, 0.25f, 0));
+
+	EXPECT_EQ(n1, t.GetNormal());
+	EXPECT_EQ(n2, t.GetNormal());
+	EXPECT_EQ(n3, t.GetNormal());
+}
+
+TEST(Chapter15_tests, Intersecting_a_ray_parallel_to_a_triangle) {
+	Triangle t(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+
+	Ray r = Ray(Point(0, -1, -2), Vector(0, 1, 0));
+
+	std::vector<Intersection> xs = t.local_intersect(r.to_ray_struct());
+
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter15_tests, A_ray_misses_the_p1_p3_edge) {
+	Triangle t(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+
+	Ray r = Ray(Point(1, 1, -2), Vector(0, 0, 1));
+
+	std::vector<Intersection> xs = t.local_intersect(r.to_ray_struct());
+
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter15_tests, A_ray_misses_the_p1_p2_edge) {
+	Triangle t(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+
+	Ray r = Ray(Point(-1, 1, -2), Vector(0, 0, 1));
+
+	std::vector<Intersection> xs = t.local_intersect(r.to_ray_struct());
+
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter15_tests, A_ray_misses_the_p2_p3_edge) {
+	Triangle t(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+
+	Ray r = Ray(Point(0, -1, -2), Vector(0, 0, 1));
+
+	std::vector<Intersection> xs = t.local_intersect(r.to_ray_struct());
+
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter15_tests, A_ray_strikes_a_triangle) {
+	Triangle t(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+
+	Ray r = Ray(Point(0, 0.5, -2), Vector(0, 0, 1));
+
+	std::vector<Intersection> xs = t.local_intersect(r.to_ray_struct());
+
+	EXPECT_EQ(xs.size(), 1);
+	EXPECT_EQ(xs[0].GetTime(), 2);
+}
+TEST(Chapter15_tests, Parser_ignores_unrecognized_lines) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\gibberish.obj");
+	EXPECT_EQ(parser.GetLinesIgnored(), 5);
+}
+
+TEST(Chapter15_tests, Parsing_vertex_records) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\vertex_records.obj");
+
+	EXPECT_EQ(parser.GetLinesIgnored(), 0);
+	EXPECT_EQ(parser.GetVertices()[0], Point(-1, 1, 0));
+	EXPECT_EQ(parser.GetVertices()[1], Point(-1, 0.5f, 0));
+	EXPECT_EQ(parser.GetVertices()[2], Point(1, 0, 0));
+	EXPECT_EQ(parser.GetVertices()[3], Point(1, 1, 0));
+}
+
+TEST(Chapter15_tests, Parsing_triangle_faces) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\triangle_faces.obj");
+	Group* g = parser.GetDefaultGroup();
+	Triangle t1 = *(Triangle*)g->GetChildren()[0];
+	Triangle t2 = *(Triangle*)g->GetChildren()[1];
+
+	EXPECT_EQ(parser.GetLinesIgnored(), 0);
+	EXPECT_EQ(t1.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t1.GetP2(), parser.GetVertices()[1]);
+	EXPECT_EQ(t1.GetP3(), parser.GetVertices()[2]);
+	EXPECT_EQ(t2.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t2.GetP2(), parser.GetVertices()[2]);
+	EXPECT_EQ(t2.GetP3(), parser.GetVertices()[3]);
+}
+
+TEST(Chapter15_tests, Triangulating_polygons) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\triangulating_polygons.obj");
+	Group* g = parser.GetDefaultGroup();
+	Triangle t1 = *(Triangle*)g->GetChildren()[0];
+	Triangle t2 = *(Triangle*)g->GetChildren()[1];
+	Triangle t3 = *(Triangle*)g->GetChildren()[2];
+
+	EXPECT_EQ(parser.GetLinesIgnored(), 0);
+	EXPECT_EQ(t1.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t1.GetP2(), parser.GetVertices()[1]);
+	EXPECT_EQ(t1.GetP3(), parser.GetVertices()[2]);
+	EXPECT_EQ(t2.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t2.GetP2(), parser.GetVertices()[2]);
+	EXPECT_EQ(t2.GetP3(), parser.GetVertices()[3]);
+	EXPECT_EQ(t3.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t3.GetP2(), parser.GetVertices()[3]);
+	EXPECT_EQ(t3.GetP3(), parser.GetVertices()[4]);
+}
+
+TEST(Chapter15_tests, Triangles_in_groups) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\triangles.obj");
+	Group* g1 = parser.GetGroupByName("FirstGroup");
+	Group* g2 = parser.GetGroupByName("SecondGroup");
+	Triangle t1 = *(Triangle*)g1->GetChildren()[0];
+	Triangle t2 = *(Triangle*)g2->GetChildren()[0];
+
+	EXPECT_EQ(parser.GetLinesIgnored(), 0);
+	EXPECT_EQ(t1.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t1.GetP2(), parser.GetVertices()[1]);
+	EXPECT_EQ(t1.GetP3(), parser.GetVertices()[2]);
+	EXPECT_EQ(t2.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t2.GetP2(), parser.GetVertices()[2]);
+	EXPECT_EQ(t2.GetP3(), parser.GetVertices()[3]);
+}
+
+TEST(Chapter15_tests, Converting_a_OBJ_file_to_a_group) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\triangles.obj");
+	Group* g = new Group();
+	parser.ConvertToSceneGroup(g);
+
+	EXPECT_TRUE(g->ContainsChildWithName("FirstGroup"));
+	EXPECT_TRUE(g->ContainsChildWithName("SecondGroup"));
+}
+
+TEST(Chapter15_tests, Parsing_a_large_OBJ_file) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\obj_files\\teapot_low.obj");
+	EXPECT_EQ(parser.GetVertices().size(), 137);
+	EXPECT_EQ(parser.GetTriangleCount(), 240);
+}
+
+TEST(Chapter15_tests, Constructing_a_smooth_triangle) {
+	Point p1 = Point(0, 1, 0);
+	Point p2 = Point(-1, 0, 0);
+	Point p3 = Point(1, 0, 0);
+	Vector n1 = Vector(0, 1, 0);
+	Vector n2 = Vector(-1, 0, 0);
+	Vector n3 = Vector(1, 0, 0);
+	SmoothTriangle tri = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+
+	EXPECT_EQ(tri.GetP1(), p1);
+	EXPECT_EQ(tri.GetP2(), p2);
+	EXPECT_EQ(tri.GetP3(), p3);
+	EXPECT_EQ(tri.GetN1(), n1);
+	EXPECT_EQ(tri.GetN2(), n2);
+	EXPECT_EQ(tri.GetN3(), n3);
+}
+
+TEST(Chapter15_tests, An_intersection_encapsulates_u_and_v) {
+	Triangle s(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0));
+	Intersection i = Intersection(3.5f, &s);
+	i.SetU(0.2f);
+	i.SetV(0.4f);
+	EXPECT_EQ(i.GetU(), 0.2f);
+	EXPECT_EQ(i.GetV(), 0.4f);
+}
+
+TEST(Chapter15_tests, An_intersection_with_a_smooth_triangle_stores_u_and_v) {
+	Point p1 = Point(0, 1, 0);
+	Point p2 = Point(-1, 0, 0);
+	Point p3 = Point(1, 0, 0);
+	Vector n1 = Vector(0, 1, 0);
+	Vector n2 = Vector(-1, 0, 0);
+	Vector n3 = Vector(1, 0, 0);
+	SmoothTriangle tri = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+	Ray r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1));
+	std::vector<Intersection> xs = tri.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs[0].GetU(), 0.45f);
+	EXPECT_EQ(xs[0].GetV(), 0.25f);
+}
+
+TEST(Chapter15_tests, A_smooth_triangle_uses_u_and_v_to_interpolate_the_normal) {
+	Point p1 = Point(0, 1, 0);
+	Point p2 = Point(-1, 0, 0);
+	Point p3 = Point(1, 0, 0);
+	Vector n1 = Vector(0, 1, 0);
+	Vector n2 = Vector(-1, 0, 0);
+	Vector n3 = Vector(1, 0, 0);
+	SmoothTriangle tri = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+	Intersection i = Intersection(1, &tri, 0.45f, 0.25f);
+	Vector n = tri.normal_at(Point(0, 0, 0), i);
+	EXPECT_EQ(n, Vector(-0.5547f, 0.83205f, 0.0f));
+}
+
+TEST(Chapter15_tests, Preparing_the_normal_on_a_smooth_triangle) {
+	Point p1 = Point(0, 1, 0);
+	Point p2 = Point(-1, 0, 0);
+	Point p3 = Point(1, 0, 0);
+	Vector n1 = Vector(0, 1, 0);
+	Vector n2 = Vector(-1, 0, 0);
+	Vector n3 = Vector(1, 0, 0);
+	SmoothTriangle tri = SmoothTriangle(p1, p2, p3, n1, n2, n3);
+	Intersection i = Intersection(1, &tri, 0.45f, 0.25f);
+	Ray r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1));
+	std::vector<Intersection> xs = Intersection::intersections({ i });
+	Engine::Computation comps = Engine::prepare_computations(i, r, xs);
+	EXPECT_EQ(comps.normalv, Vector(-0.5547f, 0.83205f, 0.0f));
+}
+
+TEST(Chapter15_tests, Parsing_vertex_normal_records) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\vertex_normal_records.obj");
+
+	EXPECT_EQ(parser.GetLinesIgnored(), 0);
+	EXPECT_EQ(parser.GetNormals()[0], Vector(0, 0, 1));
+	EXPECT_EQ(parser.GetNormals()[1], Vector(0.707f, 0, -0.707f));
+	EXPECT_EQ(parser.GetNormals()[2], Vector(1, 2, 3));
+}
+
+TEST(Chapter15_tests, Faces_with_normals) {
+	ObjParser parser = ObjParser("C:\\Users\\zachc\\source\\repos\\RayTracerChallengeCpp\\RayTracerChallenge\\ConRayTracer\\test_obj_files\\faces_with_normals.obj", ShadingType::SMOOTH);
+	Group* g = parser.GetDefaultGroup();
+	SmoothTriangle t1 = *(SmoothTriangle*)g->GetChildren()[0];
+	SmoothTriangle t2 = *(SmoothTriangle*)g->GetChildren()[1];
+	EXPECT_EQ(parser.GetLinesIgnored(), 0);
+	EXPECT_EQ(t1.GetP1(), parser.GetVertices()[0]);
+	EXPECT_EQ(t1.GetP2(), parser.GetVertices()[1]);
+	EXPECT_EQ(t1.GetP3(), parser.GetVertices()[2]);
+	EXPECT_EQ(t1.GetN1(), parser.GetNormals()[2]);
+	EXPECT_EQ(t1.GetN2(), parser.GetNormals()[0]);
+	EXPECT_EQ(t1.GetN3(), parser.GetNormals()[1]);
+	EXPECT_TRUE(t2 == t1);
 }
 #pragma endregion

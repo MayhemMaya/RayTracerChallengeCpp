@@ -38,19 +38,20 @@ Cube& Cube::operator=(const Object& object) {
 }
 
 std::vector<Intersection> Cube::local_intersect(const utils::RayStruct& local_ray) {
-  utils::TimeValuePair x = utils::check_axis(local_ray.origin[0], local_ray.direction[0], -1, 1);
-  utils::TimeValuePair y = utils::check_axis(local_ray.origin[1], local_ray.direction[1], -1, 1);
-  utils::TimeValuePair z = utils::check_axis(local_ray.origin[2], local_ray.direction[2], -1, 1);
+  // using structured bindings here now.
+  const auto [x_tmin, x_tmax] = utils::check_axis(local_ray.origin[0], local_ray.direction[0], -1, 1);
+  const auto [y_tmin, y_tmax] = utils::check_axis(local_ray.origin[1], local_ray.direction[1], -1, 1);
+  const auto [z_tmin, z_tmax] = utils::check_axis(local_ray.origin[2], local_ray.direction[2], -1, 1);
 
-  const auto tmin = std::max({ x.tmin, y.tmin, z.tmin });
-  const auto tmax = std::min({ x.tmax, y.tmax, z.tmax });
+  const auto tmin = std::max({ x_tmin, y_tmin, z_tmin });
+  const auto tmax = std::min({ x_tmax, y_tmax, z_tmax });
 
   if (tmin > tmax || tmax < 0) return {};
 
   return { Intersection(tmin, this), Intersection(tmax, this) };
 }
 
-Vector Cube::local_normal_at(const Point& local_point) const {
+Vector Cube::local_normal_at(const Point& local_point, const Intersection& hit) const {
   const auto maxc = std::max({ abs(local_point[0]), abs(local_point[1]), abs(local_point[2]) });
 
   if (maxc == abs(local_point[0])) {

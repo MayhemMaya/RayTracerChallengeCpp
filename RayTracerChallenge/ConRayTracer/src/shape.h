@@ -15,15 +15,15 @@ class Shape : public Object {
   Shape(const std::string& name, const ObjectType& type, const Material& material);
   Shape(const std::string& name, const ObjectType& type, const Material& material,
                                                          const Matrix4& transform);
-  virtual ~Shape() = 0;
+  virtual ~Shape() override = 0;
   void ListDetails() const override;
-  Vector normal_at(const Point& point) const;
+  Vector normal_at(const Point& point, const Intersection& hit = Intersection()) const;
   Material& GetMaterial();
-  void SetMaterial(const Material& material);
+  virtual void SetMaterial(const Material& material);
   bool operator==(const Object& object) const override;
   Shape& operator=(const Object& other) override;
   virtual std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) = 0;
-  virtual Vector local_normal_at(const Point& local_point) const = 0;
+  virtual Vector local_normal_at(const Point& local_point, const Intersection& hit = Intersection()) const = 0;
   static Vector normal_to_world(const Object* shape, Vector normal);
   virtual BoundingBox bounds() const = 0;
  protected:

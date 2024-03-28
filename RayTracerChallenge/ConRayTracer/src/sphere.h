@@ -12,7 +12,7 @@ class Sphere : public Shape {
    bool operator==(const Object& object) const override;
    Sphere& operator=(const Object& other) override;
    std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) override;
-   Vector local_normal_at(const Point& local_point) const override;
+   Vector local_normal_at(const Point& local_point, const Intersection& hit = Intersection()) const override;
    static Sphere glass_sphere(const std::string& name);
    static Sphere glass_sphere(const std::string& name, const Matrix4& transform);
    BoundingBox bounds() const override final;

@@ -33,13 +33,6 @@ std::string ToString(float value) {
   return ss.str();
 }
 
-void ExportFile(const std::string& file_name, const std::string& contents) {
-  std::ofstream file(file_name);
-  file << contents;
-  file.close();
-  std::cout << "Exported file: " << "'" << file_name << "'";
-}
-
 void swap(float& a, float& b) {
   float temp = a;
   a = b;
@@ -107,20 +100,132 @@ TimeValuePair check_axis(float axis_origin, float axis_direction, float minimum,
   const auto tmin_numerator = (minimum - axis_origin);
   const auto tmax_numerator = (maximum - axis_origin);
 
-  TimeValuePair pair;
+  // using structured bindings here now.
+  auto [tmin, tmax] = TimeValuePair();
 
   if (abs(axis_direction) >= utils::kEPSILON) {
-    pair.tmin = tmin_numerator / axis_direction;
-    pair.tmax = tmax_numerator / axis_direction;
+    tmin = tmin_numerator / axis_direction;
+    tmax = tmax_numerator / axis_direction;
   }
   else {
-    pair.tmin = tmin_numerator * utils::kINFINITY;
-    pair.tmax = tmax_numerator * utils::kINFINITY;
+    tmin = tmin_numerator * utils::kINFINITY;
+    tmax = tmax_numerator * utils::kINFINITY;
   }
 
-  if (pair.tmin > pair.tmax) utils::swap(pair.tmin, pair.tmax);
+  if (tmin > tmax) utils::swap(tmin, tmax);
 
-  return pair;
+  return { tmin, tmax };
+}
+
+std::string remove_all_whitespace(std::string str) {
+  str.erase(remove(str.begin(), str.end(), ' '), str.end());
+  return str;
+}
+
+std::string remove_leading_whitespace(std::string str) {
+  std::string::size_type index = str.find_first_not_of(" ");
+  if (index == std::string::npos) {
+    return str;
+  }
+  return str.substr(index, str.length());
+}
+
+std::string remove_trailing_whitespace(std::string str) {
+  std::string::size_type index = str.find_last_not_of(" ");
+  return str.substr(0, index + 1);
+}
+
+std::string remove_leading_and_trailing_whitespace(std::string str) {
+  std::string str1 = remove_leading_whitespace(str);
+  return remove_trailing_whitespace(str1);
+}
+
+std::string create_equal_whitespace(std::string str) {
+  std::string new_str;
+  bool found_whitespace = false;
+  for (int i = 0; i < str.size(); i++) {
+    if (str[i] == ' ' && !found_whitespace) {
+      found_whitespace = true;
+      new_str += str[i];
+    }
+    if (str[i] != ' ') {
+      found_whitespace = false;
+      new_str += str[i];
+    }
+  }
+  return new_str;
+}
+
+FileNameCheck check_file_name(std::string file_name, FileExtensions ext) {
+  file_name = remove_all_whitespace(file_name);
+  FileNameCheck check;
+  std::string::size_type period_index = file_name.find_last_of(".");
+  if (period_index == std::string::npos) {
+    check.err.occured = true;
+    check.err.msg = "Error: Filename '" + file_name + "' does not contain period '.' or required extension.";
+    return check;
+  }
+
+  std::string file_ext = file_name.substr(period_index, file_name.length());
+  if (file_ext != extMap[ext]) {
+    check.err.occured = true;
+    check.err.msg = "Error: Filename '" + file_name + "' does not contain correct extension '" + extMap[ext] + "'.";
+    return check;
+  }
+
+  check.file_name = file_name;
+  return check;
+}
+
+SplitStringResult split_string(std::string str, char delimiter) {
+  SplitStringResult result;
+  result.failed = false;
+
+  std::string::size_type delimiter_index = str.find(delimiter);
+  if (delimiter_index == std::string::npos) {
+    result.failed = true;
+    return result;
+  }
+
+  std::string segment;
+  std::stringstream ss;
+  ss << str;
+  while (std::getline(ss, segment, delimiter)) {
+    result.segments.push_back(segment);
+  }
+  return result;
+}
+
+Number string_to_number(const std::string& str, bool suppress_errors) {
+  Number num;
+  num.type = NumberType::UNKNOWN;
+  num.float_value = 0.0f;
+  num.int_value = 0;
+
+  if (str == "") {
+    if (!suppress_errors) std::cerr << "string_to_number(): String is empty!\n";
+  }
+
+  std::string::size_type decimal_point_index = str.find_first_of('.');
+  if (decimal_point_index != std::string::npos) {
+    try {
+      num.float_value = std::stof(str);
+      num.type = NumberType::FLOAT;
+      return num;
+    }
+    catch (...) {
+      if (!suppress_errors) std::cerr << "string_to_number(): String is not a floating point number!\n";
+    }
+  }
+
+  try {
+    num.int_value = std::stoi(str);
+    num.type = NumberType::INT;
+  }
+  catch (...) {
+    if (!suppress_errors) std::cerr << "string_to_number(): String is not an integer number!\n";
+  }
+  return num;
 }
 
 } // namespace utils
