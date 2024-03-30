@@ -20,6 +20,8 @@ class Shape : public Object {
   Vector normal_at(const Point& point, const Intersection& hit = Intersection()) const;
   Material& GetMaterial();
   virtual void SetMaterial(const Material& material);
+  bool GetCanOptOutOfShadow() const;
+  void SetCanOptOutOfShadow(bool opt_out);
   bool operator==(const Object& object) const override;
   Shape& operator=(const Object& other) override;
   virtual std::vector<Intersection> local_intersect(const utils::RayStruct& local_ray) = 0;
@@ -28,4 +30,5 @@ class Shape : public Object {
   virtual BoundingBox bounds() const = 0;
  protected:
   Material material_;
+  bool can_out_out_of_shadow_;
 };

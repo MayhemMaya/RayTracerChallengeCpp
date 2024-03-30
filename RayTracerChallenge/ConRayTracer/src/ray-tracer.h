@@ -42,3 +42,4 @@
 #include "triangle.h"
 #include "obj-parser.h"
 #include "smooth-triangle.h"
+#include "csg.h"

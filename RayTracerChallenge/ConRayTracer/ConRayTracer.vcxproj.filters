@@ -163,6 +163,9 @@
     <ClCompile Include="src\smooth-triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\csg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\canvas.h">
@@ -307,6 +310,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\smooth-triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\csg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

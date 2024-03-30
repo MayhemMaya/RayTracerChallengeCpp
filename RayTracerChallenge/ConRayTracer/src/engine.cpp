@@ -158,7 +158,8 @@ Computation prepare_computations(const Intersection& intersection, const Ray& ra
 Color shade_hit(const World& world, const Computation& comps, int recursive_calls_remaining) {
 
   if (!utils::kUSE_ALL_LIGHTS) {
-    bool shadowed = is_shadowed(world, comps.over_point);
+    bool shadow_opt_out = comps.object->GetCanOptOutOfShadow();
+    bool shadowed = is_shadowed(world, comps.over_point) && !shadow_opt_out;
     Color surface = lighting(comps.object->GetMaterial(), comps.object, (*world.GetLights()[0]),
                                    comps.over_point, comps.eyev, comps.normalv, shadowed);
     Color reflected = reflected_color(world, comps, recursive_calls_remaining);
@@ -176,7 +177,8 @@ Color shade_hit(const World& world, const Computation& comps, int recursive_call
   Color hit_color;
   
   for (auto light : world.GetLights()) {
-    bool shadowed = is_shadowed(world, comps.over_point);
+    bool shadow_opt_out = comps.object->GetCanOptOutOfShadow();
+    bool shadowed = is_shadowed(world, comps.over_point) && !shadow_opt_out;
     Color surface = lighting(comps.object->GetMaterial(), comps.object, (*light),
       comps.over_point, comps.eyev, comps.normalv, shadowed);
     Color reflected = reflected_color(world, comps, recursive_calls_remaining);

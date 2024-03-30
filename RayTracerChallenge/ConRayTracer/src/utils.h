@@ -64,7 +64,7 @@ struct SplitStringResult {
 static float kEPSILON = 0.001f;
 static double kPI = 3.141592653589793;
 static int kRECURSION_DEPTH = 5;
-static bool kUSE_ALL_LIGHTS = false;
+static bool kUSE_ALL_LIGHTS = true;
 static double kINFINITY = std::numeric_limits<double>::infinity();
 bool equal(float a, float b);
 float clamp(float value, float min, float max);

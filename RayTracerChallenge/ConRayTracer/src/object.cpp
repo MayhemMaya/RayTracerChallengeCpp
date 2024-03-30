@@ -83,7 +83,7 @@ Point Object::GetPosition() const {
 ObjectType Object::GetObjectType() const { return type_; }
 
 std::string Object::GetObjectTypeName() const {
-  return typeMap[type_];
+  return typeMap.at(type_);
 }
 
 bool Object::operator==(const Object& other) const {

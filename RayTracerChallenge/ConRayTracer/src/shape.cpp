@@ -5,17 +5,17 @@
 
 
 Shape::Shape(const std::string& name, const ObjectType& type)
-    : Object(name, type), material_(Material()) {}
+    : Object(name, type), material_(Material()), can_out_out_of_shadow_(false) {}
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Matrix4& transform)
-    : Object(name, type, transform), material_(Material()) {}
+    : Object(name, type, transform), material_(Material()), can_out_out_of_shadow_(false) {}
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material)
-    : Object(name, type), material_(material) {}
+    : Object(name, type), material_(material), can_out_out_of_shadow_(false) {}
 
 Shape::Shape(const std::string& name, const ObjectType& type, const Material& material,
                                                    const Matrix4& transform)
-    : Object(name, type, transform), material_(material) {}
+    : Object(name, type, transform), material_(material), can_out_out_of_shadow_(false) {}
 
 Shape::~Shape() {}
 
@@ -39,6 +39,14 @@ Material& Shape::GetMaterial() {
 }
 void Shape::SetMaterial(const Material& material) {
   material_ = material;
+}
+
+bool Shape::GetCanOptOutOfShadow() const {
+  return can_out_out_of_shadow_;
+}
+
+void Shape::SetCanOptOutOfShadow(bool opt_out) {
+  can_out_out_of_shadow_ = opt_out;
 }
 
 bool Shape::operator==(const Object& object) const {

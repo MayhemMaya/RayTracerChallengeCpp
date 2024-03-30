@@ -42,6 +42,7 @@
 #include "triangle.cpp"
 #include "obj-parser.cpp"
 #include "smooth-triangle.cpp"
+#include "csg.cpp"
 
 #pragma region UtilsTests
 TEST(UtilsTests, ClampToZero) {
@@ -2612,5 +2613,114 @@ TEST(Chapter15_tests, Faces_with_normals) {
 	EXPECT_EQ(t1.GetN2(), parser.GetNormals()[0]);
 	EXPECT_EQ(t1.GetN3(), parser.GetNormals()[1]);
 	EXPECT_TRUE(t2 == t1);
+}
+#pragma endregion
+
+#pragma region Chapter16Tests
+TEST(Chapter16_tests, A_CSG_is_created_with_an_operation_and_two_shapes) {
+	Sphere s1;
+	Cube s2;
+	CSG c = CSG(Operation::UNION, &s1, &s2);
+	EXPECT_EQ(c.GetOperation(), Operation::UNION);
+	EXPECT_TRUE(*c.GetLeft() == s1);
+	EXPECT_TRUE(*c.GetRight() == s2);
+	EXPECT_TRUE(*s1.GetParent() == c);
+	EXPECT_TRUE(*s2.GetParent() == c);
+}
+
+TEST(Chapter16_tests, Evaluating_the_rule_for_a_CSG_operation) {
+	struct TruthTableEntry {
+		Operation op;
+		bool lhit;
+		bool inl;
+		bool inr;
+		bool result;
+	};
+
+	std::vector<TruthTableEntry> truth_table = {
+		{ Operation::UNION, true, true, true, false },
+		{ Operation::UNION, true, true, false, true },
+		{ Operation::UNION, true, false, true, false },
+		{ Operation::UNION, true, false, false, true },
+		{ Operation::UNION, false, true, true, false },
+		{ Operation::UNION, false, true, false, false },
+		{ Operation::UNION, false, false, true, true },
+		{ Operation::UNION, false, false, false, true },
+		{ Operation::INTERSECTION, true, true, true, true },
+		{ Operation::INTERSECTION, true, true, false, false },
+		{ Operation::INTERSECTION, true, false, true, true },
+		{ Operation::INTERSECTION, true, false, false, false },
+		{ Operation::INTERSECTION, false, true, true, true },
+		{ Operation::INTERSECTION, false, true, false, true },
+		{ Operation::INTERSECTION, false, false, true, false },
+		{ Operation::INTERSECTION, false, false, false, false },
+		{ Operation::DIFFERENCE, true, true, true, false },
+		{ Operation::DIFFERENCE, true, true, false, true },
+		{ Operation::DIFFERENCE, true, false, true, false },
+		{ Operation::DIFFERENCE, true, false, false, true },
+		{ Operation::DIFFERENCE, false, true, true, true },
+		{ Operation::DIFFERENCE, false, true, false, true },
+		{ Operation::DIFFERENCE, false, false, true, false },
+		{ Operation::DIFFERENCE, false, false, false, false }
+	};
+
+	for (const auto& [op, lhit, inl, inr, result] : truth_table) {
+		bool actual_result = CSG::intersection_allowed(op, lhit, inl, inr);
+		ASSERT_EQ(result, actual_result);
+	}
+}
+
+TEST(Chapter16_tests, Filtering_a_list_of_intersections) {
+	struct CSGIntersectionExample {
+		Operation op;
+		int x0;
+		int x1;
+	};
+
+	std::vector<CSGIntersectionExample> examples = {
+		{ Operation::UNION, 0, 3 },
+		{ Operation::INTERSECTION, 1, 2 },
+		{ Operation::DIFFERENCE, 0, 1 }
+	};
+
+	Sphere s1;
+	Cube s2;
+
+	for (const auto& [op, x0, x1] : examples) {
+		CSG c = CSG(op, &s1, &s2);
+		std::vector<Intersection> xs = Intersection::intersections({
+			Intersection(1, &s1),
+			Intersection(2, &s2),
+			Intersection(3, &s1),
+			Intersection(4, &s2),
+		});
+		std::vector<Intersection> result = c.filter_intersections(xs);
+		EXPECT_EQ(result.size(), 2);
+		EXPECT_TRUE(result[0] == xs[x0]);
+		EXPECT_TRUE(result[1] == xs[x1]);
+	}
+}
+
+TEST(Chapter16_tests, A_ray_misses_a_CSG_object) {
+	Sphere s1;
+	Cube s2;
+	CSG c = CSG(Operation::UNION, &s1, &s2);
+	Ray r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
+	std::vector<Intersection> xs = c.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(Chapter16_tests, A_ray_hits_a_CSG_object) {
+	Sphere s1;
+	Cube s2;
+	s2.SetTransform(Matrix4().translation(0, 0, 0.5));
+	CSG c = CSG(Operation::UNION, &s1, &s2);
+	Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+	std::vector<Intersection> xs = c.local_intersect(r.to_ray_struct());
+	EXPECT_EQ(xs.size(), 2);
+	EXPECT_EQ(xs[0].GetTime(), 4);
+	EXPECT_TRUE(*xs[0].GetObject() == s1);
+	EXPECT_EQ(xs[1].GetTime(), 6.5f);
+	EXPECT_TRUE(*xs[1].GetObject() == s2);
 }
 #pragma endregion

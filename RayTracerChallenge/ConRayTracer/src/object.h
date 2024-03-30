@@ -19,7 +19,8 @@ static enum class ObjectType {
   kCylinder,
   kCone,
   kGroup,
-  kTriangle
+  kTriangle,
+  kCSG
 };
 
 static std::map<ObjectType, std::string> typeMap {
@@ -34,6 +35,7 @@ static std::map<ObjectType, std::string> typeMap {
   {ObjectType::kCone, "kCone"},
   {ObjectType::kGroup, "kGroup"},
   {ObjectType::kTriangle, "kTriangle"},
+  {ObjectType::kCSG, "kCSG"},
 };
 
 class Object {
